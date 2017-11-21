@@ -1,16 +1,27 @@
 language: php
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 php:
   - 7.1
   - 7.2
+
+env:
+  - SYMFONY_PHPUNIT_REMOVE=symfony/yaml
 
 matrix:
   fast_finish: true
   include:
     - php: 7.1
-      env: COMPOSER_FLAGS='--prefer-lowest'
+      env:
+        - SYMFONY_VERSION='3.3.*'
+        - SYMFONY_PHPUNIT_REMOVE=symfony/yaml
     - php: 7.1
-      env: SYMFONY_VERSION='3.3.*'
+      env:
+        - SYMFONY_VERSION='2.8.*'
+        - SYMFONY_PHPUNIT_REMOVE=symfony/yaml
 
 before_install:
   - composer self-update
@@ -18,7 +29,7 @@ before_install:
 
 install: composer update $COMPOSER_FLAGS --prefer-dist
 
-script: if [[ "$TRAVIS_PHP_VERSION" == "7.1" && -z "$SYMFONY_VERSION" && -z "$COMPOSER_FLAGS" ]]; then vendor/bin/phpunit --coverage-clover=coverage.clover; else vendor/bin/phpunit; fi
+script: if [[ "$TRAVIS_PHP_VERSION" == "7.1" && -z "$SYMFONY_VERSION" && -z "$COMPOSER_FLAGS" ]]; then vendor/bin/simple-phpunit --coverage-clover=coverage.clover; else vendor/bin/simple-phpunit; fi
 
 after_success:
     - wget https://scrutinizer-ci.com/ocular.phar

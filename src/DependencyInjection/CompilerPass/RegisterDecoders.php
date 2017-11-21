@@ -27,6 +27,6 @@ class RegisterDecoders implements CompilerPassInterface
         }
 
         $provider = $container->findDefinition(DecoderProvider::class);
-        $provider->setArgument(0, $decoders);
+        $provider->replaceArgument(0, $decoders);
     }
 }
