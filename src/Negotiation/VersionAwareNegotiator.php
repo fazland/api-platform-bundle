@@ -4,6 +4,7 @@ namespace Kcs\ApiPlatformBundle\Negotiation;
 
 use Negotiation\Accept;
 use Negotiation\AcceptHeader;
+use Negotiation\BaseAccept;
 use Negotiation\Exception\InvalidArgument;
 use Negotiation\Exception\InvalidHeader;
 use Negotiation\Match;
@@ -20,9 +21,9 @@ class VersionAwareNegotiator
      *
      * @param string $priority
      *
-     * @return Accept
+     * @return BaseAccept
      */
-    public function priorityFactory($priority)
+    public function priorityFactory($priority): BaseAccept
     {
         $priority = new Priority($priority);
 
@@ -40,7 +41,7 @@ class VersionAwareNegotiator
      *
      * @return Priority|null best matching type
      */
-    public function getBest($header, array $priorities)
+    public function getBest($header, array $priorities): ?Priority
     {
         if (empty($priorities)) {
             throw new InvalidArgument('A set of server priorities should be given.');
@@ -109,7 +110,7 @@ class VersionAwareNegotiator
      *
      * @return string[]
      */
-    private function parseHeader($header)
+    private function parseHeader($header): array
     {
         $res = preg_match_all('/(?:[^,"]*+(?:"[^"]*+")?)+[^,"]*+/', $header, $matches);
 
@@ -126,7 +127,7 @@ class VersionAwareNegotiator
      *
      * @return Match[] Headers matched
      */
-    private function findMatches(array $headerParts, array $priorities)
+    private function findMatches(array $headerParts, array $priorities): array
     {
         $matches = [];
         foreach ($priorities as $index => $p) {
