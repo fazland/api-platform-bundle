@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service class="Kcs\ApiPlatformBundle\PatchManager\PatchManager" id="Kcs\ApiPlatformBundle\PatchManager\PatchManager" public="true">
+            <argument type="service" id="form.factory" />
+        </service>
+
+        <service alias="Kcs\ApiPlatformBundle\PatchManager\PatchManager" id="kcs_api.patch_manager" public="true" />
+    </services>
+</container>

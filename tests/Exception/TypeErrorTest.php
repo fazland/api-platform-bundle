@@ -1,0 +1,40 @@
+<?php declare(strict_types=1);
+
+namespace Kcs\ApiPlatformBundle\Tests\Exception;
+
+use Kcs\ApiPlatformBundle\Exception\TypeError;
+use Kcs\ApiPlatformBundle\Tests\Fixtures\TestObject;
+use PHPUnit\Framework\TestCase;
+
+class TypeErrorTest extends TestCase
+{
+    public function providerForCreateArgumentInvalid()
+    {
+        $tests = [];
+
+        $tests[] = [
+            'Argument 1 passed to Foo::bar must be of type string, integer given',
+            1, 'Foo::bar', 'string', 23,
+        ];
+
+        $tests[] = [
+            'Argument 1 passed to Foo::bar must be of type Foo or Foox, string given',
+            1, 'Foo::bar', ['Foo', 'Foox'], 'asf',
+        ];
+
+        $tests[] = [
+            'Argument 2 passed to Foo::bar must be of type Foo, Foox or null, Kcs\ApiPlatformBundle\Tests\Fixtures\TestObject given',
+            2, 'Foo::bar', ['Foo', 'Foox', 'null'], new TestObject(),
+        ];
+
+        return $tests;
+    }
+
+    /**
+     * @dataProvider providerForCreateArgumentInvalid
+     */
+    public function testCreateArgumentInvalidShouldFormatMessageCorrectly($message, $no, $function, $expected, $given)
+    {
+        $this->assertEquals($message, TypeError::createArgumentInvalid($no, $function, $expected, $given)->getMessage());
+    }
+}

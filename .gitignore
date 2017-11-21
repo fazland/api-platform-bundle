@@ -1,0 +1,10 @@
+composer.phar
+/vendor/
+composer.lock
+
+/bin/*
+!bin/console
+
+# PHPUnit
+/app/phpunit.xml
+/phpunit.xml

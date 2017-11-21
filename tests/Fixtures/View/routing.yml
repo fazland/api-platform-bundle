@@ -1,0 +1,15 @@
+index:
+    path: /
+    defaults: { _controller: 'AppBundle:Test:index' }
+
+form_invalid:
+    path: /form-invalid
+    defaults: { _controller: 'AppBundle:Test:formInvalidException' }
+
+form_not_submitted:
+    path: /form-not-submitted
+    defaults: { _controller: 'AppBundle:Test:formNotSubmittedException' }
+
+invalid_json:
+    path: /invalid-json
+    defaults: { _controller: 'AppBundle:Test:invalidJsonException' }

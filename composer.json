@@ -1,0 +1,42 @@
+{
+    "name": "kcs/api-platform-bundle",
+    "license": "MIT",
+    "minimum-stability": "beta",
+    "authors": [
+        {
+            "name": "Alessandro Chitolina",
+            "email": "alekitto@gmail.com"
+        }
+    ],
+    "require": {
+        "doctrine/orm": "^2.5",
+        "justinrainbow/json-schema": "^5.2",
+        "kcs/serializer": "^2.0",
+        "nesbot/carbon": "^1.15",
+        "sensio/framework-extra-bundle": "^4.0|^5.0",
+        "symfony/form": "^2.8|^3.0|^4.0",
+        "symfony/framework-bundle": "^2.8|^3.0|^4.0",
+        "symfony/security-bundle": "^2.8|^3.0|^4.0",
+        "symfony/validator": "^2.8|^3.0|^4.0",
+        "symfony/yaml": "^2.8|^3.0|^4.0",
+        "willdurand/negotiation": "^2.3"
+    },
+    "require-dev": {
+        "symfony/browser-kit": "^2.8|^3.0|^4.0",
+        "symfony/phpunit-bridge": "^2.8|^3.0|^4.0",
+        "symfony/var-dumper": "^2.8|^3.0|^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kcs\\ApiPlatformBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Kcs\\ApiPlatformBundle\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

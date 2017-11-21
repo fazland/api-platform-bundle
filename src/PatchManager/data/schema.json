@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "oneOf": [
+      { "$ref": "#/definitions/test_add_replace" },
+      { "$ref": "#/definitions/move_copy" },
+      { "$ref": "#/definitions/remove" }
+    ]
+  },
+  "definitions": {
+    "path": {
+      "type": "string",
+      "pattern": "^/[a-zA-Z0-9-/]*$"
+    },
+    "test_add_replace": {
+      "properties": {
+        "op": { "enum": [ "test", "add", "replace" ] },
+        "path": { "$ref": "#/definitions/path" },
+        "value": {
+          "type": "any"
+        }
+      },
+      "required": [ "op", "path", "value" ],
+      "additionalProperties": false
+    },
+    "move_copy": {
+      "properties": {
+        "op": { "enum": [ "move", "copy" ] },
+        "path": { "$ref": "#/definitions/path" },
+        "from": { "$ref": "#/definitions/path" }
+      },
+      "required": [ "op", "path", "from" ],
+      "additionalProperties": false
+    },
+    "remove": {
+      "properties": {
+        "op": { "enum": [ "remove" ] },
+        "path": { "$ref": "#/definitions/path" }
+      },
+      "required": [ "op", "path" ],
+      "additionalProperties": false
+    }
+  }
+}
