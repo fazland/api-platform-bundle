@@ -17,6 +17,21 @@ security:
             security: false
         main:
             anonymous: ~
+doctrine:
+    dbal:
+        url: "sqlite:///%kernel.cache_dir%/test.db"
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+        default_repository_class: Kcs\ApiPlatformBundle\Doctrine\EntityRepository
+        mappings:
+            Kcs\ApiPlatformBundle\Tests\Fixtures:
+                is_bundle: false
+                type: annotation
+                dir: "%kernel.root_dir%/../Entity"
+                prefix: "Kcs\\ApiPlatformBundle\\Tests\\Fixtures"
 
 sensio_framework_extra:
     router:      { annotations: true }
@@ -25,3 +40,8 @@ sensio_framework_extra:
     cache:       { annotations: true }
     security:    { annotations: true }
     psr_message: { enabled: false }
+
+services:
+    Doctrine\ORM\EntityManager:
+        alias: 'doctrine.orm.default_entity_manager'
+        public: true

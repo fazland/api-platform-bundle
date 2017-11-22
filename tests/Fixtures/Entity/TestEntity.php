@@ -7,16 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
-class FooBar
+class TestEntity
 {
     /**
-     * @var int
-     *
      * @ORM\Column()
      * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     public $id;
-
-    public $prop;
 }

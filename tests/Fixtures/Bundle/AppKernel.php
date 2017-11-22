@@ -2,6 +2,7 @@
 
 namespace Kcs\ApiPlatformBundle\Tests\Fixtures\Bundle;
 
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Kcs\ApiPlatformBundle\ApiPlatformBundle;
 use Kcs\ApiPlatformBundle\Tests\Fixtures\TestKernel;
 use Kcs\Serializer\Bundle\SerializerBundle;
@@ -22,6 +23,7 @@ class AppKernel extends TestKernel
             new SensioFrameworkExtraBundle(),
             new SecurityBundle(),
             new SerializerBundle(),
+            new DoctrineBundle(),
             new ApiPlatformBundle(),
             new AppBundle(),
         ];
