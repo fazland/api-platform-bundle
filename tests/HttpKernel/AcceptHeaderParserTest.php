@@ -2,7 +2,7 @@
 
 namespace Kcs\ApiPlatformBundle\Tests\HttpKernel;
 
-use Carbon\Carbon;
+use Cake\Chronos\Chronos;
 use Kcs\ApiPlatformBundle\HttpKernel\AcceptHeaderParser;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,7 +57,7 @@ class AcceptHeaderParserTest extends TestCase
      */
     public function testAcceptableHeader(string $header)
     {
-        Carbon::setTestNow(Carbon::createFromDate(2016, 2, 28));
+        Chronos::setTestNow(Chronos::createFromDate(2016, 2, 28));
         $request = Request::create('/', Request::METHOD_GET, [], [], [], ['HTTP_ACCEPT' => $header]);
 
         $event = $this->prophesize(GetResponseEvent::class);
