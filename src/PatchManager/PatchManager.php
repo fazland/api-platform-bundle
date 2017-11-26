@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 
-class PatchManager
+class PatchManager implements PatchManagerInterface
 {
     /**
      * @var FormFactoryInterface
@@ -28,12 +28,7 @@ class PatchManager
     }
 
     /**
-     * Executes the PATCH operations.
-     *
-     * @param PatchableInterface $patchable
-     * @param Request            $request
-     *
-     * @throws TypeError|InvalidJSONException
+     * {@inheritdoc}
      */
     public function patch($patchable, Request $request): void
     {

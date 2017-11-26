@@ -6,6 +6,7 @@ namespace Kcs\ApiPlatformBundle\Tests\PatchManager;
 
 use Kcs\ApiPlatformBundle\PatchManager\PatchableInterface;
 use Kcs\ApiPlatformBundle\PatchManager\PatchManager;
+use Kcs\ApiPlatformBundle\PatchManager\PatchManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -225,7 +226,7 @@ class PatchManagerTest extends TestCase
         ], $object->reveal()->a);
     }
 
-    protected function createPatchManager(): PatchManager
+    protected function createPatchManager(): PatchManagerInterface
     {
         return new PatchManager($this->formFactory->reveal());
     }
