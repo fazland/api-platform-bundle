@@ -7,6 +7,9 @@
     <services>
         <service class="Kcs\ApiPlatformBundle\PatchManager\PatchManager" id="Kcs\ApiPlatformBundle\PatchManager\PatchManager" public="true">
             <argument type="service" id="form.factory" />
+            <call method="setCache">
+                <argument type="service" id="cache.app" on-invalid="null" />
+            </call>
         </service>
 
         <service alias="Kcs\ApiPlatformBundle\PatchManager\PatchManager" id="kcs_api.patch_manager" public="true" />

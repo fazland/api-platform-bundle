@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Kcs\ApiPlatformBundle\PatchManager;
 
@@ -9,6 +7,7 @@ use Kcs\ApiPlatformBundle\Exception\TypeError;
 use Kcs\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
 use Kcs\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
 use Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
@@ -17,9 +16,18 @@ use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 class PatchManager implements PatchManagerInterface
 {
     /**
+     * @var CacheItemPoolInterface
+     */
+    protected $cache;
+
+    /**
      * @var FormFactoryInterface
      */
     private $formFactory;
+
+    /**
+     * @var OperationFactory
+     */
     private $operationsFactory;
 
     public function __construct(FormFactoryInterface $formFactory)
@@ -45,7 +53,7 @@ class PatchManager implements PatchManagerInterface
         $object = (array) Validator::arrayToObjectRecursive($request->request->all());
 
         $validator = new Validator();
-        $validator->validate($object, (object) ['$ref' => 'file://'.realpath(__DIR__.'/data/schema.json')]);
+        $validator->validate($object, $this->getSchema());
 
         if (! $validator->isValid()) {
             throw new InvalidJSONException('Invalid document.');
@@ -59,11 +67,48 @@ class PatchManager implements PatchManagerInterface
             try {
                 $op->execute($patchable, $operation);
             } catch (NoSuchPropertyException | UnexpectedTypeException $exception) {
-                throw new InvalidJSONException('Operation failed at path "'.$operation->path.'"');
+                throw new InvalidJSONException('Operation failed at path "'.$operation->path.'"', 0, $exception);
             }
         }
 
         $this->commit($patchable);
+    }
+
+    /**
+     * Sets the cache pool.
+     * Used to store parsed validator schema, for example.
+     *
+     * @param CacheItemPoolInterface $cache
+     *
+     * @required
+     */
+    public function setCache(?CacheItemPoolInterface $cache): void
+    {
+        $this->cache = $cache;
+    }
+
+    /**
+     * Gets the validation schema.
+     *
+     * @return object
+     */
+    protected function getSchema()
+    {
+        if (null !== $this->cache) {
+            $item = $this->cache->getItem('patch_manager_schema');
+            if ($item->isHit()) {
+                return $item->get();
+            }
+        }
+
+        $schema = json_decode(file_get_contents(realpath(__DIR__.'/data/schema.json')));
+
+        if (isset($item)) {
+            $item->set($schema);
+            $this->cache->saveDeferred($item);
+        }
+
+        return $schema;
     }
 
     /**
