@@ -1,5 +1,6 @@
 imports:
     - { resource: ../../../src/Resources/config/view.xml }
+    - { resource: ../../../src/Resources/config/exception_listeners.xml }
 
 framework:
     test: ~

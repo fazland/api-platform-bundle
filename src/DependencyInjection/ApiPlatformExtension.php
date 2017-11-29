@@ -18,6 +18,7 @@ class ApiPlatformExtension extends Extension
         $loader->load('patch_manager.xml');
         $loader->load('view.xml');
         $loader->load('exception.xml');
+        $loader->load('exception_listeners.xml');
 
         if (method_exists($container, 'registerForAutoconfiguration')) {
             $container->registerForAutoconfiguration(DecoderInterface::class)
