@@ -1,0 +1,9 @@
+imports:
+    - { resource: ../../../src/Resources/config/exception.xml }
+    - { resource: ../../../src/Resources/config/view.xml }
+
+framework:
+    test: ~
+    secret: secret
+    router:
+        resource: "%kernel.root_dir%/routing.yml"
