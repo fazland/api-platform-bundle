@@ -78,7 +78,7 @@ class ViewHandler implements EventSubscriberInterface
     private function handle($result, Request $request, View $view)
     {
         $format = $request->attributes->get('_format');
-        $context = $this->serializationContext;
+        $context = clone $this->serializationContext;
 
         if ($result instanceof Form && ! $result->isValid()) {
             $view->statusCode = Response::HTTP_BAD_REQUEST;

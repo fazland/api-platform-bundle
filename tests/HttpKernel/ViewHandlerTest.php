@@ -9,6 +9,7 @@ use Kcs\ApiPlatformBundle\Tests\Fixtures\TestObject;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
 use Kcs\Serializer\Serializer;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -37,7 +38,7 @@ class ViewHandlerTest extends TestCase
     private $viewHandler;
 
     /**
-     * @var SerializationContext|ObjectProphecy
+     * @var SerializationContext
      */
     private $serializationContext;
 
@@ -49,10 +50,10 @@ class ViewHandlerTest extends TestCase
     protected function setUp()
     {
         $this->serializer = $this->prophesize(Serializer::class);
-        $this->serializationContext = $this->prophesize(SerializationContext::class);
+        $this->serializationContext = SerializationContext::create();
         $this->kernel = $this->prophesize(HttpKernelInterface::class);
         $this->tokenStorage = $this->prophesize(TokenStorageInterface::class);
-        $this->viewHandler = new ViewHandler($this->serializer->reveal(), $this->serializationContext->reveal(), $this->tokenStorage->reveal());
+        $this->viewHandler = new ViewHandler($this->serializer->reveal(), $this->serializationContext, $this->tokenStorage->reveal());
     }
 
     public function skipProvider()
@@ -120,10 +121,15 @@ class ViewHandlerTest extends TestCase
 
         $this->serializer
             ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::type(SerializationContext::class))
+            ->will(function ($args) {
+                /** @var SerializationContext $context */
+                list(, , $context) = $args;
+                Assert::assertEquals(['group_foo', 'bar_bar'], $context->attributes->get('groups'));
+
+                return '';
+            })
             ->shouldBeCalled();
         $event->setResponse(Argument::type(Response::class))->willReturn();
-
-        $this->serializationContext->setGroups(['group_foo', 'bar_bar'])->shouldBeCalled();
 
         $this->viewHandler->onView($event->reveal());
     }
@@ -142,10 +148,15 @@ class ViewHandlerTest extends TestCase
 
         $this->serializer
             ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::type(SerializationContext::class))
+            ->will(function ($args) {
+                /** @var SerializationContext $context */
+                list(, , $context) = $args;
+                Assert::assertEquals(['foobar'], $context->attributes->get('groups'));
+
+                return '';
+            })
             ->shouldBeCalled();
         $event->setResponse(Argument::type(Response::class))->willReturn();
-
-        $this->serializationContext->setGroups(['foobar'])->shouldBeCalled();
 
         $this->viewHandler->onView($event->reveal());
     }
@@ -233,6 +244,34 @@ class ViewHandlerTest extends TestCase
         $event->setResponse(Argument::that(function ($response) {
             return $response instanceof Response && 42 == $response->headers->get('X-Total-Count');
         }))->shouldBeCalled();
+
+        $this->viewHandler->onView($event->reveal());
+    }
+
+    public function testSerializationContextShouldBeReusable()
+    {
+        $annot = new View();
+        $annot->groups = ['group_foo', 'bar_bar'];
+
+        $request = new Request();
+        $request->attributes->set('_rest_view', $annot);
+
+        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event->getRequest()->willReturn($request);
+        $event->getControllerResult()->willReturn(new TestObject());
+
+        $self = $this;
+        $this->serializer
+            ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::type(SerializationContext::class))
+            ->will(function ($args) use ($self) {
+                /** @var SerializationContext $context */
+                list(, , $context) = $args;
+                Assert::assertNotEquals(spl_object_hash($self->serializationContext), spl_object_hash($context));
+
+                return '';
+            })
+            ->shouldBeCalled();
+        $event->setResponse(Argument::type(Response::class))->willReturn();
 
         $this->viewHandler->onView($event->reveal());
     }
