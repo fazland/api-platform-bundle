@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\JSONPointer;
+namespace Fazland\ApiPlatformBundle\Tests\JSONPointer;
 
-use Kcs\ApiPlatformBundle\JSONPointer\Accessor;
+use Fazland\ApiPlatformBundle\JSONPointer\Accessor;
 use PHPUnit\Framework\TestCase;
 
 abstract class AccessorArrayAccessTest extends TestCase

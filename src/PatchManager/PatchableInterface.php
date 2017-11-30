@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\PatchManager;
+namespace Fazland\ApiPlatformBundle\PatchManager;
 
 /**
  * Represents an object that can be patched.

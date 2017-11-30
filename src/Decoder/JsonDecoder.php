@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Decoder;
+namespace Fazland\ApiPlatformBundle\Decoder;
 
 class JsonDecoder implements DecoderInterface
 {

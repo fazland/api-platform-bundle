@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\PatchManager\Operation;
+namespace Fazland\ApiPlatformBundle\Tests\PatchManager\Operation;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Kcs\ApiPlatformBundle\PatchManager\Operation\RemoveOperation;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\RemoveOperation;
 use PHPUnit\Framework\TestCase;
 
 class RemoveOperationTest extends TestCase
@@ -90,7 +90,7 @@ class RemoveOperationTest extends TestCase
     }
 
     /**
-     * @expectedException \Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
+     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
      */
     public function testShouldThrowIfPropertyIsNotAccessible()
     {

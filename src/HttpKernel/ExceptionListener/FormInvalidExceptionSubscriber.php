@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\HttpKernel\ExceptionListener;
+namespace Fazland\ApiPlatformBundle\HttpKernel\ExceptionListener;
 
-use Kcs\ApiPlatformBundle\Annotation\View;
-use Kcs\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
+use Fazland\ApiPlatformBundle\Annotation\View;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;

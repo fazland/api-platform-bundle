@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\PatchManager\Operation;
+namespace Fazland\ApiPlatformBundle\PatchManager\Operation;
 
-use Kcs\ApiPlatformBundle\JSONPointer\Path;
-use Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
+use Fazland\ApiPlatformBundle\JSONPointer\Path;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 
 class ReplaceOperation extends AbstractOperation

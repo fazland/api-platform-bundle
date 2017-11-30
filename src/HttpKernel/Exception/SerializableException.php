@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\HttpKernel\Exception;
+namespace Fazland\ApiPlatformBundle\HttpKernel\Exception;
 
 use Kcs\Serializer\Annotation as Serializer;
 use Symfony\Component\Debug\Exception\FlattenException;

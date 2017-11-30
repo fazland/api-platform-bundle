@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\HttpKernel;
+namespace Fazland\ApiPlatformBundle\HttpKernel;
 
-use Kcs\ApiPlatformBundle\Decoder\DecoderProviderInterface;
-use Kcs\ApiPlatformBundle\Decoder\Exception\UnsupportedFormatException;
+use Fazland\ApiPlatformBundle\Decoder\DecoderProviderInterface;
+use Fazland\ApiPlatformBundle\Decoder\Exception\UnsupportedFormatException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;

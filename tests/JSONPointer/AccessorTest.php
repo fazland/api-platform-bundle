@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\JSONPointer;
+namespace Fazland\ApiPlatformBundle\Tests\JSONPointer;
 
-use Kcs\ApiPlatformBundle\JSONPointer\Accessor;
-use Kcs\ApiPlatformBundle\JSONPointer\Path;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\JSONPointer\TestClass;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\JSONPointer\TestClassIsWritable;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\JSONPointer\TestClassMagicGet;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\JSONPointer\TestClassSetValue;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\JSONPointer\Ticket5775Object;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\JSONPointer\TypeHinted;
+use Fazland\ApiPlatformBundle\JSONPointer\Accessor;
+use Fazland\ApiPlatformBundle\JSONPointer\Path;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer\TestClass;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer\TestClassIsWritable;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer\TestClassMagicGet;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer\TestClassSetValue;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer\Ticket5775Object;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer\TypeHinted;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\PropertyAccess\Exception\NoSuchIndexException;

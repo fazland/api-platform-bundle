@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\PatchManager\Operation;
+namespace Fazland\ApiPlatformBundle\Tests\PatchManager\Operation;
 
-use Kcs\ApiPlatformBundle\PatchManager\Operation\CopyOperation;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\CopyOperation;
 use PHPUnit\Framework\TestCase;
 
 class CopyOperationTest extends TestCase
@@ -27,7 +27,7 @@ class CopyOperationTest extends TestCase
     }
 
     /**
-     * @expectedException \Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
+     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
      */
     public function testShouldThrowIfPropertyDoesNotExist()
     {

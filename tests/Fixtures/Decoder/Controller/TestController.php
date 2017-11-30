@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Fixtures\Decoder\Controller;
+namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Decoder\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;

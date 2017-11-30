@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\PatchManager;
+namespace Fazland\ApiPlatformBundle\PatchManager;
 
 use JsonSchema\Validator;
-use Kcs\ApiPlatformBundle\Exception\TypeError;
-use Kcs\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
-use Kcs\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
-use Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
+use Fazland\ApiPlatformBundle\Exception\TypeError;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;

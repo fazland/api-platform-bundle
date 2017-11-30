@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\JSONPointer;
+namespace Fazland\ApiPlatformBundle\Tests\JSONPointer;
 
-use Kcs\ApiPlatformBundle\JSONPointer\Path;
+use Fazland\ApiPlatformBundle\JSONPointer\Path;
 use PHPUnit\Framework\TestCase;
 
 class PathTest extends TestCase

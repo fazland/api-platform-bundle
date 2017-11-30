@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\ExceptionListener;
+namespace Fazland\ApiPlatformBundle\Tests\ExceptionListener;
 
-use Kcs\ApiPlatformBundle\HttpKernel\ExceptionListener\InvalidJSONExceptionSubscriber;
-use Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
+use Fazland\ApiPlatformBundle\HttpKernel\ExceptionListener\InvalidJSONExceptionSubscriber;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
 use Prophecy\Argument;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;

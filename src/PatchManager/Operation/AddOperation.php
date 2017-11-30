@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\PatchManager\Operation;
+namespace Fazland\ApiPlatformBundle\PatchManager\Operation;
 
 class AddOperation extends AbstractOperation
 {

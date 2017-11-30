@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\HttpKernel;
+namespace Fazland\ApiPlatformBundle\Tests\HttpKernel;
 
 use Cake\Chronos\Chronos;
-use Kcs\ApiPlatformBundle\HttpKernel\AcceptHeaderParser;
+use Fazland\ApiPlatformBundle\HttpKernel\AcceptHeaderParser;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;

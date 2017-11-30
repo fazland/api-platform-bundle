@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\HttpKernel;
+namespace Fazland\ApiPlatformBundle\HttpKernel;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;

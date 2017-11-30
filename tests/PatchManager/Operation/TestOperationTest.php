@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\PatchManager\Operation;
+namespace Fazland\ApiPlatformBundle\Tests\PatchManager\Operation;
 
-use Kcs\ApiPlatformBundle\PatchManager\Operation\TestOperation;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\TestOperation;
 use PHPUnit\Framework\TestCase;
 
 class TestOperationTest extends TestCase
@@ -18,7 +18,7 @@ class TestOperationTest extends TestCase
     }
 
     /**
-     * @expectedException \Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
+     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
      */
     public function testShouldThrowIfValuesAreNotEqual()
     {

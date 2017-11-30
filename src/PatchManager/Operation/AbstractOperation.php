@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\PatchManager\Operation;
+namespace Fazland\ApiPlatformBundle\PatchManager\Operation;
 
-use Kcs\ApiPlatformBundle\JSONPointer\Accessor;
+use Fazland\ApiPlatformBundle\JSONPointer\Accessor;
 
 abstract class AbstractOperation implements OperationInterface
 {

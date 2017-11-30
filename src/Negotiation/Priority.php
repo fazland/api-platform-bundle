@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Negotiation;
+namespace Fazland\ApiPlatformBundle\Negotiation;
 
 use Negotiation\AcceptHeader;
 use Negotiation\BaseAccept;

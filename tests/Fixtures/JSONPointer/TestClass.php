@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Fixtures\JSONPointer;
+namespace Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer;
 
 class TestClass
 {

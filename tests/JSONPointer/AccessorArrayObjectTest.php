@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\JSONPointer;
+namespace Fazland\ApiPlatformBundle\Tests\JSONPointer;
 
 class AccessorArrayObjectTest extends AccessorCollectionTest
 {

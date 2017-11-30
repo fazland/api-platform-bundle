@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\PatchManager;
+namespace Fazland\ApiPlatformBundle\PatchManager;
 
-use Kcs\ApiPlatformBundle\Exception\TypeError;
-use Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
+use Fazland\ApiPlatformBundle\Exception\TypeError;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Symfony\Component\HttpFoundation\Request;
 
 interface PatchManagerInterface

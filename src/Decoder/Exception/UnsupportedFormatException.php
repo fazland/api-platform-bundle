@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Decoder\Exception;
+namespace Fazland\ApiPlatformBundle\Decoder\Exception;
 
 class UnsupportedFormatException extends \RuntimeException
 {

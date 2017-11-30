@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Fixtures\View;
+namespace Fazland\ApiPlatformBundle\Tests\Fixtures\View;
 
-use Kcs\ApiPlatformBundle\Tests\Fixtures\TestKernel;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\TestKernel;
 use Kcs\Serializer\Bundle\SerializerBundle;
 use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;

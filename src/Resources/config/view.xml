@@ -13,7 +13,7 @@
             </call>
         </service>
 
-        <service class="Kcs\ApiPlatformBundle\HttpKernel\ViewHandler" id="Kcs\ApiPlatformBundle\HttpKernel\ViewHandler">
+        <service class="Fazland\ApiPlatformBundle\HttpKernel\ViewHandler" id="Fazland\ApiPlatformBundle\HttpKernel\ViewHandler">
             <argument type="service" id="kcs_serializer.serializer" />
             <argument type="service" id="kcs_api.view_serialization_context.prototype" />
             <argument type="service" id="security.token_storage" on-invalid="null" />
@@ -21,7 +21,7 @@
             <tag name="kernel.event_subscriber" />
         </service>
 
-        <service class="Kcs\ApiPlatformBundle\HttpKernel\AcceptHeaderParser" id="Kcs\ApiPlatformBundle\HttpKernel\AcceptHeaderParser">
+        <service class="Fazland\ApiPlatformBundle\HttpKernel\AcceptHeaderParser" id="Fazland\ApiPlatformBundle\HttpKernel\AcceptHeaderParser">
             <tag name="kernel.event_subscriber" />
         </service>
     </services>

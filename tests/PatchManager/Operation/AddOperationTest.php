@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\PatchManager\Operation;
+namespace Fazland\ApiPlatformBundle\Tests\PatchManager\Operation;
 
-use Kcs\ApiPlatformBundle\PatchManager\Operation\AddOperation;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\AddOperation;
 use PHPUnit\Framework\TestCase;
 
 class AddOperationTest extends TestCase

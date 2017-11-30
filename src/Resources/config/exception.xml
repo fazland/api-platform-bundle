@@ -9,13 +9,13 @@
     </parameters>
 
     <services>
-        <service class="Kcs\ApiPlatformBundle\Controller\ExceptionController" id="kcs_api_platform.exception_controller" public="true">
+        <service class="Fazland\ApiPlatformBundle\Controller\ExceptionController" id="kcs_api_platform.exception_controller" public="true">
             <argument type="service" id="kcs_serializer.serializer" />
             <argument type="service" id="kcs_api.view_serialization_context.prototype" />
             <argument>%kernel.debug%</argument>
         </service>
 
-        <service class="Kcs\ApiPlatformBundle\HttpKernel\ExceptionListener" id="Kcs\ApiPlatformBundle\HttpKernel\ExceptionListener">
+        <service class="Fazland\ApiPlatformBundle\HttpKernel\ExceptionListener" id="Fazland\ApiPlatformBundle\HttpKernel\ExceptionListener">
             <argument>%kcs_api_platform.exception_listener.controller%</argument>
             <argument type="service" id="logger" on-invalid="null" />
             <tag name="kernel.event_subscriber" />

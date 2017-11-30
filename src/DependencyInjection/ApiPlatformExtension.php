@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\DependencyInjection;
+namespace Fazland\ApiPlatformBundle\DependencyInjection;
 
-use Kcs\ApiPlatformBundle\Decoder\DecoderInterface;
+use Fazland\ApiPlatformBundle\Decoder\DecoderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;

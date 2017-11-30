@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Fixtures;
+namespace Fazland\ApiPlatformBundle\Tests\Fixtures;
 
 use Psr\Log\NullLogger;
 use Symfony\Component\Config\ConfigCache;

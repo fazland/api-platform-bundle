@@ -5,13 +5,13 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service class="Kcs\ApiPlatformBundle\PatchManager\PatchManager" id="Kcs\ApiPlatformBundle\PatchManager\PatchManager" public="true">
+        <service class="Fazland\ApiPlatformBundle\PatchManager\PatchManager" id="Fazland\ApiPlatformBundle\PatchManager\PatchManager" public="true">
             <argument type="service" id="form.factory" />
             <call method="setCache">
                 <argument type="service" id="cache.app" on-invalid="null" />
             </call>
         </service>
 
-        <service alias="Kcs\ApiPlatformBundle\PatchManager\PatchManager" id="kcs_api.patch_manager" public="true" />
+        <service alias="Fazland\ApiPlatformBundle\PatchManager\PatchManager" id="kcs_api.patch_manager" public="true" />
     </services>
 </container>

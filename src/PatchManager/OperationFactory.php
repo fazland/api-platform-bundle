@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\PatchManager;
+namespace Fazland\ApiPlatformBundle\PatchManager;
 
-use Kcs\ApiPlatformBundle\JSONPointer\Accessor;
-use Kcs\ApiPlatformBundle\PatchManager\Exception\UnknownOperationException;
-use Kcs\ApiPlatformBundle\PatchManager\Operation\AddOperation;
-use Kcs\ApiPlatformBundle\PatchManager\Operation\CopyOperation;
-use Kcs\ApiPlatformBundle\PatchManager\Operation\MoveOperation;
-use Kcs\ApiPlatformBundle\PatchManager\Operation\OperationInterface;
-use Kcs\ApiPlatformBundle\PatchManager\Operation\RemoveOperation;
-use Kcs\ApiPlatformBundle\PatchManager\Operation\ReplaceOperation;
-use Kcs\ApiPlatformBundle\PatchManager\Operation\TestOperation;
+use Fazland\ApiPlatformBundle\JSONPointer\Accessor;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\UnknownOperationException;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\AddOperation;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\CopyOperation;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\MoveOperation;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\OperationInterface;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\RemoveOperation;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\ReplaceOperation;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\TestOperation;
 
 class OperationFactory
 {

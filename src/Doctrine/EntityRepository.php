@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Doctrine;
+namespace Fazland\ApiPlatformBundle\Doctrine;
 
 use Doctrine\ORM\EntityRepository as BaseRepository;
 use Doctrine\ORM\NoResultException;

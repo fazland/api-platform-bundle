@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Fixtures;
+namespace Fazland\ApiPlatformBundle\Tests\Fixtures;
 
-use Kcs\ApiPlatformBundle\HttpKernel\View\Context;
+use Fazland\ApiPlatformBundle\HttpKernel\View\Context;
 
 class TestObject
 {

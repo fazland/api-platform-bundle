@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Exception;
+namespace Fazland\ApiPlatformBundle\Tests\Exception;
 
-use Kcs\ApiPlatformBundle\Tests\Fixtures\Exception\AppKernel;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\Exception\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class FunctionalTest extends WebTestCase

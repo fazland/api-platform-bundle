@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\JSONPointer;
+namespace Fazland\ApiPlatformBundle\Tests\JSONPointer;
 
-use Kcs\ApiPlatformBundle\Tests\Fixtures\JSONPointer\NonTraversableArrayObject;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer\NonTraversableArrayObject;
 
 class AccessorNonTraversableArrayObjectTest extends AccessorArrayAccessTest
 {

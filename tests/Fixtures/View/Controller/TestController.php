@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Fixtures\View\Controller;
+namespace Fazland\ApiPlatformBundle\Tests\Fixtures\View\Controller;
 
-use Kcs\ApiPlatformBundle\Annotation\View;
-use Kcs\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
-use Kcs\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
-use Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
+use Fazland\ApiPlatformBundle\Annotation\View;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;

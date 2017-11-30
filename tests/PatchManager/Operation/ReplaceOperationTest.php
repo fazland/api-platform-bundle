@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\PatchManager\Operation;
+namespace Fazland\ApiPlatformBundle\Tests\PatchManager\Operation;
 
-use Kcs\ApiPlatformBundle\PatchManager\Operation\ReplaceOperation;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\ReplaceOperation;
 use PHPUnit\Framework\TestCase;
 
 class ReplaceOperationTest extends TestCase
@@ -26,7 +26,7 @@ class ReplaceOperationTest extends TestCase
     }
 
     /**
-     * @expectedException \Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
+     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
      * @expectedExceptionMessage Element at path "/one" does not exist.
      */
     public function testShouldThrowIfPathDoesNotExists()

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Exception;
+namespace Fazland\ApiPlatformBundle\Exception;
 
 class TypeError extends \TypeError
 {

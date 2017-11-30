@@ -1,16 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Doctrine;
+namespace Fazland\ApiPlatformBundle\Tests\Doctrine;
 
 use Doctrine\DBAL\Cache\ArrayStatement;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Kcs\ApiPlatformBundle\Doctrine\EntityIterator;
-use Kcs\ApiPlatformBundle\Doctrine\EntityRepository;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\Bundle\AppKernel;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\Doctrine\EntityManagerMockTrait;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\Entity\TestEntity;
+use Fazland\ApiPlatformBundle\Doctrine\EntityIterator;
+use Fazland\ApiPlatformBundle\Doctrine\EntityRepository;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\Bundle\AppKernel;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\Doctrine\EntityManagerMockTrait;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\Entity\TestEntity;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

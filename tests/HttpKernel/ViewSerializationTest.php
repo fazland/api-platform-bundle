@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\HttpKernel;
+namespace Fazland\ApiPlatformBundle\Tests\HttpKernel;
 
-use Kcs\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ViewSerializationTest extends WebTestCase

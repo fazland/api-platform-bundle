@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Decoder;
+namespace Fazland\ApiPlatformBundle\Tests\Decoder;
 
-use Kcs\ApiPlatformBundle\Decoder\DecoderInterface;
-use Kcs\ApiPlatformBundle\Decoder\DecoderProvider;
+use Fazland\ApiPlatformBundle\Decoder\DecoderInterface;
+use Fazland\ApiPlatformBundle\Decoder\DecoderProvider;
 use PHPUnit\Framework\TestCase;
 
 class DecoderProviderTest extends TestCase
@@ -30,7 +30,7 @@ class DecoderProviderTest extends TestCase
     }
 
     /**
-     * @expectedException \Kcs\ApiPlatformBundle\Decoder\Exception\UnsupportedFormatException
+     * @expectedException \Fazland\ApiPlatformBundle\Decoder\Exception\UnsupportedFormatException
      */
     public function testGetShouldThrowIfFormatIsNotSupported()
     {

@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle;
+namespace Fazland\ApiPlatformBundle;
 
-use Kcs\ApiPlatformBundle\DependencyInjection\CompilerPass\RegisterDecoders;
+use Fazland\ApiPlatformBundle\DependencyInjection\CompilerPass\RegisterDecoders;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

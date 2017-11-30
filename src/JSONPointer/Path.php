@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\JSONPointer;
+namespace Fazland\ApiPlatformBundle\JSONPointer;
 
 use Symfony\Component\PropertyAccess\Exception\InvalidPropertyPathException;
 use Symfony\Component\PropertyAccess\Exception\OutOfBoundsException;

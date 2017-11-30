@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\HttpKernel\ExceptionListener;
+namespace Fazland\ApiPlatformBundle\HttpKernel\ExceptionListener;
 
-use Kcs\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

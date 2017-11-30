@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\DependencyInjection\CompilerPass;
+namespace Fazland\ApiPlatformBundle\DependencyInjection\CompilerPass;
 
-use Kcs\ApiPlatformBundle\Decoder\DecoderProvider;
+use Fazland\ApiPlatformBundle\Decoder\DecoderProvider;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

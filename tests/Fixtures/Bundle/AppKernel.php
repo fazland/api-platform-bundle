@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Fixtures\Bundle;
+namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Bundle;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-use Kcs\ApiPlatformBundle\ApiPlatformBundle;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\TestKernel;
+use Fazland\ApiPlatformBundle\ApiPlatformBundle;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\TestKernel;
 use Kcs\Serializer\Bundle\SerializerBundle;
 use Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\PatchManager;
+namespace Fazland\ApiPlatformBundle\Tests\PatchManager;
 
-use Kcs\ApiPlatformBundle\PatchManager\Operation\OperationInterface;
-use Kcs\ApiPlatformBundle\PatchManager\OperationFactory;
+use Fazland\ApiPlatformBundle\PatchManager\Operation\OperationInterface;
+use Fazland\ApiPlatformBundle\PatchManager\OperationFactory;
 use PHPUnit\Framework\TestCase;
 
 class OperationFactoryTest extends TestCase
@@ -37,7 +37,7 @@ class OperationFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Kcs\ApiPlatformBundle\PatchManager\Exception\UnknownOperationException
+     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\UnknownOperationException
      */
     public function testFactoryShouldThrowIfOperationIsUnknown()
     {

@@ -25,13 +25,13 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
-        default_repository_class: Kcs\ApiPlatformBundle\Doctrine\EntityRepository
+        default_repository_class: Fazland\ApiPlatformBundle\Doctrine\EntityRepository
         mappings:
-            Kcs\ApiPlatformBundle\Tests\Fixtures:
+            Fazland\ApiPlatformBundle\Tests\Fixtures:
                 is_bundle: false
                 type: annotation
                 dir: "%kernel.root_dir%/../Entity"
-                prefix: "Kcs\\ApiPlatformBundle\\Tests\\Fixtures"
+                prefix: Fazland\ApiPlatformBundle\Tests\Fixtures
 
 sensio_framework_extra:
     router:      { annotations: true }

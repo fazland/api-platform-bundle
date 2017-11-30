@@ -5,17 +5,17 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service class="Kcs\ApiPlatformBundle\Decoder\DecoderProvider" id="Kcs\ApiPlatformBundle\Decoder\DecoderProvider">
+        <service class="Fazland\ApiPlatformBundle\Decoder\DecoderProvider" id="Fazland\ApiPlatformBundle\Decoder\DecoderProvider">
             <argument type="collection" />
         </service>
-        <service id="Kcs\ApiPlatformBundle\Decoder\DecoderProviderInterface" alias="Kcs\ApiPlatformBundle\Decoder\DecoderProvider" />
+        <service id="Fazland\ApiPlatformBundle\Decoder\DecoderProviderInterface" alias="Fazland\ApiPlatformBundle\Decoder\DecoderProvider" />
 
-        <service class="Kcs\ApiPlatformBundle\Decoder\JsonDecoder" id="Kcs\ApiPlatformBundle\Decoder\JsonDecoder">
+        <service class="Fazland\ApiPlatformBundle\Decoder\JsonDecoder" id="Fazland\ApiPlatformBundle\Decoder\JsonDecoder">
             <tag name="kcs_api.decoder" />
         </service>
 
-        <service class="Kcs\ApiPlatformBundle\HttpKernel\BodyConverter" id="Kcs\ApiPlatformBundle\HttpKernel\BodyConverter">
-            <argument type="service" id="Kcs\ApiPlatformBundle\Decoder\DecoderProviderInterface" />
+        <service class="Fazland\ApiPlatformBundle\HttpKernel\BodyConverter" id="Fazland\ApiPlatformBundle\HttpKernel\BodyConverter">
+            <argument type="service" id="Fazland\ApiPlatformBundle\Decoder\DecoderProviderInterface" />
             <tag name="kernel.event_subscriber" />
         </service>
     </services>

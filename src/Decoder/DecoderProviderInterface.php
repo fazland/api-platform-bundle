@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Decoder;
+namespace Fazland\ApiPlatformBundle\Decoder;
 
-use Kcs\ApiPlatformBundle\Decoder\Exception\UnsupportedFormatException;
+use Fazland\ApiPlatformBundle\Decoder\Exception\UnsupportedFormatException;
 
 interface DecoderProviderInterface
 {

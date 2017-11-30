@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Fixtures\View;
+namespace Fazland\ApiPlatformBundle\Tests\Fixtures\View;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

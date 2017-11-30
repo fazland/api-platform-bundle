@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Fixtures\Decoder;
+namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Decoder;
 
-use Kcs\ApiPlatformBundle\Tests\Fixtures\TestKernel;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\TestKernel;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 

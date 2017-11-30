@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Doctrine;
+namespace Fazland\ApiPlatformBundle\Tests\Doctrine;
 
 use Doctrine\DBAL\Cache\ArrayStatement;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
-use Kcs\ApiPlatformBundle\Doctrine\EntityIterator;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\Doctrine\EntityManagerMockTrait;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\Entity\FooBar;
+use Fazland\ApiPlatformBundle\Doctrine\EntityIterator;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\Doctrine\EntityManagerMockTrait;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\Entity\FooBar;
 use PHPUnit\Framework\TestCase;
 
 class EntityIteratorTest extends TestCase

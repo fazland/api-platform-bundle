@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\PatchManager;
+namespace Fazland\ApiPlatformBundle\Tests\PatchManager;
 
-use Kcs\ApiPlatformBundle\PatchManager\PatchableInterface;
-use Kcs\ApiPlatformBundle\PatchManager\PatchManager;
-use Kcs\ApiPlatformBundle\PatchManager\PatchManagerInterface;
+use Fazland\ApiPlatformBundle\PatchManager\PatchableInterface;
+use Fazland\ApiPlatformBundle\PatchManager\PatchManager;
+use Fazland\ApiPlatformBundle\PatchManager\PatchManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -76,7 +76,7 @@ class PatchManagerTest extends TestCase
     }
 
     /**
-     * @expectedException \Kcs\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException
+     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException
      */
     public function testMergePatchShouldThrowIfFormIsNotSubmitted()
     {
@@ -101,7 +101,7 @@ class PatchManagerTest extends TestCase
     }
 
     /**
-     * @expectedException \Kcs\ApiPlatformBundle\PatchManager\Exception\FormInvalidException
+     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException
      */
     public function testMergePatchShouldThrowIfFormIsNotValid()
     {
@@ -136,7 +136,7 @@ class PatchManagerTest extends TestCase
 
     /**
      * @dataProvider getInvalidJson
-     * @expectedException \Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
+     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
      * @expectedExceptionMessage Invalid document.
      */
     public function testPatchShouldThrowIfDocumentIsInvalid($params)
@@ -192,7 +192,7 @@ class PatchManagerTest extends TestCase
 
     /**
      * @dataProvider getInvalidJsonAndObject
-     * @expectedException \Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
+     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
      * @expectedExceptionMessageRegExp #Operation failed at path#
      */
     public function testPatchShouldThrowIfOperationErrored($params, $object)

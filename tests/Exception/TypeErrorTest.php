@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Exception;
+namespace Fazland\ApiPlatformBundle\Tests\Exception;
 
-use Kcs\ApiPlatformBundle\Exception\TypeError;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\TestObject;
+use Fazland\ApiPlatformBundle\Exception\TypeError;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\TestObject;
 use PHPUnit\Framework\TestCase;
 
 class TypeErrorTest extends TestCase
@@ -23,7 +23,7 @@ class TypeErrorTest extends TestCase
         ];
 
         $tests[] = [
-            'Argument 2 passed to Foo::bar must be of type Foo, Foox or null, Kcs\ApiPlatformBundle\Tests\Fixtures\TestObject given',
+            'Argument 2 passed to Foo::bar must be of type Foo, Foox or null, Fazland\ApiPlatformBundle\Tests\Fixtures\TestObject given',
             2, 'Foo::bar', ['Foo', 'Foox', 'null'], new TestObject(),
         ];
 

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Negotiation;
+namespace Fazland\ApiPlatformBundle\Tests\Negotiation;
 
-use Kcs\ApiPlatformBundle\Negotiation\Priority;
-use Kcs\ApiPlatformBundle\Negotiation\VersionAwareNegotiator;
+use Fazland\ApiPlatformBundle\Negotiation\Priority;
+use Fazland\ApiPlatformBundle\Negotiation\VersionAwareNegotiator;
 use Negotiation\Exception\InvalidArgument;
 use Negotiation\Exception\InvalidHeader;
 use Negotiation\Exception\InvalidMediaType;

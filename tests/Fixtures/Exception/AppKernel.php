@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Fixtures\Exception;
+namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Exception;
 
-use Kcs\ApiPlatformBundle\Tests\Fixtures\TestKernel;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\TestKernel;
 use Kcs\Serializer\Bundle\SerializerBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Decoder;
+namespace Fazland\ApiPlatformBundle\Tests\Decoder;
 
-use Kcs\ApiPlatformBundle\Decoder\JsonDecoder;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\Decoder\AppKernel;
+use Fazland\ApiPlatformBundle\Decoder\JsonDecoder;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\Decoder\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class JsonDecoderTest extends WebTestCase

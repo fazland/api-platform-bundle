@@ -1,11 +1,15 @@
 {
-    "name": "kcs/api-platform-bundle",
+    "name": "fazland/api-platform-bundle",
     "license": "MIT",
     "minimum-stability": "beta",
     "authors": [
         {
             "name": "Alessandro Chitolina",
             "email": "alekitto@gmail.com"
+        },
+        {
+            "name": "Fazland Team",
+            "email": "dev@fazland.com"
         }
     ],
     "require": {
@@ -35,12 +39,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Kcs\\ApiPlatformBundle\\": "src/"
+            "Fazland\\ApiPlatformBundle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Kcs\\ApiPlatformBundle\\Tests\\": "tests/"
+            "Fazland\\ApiPlatformBundle\\Tests\\": "tests/"
         }
     },
     "config": {

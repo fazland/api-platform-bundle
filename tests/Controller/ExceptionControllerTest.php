@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Controller;
+namespace Fazland\ApiPlatformBundle\Tests\Controller;
 
-use Kcs\ApiPlatformBundle\Controller\ExceptionController;
-use Kcs\ApiPlatformBundle\HttpKernel\Exception\DebugSerializableException;
-use Kcs\ApiPlatformBundle\HttpKernel\Exception\SerializableException;
+use Fazland\ApiPlatformBundle\Controller\ExceptionController;
+use Fazland\ApiPlatformBundle\HttpKernel\Exception\DebugSerializableException;
+use Fazland\ApiPlatformBundle\HttpKernel\Exception\SerializableException;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
 use Kcs\Serializer\Serializer;

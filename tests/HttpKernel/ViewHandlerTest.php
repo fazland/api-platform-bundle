@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\HttpKernel;
+namespace Fazland\ApiPlatformBundle\Tests\HttpKernel;
 
-use Kcs\ApiPlatformBundle\Annotation\View;
-use Kcs\ApiPlatformBundle\Doctrine\EntityIterator;
-use Kcs\ApiPlatformBundle\HttpKernel\ViewHandler;
-use Kcs\ApiPlatformBundle\Tests\Fixtures\TestObject;
+use Fazland\ApiPlatformBundle\Annotation\View;
+use Fazland\ApiPlatformBundle\Doctrine\EntityIterator;
+use Fazland\ApiPlatformBundle\HttpKernel\ViewHandler;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\TestObject;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
 use Kcs\Serializer\Serializer;

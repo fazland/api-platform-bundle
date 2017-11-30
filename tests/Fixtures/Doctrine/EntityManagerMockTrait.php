@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\Tests\Fixtures\Doctrine;
+namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Doctrine;
 
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
@@ -11,7 +11,7 @@ use Doctrine\DBAL\Driver\PDOConnection;
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
-use Kcs\ApiPlatformBundle\Tests\Doctrine\Mocks\MockPlatform;
+use Fazland\ApiPlatformBundle\Tests\Doctrine\Mocks\MockPlatform;
 use Prophecy\Prophecy\ObjectProphecy;
 
 trait EntityManagerMockTrait

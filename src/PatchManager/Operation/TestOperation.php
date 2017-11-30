@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\PatchManager\Operation;
+namespace Fazland\ApiPlatformBundle\PatchManager\Operation;
 
-use Kcs\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 
 class TestOperation extends AbstractOperation
 {

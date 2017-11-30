@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Kcs\ApiPlatformBundle\HttpKernel;
+namespace Fazland\ApiPlatformBundle\HttpKernel;
 
 use Cake\Chronos\Chronos;
-use Kcs\ApiPlatformBundle\Negotiation\VersionAwareNegotiator;
+use Fazland\ApiPlatformBundle\Negotiation\VersionAwareNegotiator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
