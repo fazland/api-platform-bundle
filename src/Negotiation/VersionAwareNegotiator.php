@@ -4,26 +4,32 @@ namespace Kcs\ApiPlatformBundle\Negotiation;
 
 use Negotiation\Accept;
 use Negotiation\AcceptHeader;
-use Negotiation\BaseAccept;
 use Negotiation\Exception\InvalidArgument;
 use Negotiation\Exception\InvalidHeader;
 use Negotiation\Match;
 
 class VersionAwareNegotiator
 {
-    protected function acceptFactory($header)
+    /**
+     * Build an Accept object for header.
+     *
+     * @param string $header
+     *
+     * @return Accept
+     */
+    protected function acceptFactory($header): Accept
     {
         return new Accept($header);
     }
 
     /**
-     * Build Accept object for priority.
+     * Build a Priority object for priority.
      *
      * @param string $priority
      *
-     * @return BaseAccept
+     * @return Priority
      */
-    public function priorityFactory($priority): BaseAccept
+    public function priorityFactory($priority): Priority
     {
         $priority = new Priority($priority);
 
@@ -73,12 +79,8 @@ class VersionAwareNegotiator
         return $priority;
     }
 
-    protected function match(AcceptHeader $accept, AcceptHeader $priority, $index, $headerIndex)
+    protected function match(Accept $accept, Priority $priority, $index, $headerIndex)
     {
-        if (! $accept instanceof Accept || ! $priority instanceof Priority) {
-            return null;
-        }
-
         $ab = $accept->getBasePart();
         $pb = $priority->getBasePart();
 
@@ -112,7 +114,7 @@ class VersionAwareNegotiator
      */
     private function parseHeader($header): array
     {
-        $res = preg_match_all('/(?:[^,"]*+(?:"[^"]*+")?)+[^,"]*+/', $header, $matches);
+        $res = preg_match_all('/(?:[^,"]++(?:"[^"]*+")?)+[^,"]*+/', $header, $matches);
 
         if (! $res) {
             throw new InvalidHeader(sprintf('Failed to parse accept header: "%s"', $header));

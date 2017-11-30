@@ -5,14 +5,17 @@ namespace Kcs\ApiPlatformBundle\Tests\Negotiation;
 use Kcs\ApiPlatformBundle\Negotiation\Priority;
 use Kcs\ApiPlatformBundle\Negotiation\VersionAwareNegotiator;
 use Negotiation\Exception\InvalidArgument;
+use Negotiation\Exception\InvalidHeader;
 use Negotiation\Exception\InvalidMediaType;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @property VersionAwareNegotiator negotiator
- */
 class VersionAwareNegotiatorTest extends TestCase
 {
+    /**
+     * @var VersionAwareNegotiator
+     */
+    private $negotiator;
+
     public function setUp()
     {
         $this->negotiator = new VersionAwareNegotiator();
@@ -24,6 +27,14 @@ class VersionAwareNegotiatorTest extends TestCase
     public function testPriorityFactoryRaiseExceptionIfContainsVersionParam()
     {
         $this->negotiator->priorityFactory('text/html; version=12');
+    }
+
+    /**
+     * @expectedException \Negotiation\Exception\InvalidMediaType
+     */
+    public function testPriorityFactoryRaiseExceptionIfInvalidMediaType()
+    {
+        $this->negotiator->priorityFactory('html');
     }
 
     /**
@@ -61,6 +72,7 @@ class VersionAwareNegotiatorTest extends TestCase
             ['/qwer', ['f/g'], new InvalidMediaType()],
             ['', ['foo/bar'], new InvalidArgument('The header string should not be empty.')],
             ['*/*', [], new InvalidArgument('A set of server priorities should be given.')],
+            [',', ['text/html'], new InvalidHeader('Failed to parse accept header: ","')],
 
             // See: http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
             [$rfcHeader, ['text/html;level=1'], ['text/html', ['level' => '1']]],
