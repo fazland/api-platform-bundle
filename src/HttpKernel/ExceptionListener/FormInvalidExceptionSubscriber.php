@@ -30,7 +30,7 @@ class FormInvalidExceptionSubscriber implements EventSubscriberInterface
      * Clones the request for the exception.
      *
      * @param FormInterface $form
-     * @param Request $request The original request
+     * @param Request       $request The original request
      *
      * @return Request $request The cloned request
      */
@@ -52,9 +52,11 @@ class FormInvalidExceptionSubscriber implements EventSubscriberInterface
      * This method should be considered as private.
      *
      * @param FormInterface $form
+     *
      * @return FormInterface
      *
      * @View()
+     *
      * @internal
      */
     public function formAction(FormInterface $form)
