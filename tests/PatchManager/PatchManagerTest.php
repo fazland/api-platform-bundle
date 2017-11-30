@@ -10,6 +10,8 @@ use Kcs\ApiPlatformBundle\PatchManager\PatchManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\HeaderBag;
@@ -21,12 +23,22 @@ class PatchManagerTest extends TestCase
     /**
      * @var FormFactoryInterface|ObjectProphecy
      */
-    protected $formFactory;
+    private $formFactory;
 
     /**
      * @var PatchManager
      */
-    protected $patchManager;
+    private $patchManager;
+
+    /**
+     * @var CacheItemPoolInterface
+     */
+    private static $cache;
+
+    public static function setUpBeforeClass()
+    {
+        self::$cache = new ArrayAdapter();
+    }
 
     protected function setUp()
     {
@@ -228,6 +240,9 @@ class PatchManagerTest extends TestCase
 
     protected function createPatchManager(): PatchManagerInterface
     {
-        return new PatchManager($this->formFactory->reveal());
+        $manager = new PatchManager($this->formFactory->reveal());
+        $manager->setCache(self::$cache);
+
+        return $manager;
     }
 }
