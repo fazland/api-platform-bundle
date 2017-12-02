@@ -14,6 +14,10 @@ class RegisterDecoders implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        if (! $container->hasDefinition(DecoderProvider::class)) {
+            return;
+        }
+
         $decoders = [];
 
         foreach ($container->findTaggedServiceIds('kcs_api.decoder') as $serviceId => $unused) {

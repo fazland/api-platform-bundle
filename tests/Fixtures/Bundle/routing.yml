@@ -2,6 +2,10 @@ index:
     path: /
     defaults: { _controller: 'AppBundle:Test:index' }
 
+body:
+    path: /body
+    defaults: { _controller: 'AppBundle:Test:body' }
+
 form_invalid:
     path: /form-invalid
     defaults: { _controller: 'AppBundle:Test:formInvalidException' }

@@ -34,6 +34,6 @@ class AppKernel extends TestKernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__.'/config.yml');
+        $loader->load(__DIR__.'/config_'.$this->environment.'.yml');
     }
 }

@@ -5,14 +5,6 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service class="Kcs\Serializer\SerializationContext" id="kcs_api.view_serialization_context.prototype" shared="false">
-            <factory class="Kcs\Serializer\SerializationContext" method="create" />
-            <call method="enableMaxDepthChecks" />
-            <call method="setSerializeNull">
-                <argument>true</argument>
-            </call>
-        </service>
-
         <service class="Fazland\ApiPlatformBundle\HttpKernel\ViewHandler" id="Fazland\ApiPlatformBundle\HttpKernel\ViewHandler">
             <argument type="service" id="kcs_serializer.serializer" />
             <argument type="service" id="kcs_api.view_serialization_context.prototype" />

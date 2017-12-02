@@ -1,0 +1,5 @@
+imports:
+    - { resource: ./config.yml }
+
+api_platform:
+    view: { enabled: false }

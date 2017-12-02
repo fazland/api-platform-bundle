@@ -14,15 +14,32 @@ class ApiPlatformExtension extends Extension
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        $loader->load('decoders.xml');
+        $configuration = $this->getConfiguration($configs, $container);
+        $config = $this->processConfiguration($configuration, $configs);
+
+        if ($config['body_converter']['enabled']) {
+            $loader->load('decoders.xml');
+        }
+
         $loader->load('patch_manager.xml');
-        $loader->load('view.xml');
-        $loader->load('exception.xml');
-        $loader->load('exception_listeners.xml');
+        $loader->load('serializer.xml');
+
+        if ($config['view']['enabled']) {
+            $loader->load('view.xml');
+            $loader->load('exception_listeners.xml');
+        }
+
+        if ($config['catch_exceptions']) {
+            $loader->load('exception.xml');
+        }
 
         if (method_exists($container, 'registerForAutoconfiguration')) {
-            $container->registerForAutoconfiguration(DecoderInterface::class)
-                ->addTag('kcs_api.decoder');
+            $container->registerForAutoconfiguration(DecoderInterface::class)->addTag('kcs_api.decoder');
         }
+    }
+
+    public function getConfiguration(array $config, ContainerBuilder $container)
+    {
+        return new Configuration();
     }
 }
