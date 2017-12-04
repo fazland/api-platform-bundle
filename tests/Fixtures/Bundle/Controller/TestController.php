@@ -6,7 +6,6 @@ use Fazland\ApiPlatformBundle\Annotation\View;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;

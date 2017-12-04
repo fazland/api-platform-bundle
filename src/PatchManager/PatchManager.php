@@ -2,11 +2,11 @@
 
 namespace Fazland\ApiPlatformBundle\PatchManager;
 
-use JsonSchema\Validator;
 use Fazland\ApiPlatformBundle\Exception\TypeError;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
+use JsonSchema\Validator;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;

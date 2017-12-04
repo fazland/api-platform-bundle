@@ -2,7 +2,8 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->in([__DIR__])
-    ->exclude(['vendor'])
+    ->notPath('/tests\/Fixtures\/.*\/cache/')
+    ->notPath('vendor')
 ;
 
 return PhpCsFixer\Config::create()
