@@ -2,6 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\PatchManager;
 
+use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Fazland\ApiPlatformBundle\PatchManager\PatchableInterface;
 use Fazland\ApiPlatformBundle\PatchManager\PatchManager;
 use Fazland\ApiPlatformBundle\PatchManager\PatchManagerInterface;
@@ -15,6 +16,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PatchManagerTest extends TestCase
 {
@@ -33,6 +37,11 @@ class PatchManagerTest extends TestCase
      */
     private static $cache;
 
+    /**
+     * @var ValidatorInterface|ObjectProphecy
+     */
+    private $validator;
+
     public static function setUpBeforeClass()
     {
         self::$cache = new ArrayAdapter();
@@ -41,6 +50,9 @@ class PatchManagerTest extends TestCase
     protected function setUp()
     {
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
+        $this->validator = $this->prophesize(ValidatorInterface::class);
+        $this->validator->validate(Argument::any())->willReturn(new ConstraintViolationList());
+
         $this->patchManager = $this->createPatchManager();
     }
 
@@ -236,9 +248,31 @@ class PatchManagerTest extends TestCase
         ], $object->reveal()->a);
     }
 
+    /**
+     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
+     * @expectedExceptionMessageRegExp /Invalid entity: /
+     */
+    public function testPatchShouldThrowInvalidJSONExceptionIfObjectIsInvalid()
+    {
+        $object = $this->prophesize(PatchableInterface::class);
+        $object->reveal()->a = ['b' => ['c' => 'foo']];
+
+        $this->validator->validate($object)->willReturn(new ConstraintViolationList([
+            new ConstraintViolation('Invalid', 'Invalid', ['a'], '', 'property', 'invalid')
+        ]));
+
+        $request = $this->prophesize(Request::class);
+        $request->reveal()->headers = new HeaderBag();
+        $request->reveal()->request = new ParameterBag([
+            ['op' => 'test', 'path' => '/a/b/c', 'value' => 'foo'],
+        ]);
+
+        $this->patchManager->patch($object->reveal(), $request->reveal());
+    }
+
     protected function createPatchManager(): PatchManagerInterface
     {
-        $manager = new PatchManager($this->formFactory->reveal());
+        $manager = new PatchManager($this->formFactory->reveal(), $this->validator->reveal());
         $manager->setCache(self::$cache);
 
         return $manager;

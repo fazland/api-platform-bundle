@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PatchManager implements PatchManagerInterface
 {
@@ -30,9 +31,15 @@ class PatchManager implements PatchManagerInterface
      */
     private $operationsFactory;
 
-    public function __construct(FormFactoryInterface $formFactory)
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
+
+    public function __construct(FormFactoryInterface $formFactory, ValidatorInterface $validator)
     {
         $this->formFactory = $formFactory;
+        $this->validator = $validator;
     }
 
     /**
@@ -71,6 +78,7 @@ class PatchManager implements PatchManagerInterface
             }
         }
 
+        $this->validate($patchable);
         $this->commit($patchable);
     }
 
@@ -149,6 +157,24 @@ class PatchManager implements PatchManagerInterface
         }
 
         $this->commit($patchable);
+    }
+
+    /**
+     * Calls the validator service and throws an InvalidJSONException
+     * if the object is invalid.
+     *
+     * @param PatchableInterface $patchable
+     *
+     * @throws InvalidJSONException
+     */
+    protected function validate(PatchableInterface $patchable): void
+    {
+        $violations = $this->validator->validate($patchable);
+        if (count($violations) === 0) {
+            return;
+        }
+
+        throw new InvalidJSONException("Invalid entity: ".(string)$violations);
     }
 
     /**
