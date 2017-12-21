@@ -24,6 +24,9 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('catch_exceptions')
                     ->defaultValue(true)
                 ->end()
+                ->booleanNode('cors')
+                    ->defaultValue(true)
+                ->end()
             ->end()
         ;
 

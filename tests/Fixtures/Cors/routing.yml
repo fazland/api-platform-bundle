@@ -1,0 +1,4 @@
+index:
+    path: /
+    methods: [ GET ]
+    defaults: { _controller: 'AppBundle:Test:index' }

@@ -33,6 +33,10 @@ class ApiPlatformExtension extends Extension
             $loader->load('exception.xml');
         }
 
+        if ($config['cors']) {
+            $loader->load('cors.xml');
+        }
+
         if (method_exists($container, 'registerForAutoconfiguration')) {
             $container->registerForAutoconfiguration(DecoderInterface::class)->addTag('kcs_api.decoder');
         }
