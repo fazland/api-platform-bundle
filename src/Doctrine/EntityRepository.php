@@ -13,13 +13,9 @@ class EntityRepository extends BaseRepository
         return new EntityIterator($this->createQueryBuilder('a'));
     }
 
-    public function count(): int
+    public function count(array $criteria = [])
     {
-        $qb = $this->createQueryBuilder('a')
-            ->select('COUNT(a)')
-        ;
-
-        return (int) $qb->getQuery()->getSingleScalarResult();
+        return $this->_em->getUnitOfWork()->getEntityPersister($this->_entityName)->count($criteria);
     }
 
     public function findOneByCached(array $criteria, array $orderBy = null, $ttl = 28800)
