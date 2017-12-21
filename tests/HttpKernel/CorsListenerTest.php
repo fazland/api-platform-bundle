@@ -14,6 +14,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 class CorsListenerTest extends WebTestCase
 {
@@ -85,7 +86,10 @@ class CorsListenerTest extends WebTestCase
         $this->listener->onException($event);
 
         $this->assertTrue($event->hasResponse());
-        $this->assertTrue($event->isAllowingCustomResponseCode());
+
+        if (method_exists($event, 'isAllowingCustomResponseCode')) {
+            $this->assertTrue($event->isAllowingCustomResponseCode());
+        }
 
         $response = $event->getResponse();
         $this->assertEquals(200, $response->getStatusCode());
@@ -200,6 +204,6 @@ class CorsListenerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertEquals('*', $response->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals('GET', $response->headers->get('Access-Control-Allow-Methods'));
+        $this->assertEquals(Kernel::VERSION_ID < 30000 ? 'GET, HEAD' : 'GET', $response->headers->get('Access-Control-Allow-Methods'));
     }
 }

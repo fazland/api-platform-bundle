@@ -72,7 +72,10 @@ class CorsListener implements EventSubscriberInterface
         $response->headers->set('Access-Control-Expose-Headers', 'Authorization, Content-Length, X-Total-Count');
 
         $event->setResponse($response);
-        $event->allowCustomResponseCode();
+
+        if (method_exists($event, 'allowCustomResponseCode')) {
+            $event->allowCustomResponseCode();
+        }
     }
 
     public function onResponse(FilterResponseEvent $event)
