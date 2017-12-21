@@ -60,7 +60,7 @@ class EntityRepositoryTest extends WebTestCase
 
     public function testCountWillReturnRowCount()
     {
-        $this->_innerConnection->query('SELECT COUNT(t0_.id) AS sclr_0 FROM TestEntity t0_')
+        $this->_innerConnection->query('SELECT COUNT(*) FROM TestEntity t0')
             ->willReturn(new ArrayStatement([
                 ['sclr_0' => '42'],
             ]));
