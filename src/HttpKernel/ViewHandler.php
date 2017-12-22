@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\HttpKernel;
 
 use Fazland\ApiPlatformBundle\Annotation\View;
 use Fazland\ApiPlatformBundle\Doctrine\EntityIterator;
+use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\HttpKernel\View\Context;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
@@ -57,7 +58,7 @@ class ViewHandler implements EventSubscriberInterface
             'Content-Type' => $request->getMimeType($request->attributes->get('_format')),
         ];
 
-        if ($result instanceof EntityIterator) {
+        if ($result instanceof ObjectIterator) {
             $headers['X-Total-Count'] = $result->count();
         }
 

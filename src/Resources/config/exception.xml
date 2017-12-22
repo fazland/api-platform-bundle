@@ -5,18 +5,18 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="kcs_api_platform.exception_listener.controller">kcs_api_platform.exception_controller:showAction</parameter>
+        <parameter key="fazland_api.exception_listener.controller">fazland_api.exception_controller:showAction</parameter>
     </parameters>
 
     <services>
-        <service class="Fazland\ApiPlatformBundle\Controller\ExceptionController" id="kcs_api_platform.exception_controller" public="true">
+        <service class="Fazland\ApiPlatformBundle\Controller\ExceptionController" id="fazland_api.exception_controller" public="true">
             <argument type="service" id="kcs_serializer.serializer" />
-            <argument type="service" id="kcs_api.view_serialization_context.prototype" />
+            <argument type="service" id="fazland_api.view_serialization_context.prototype" />
             <argument>%kernel.debug%</argument>
         </service>
 
         <service class="Fazland\ApiPlatformBundle\HttpKernel\ExceptionListener" id="Fazland\ApiPlatformBundle\HttpKernel\ExceptionListener">
-            <argument>%kcs_api_platform.exception_listener.controller%</argument>
+            <argument>%fazland_api.exception_listener.controller%</argument>
             <argument type="service" id="logger" on-invalid="null" />
             <tag name="kernel.event_subscriber" />
         </service>

@@ -11,7 +11,7 @@
         <service id="Fazland\ApiPlatformBundle\Decoder\DecoderProviderInterface" alias="Fazland\ApiPlatformBundle\Decoder\DecoderProvider" />
 
         <service class="Fazland\ApiPlatformBundle\Decoder\JsonDecoder" id="Fazland\ApiPlatformBundle\Decoder\JsonDecoder">
-            <tag name="kcs_api.decoder" />
+            <tag name="fazland_api.decoder" />
         </service>
 
         <service class="Fazland\ApiPlatformBundle\HttpKernel\BodyConverter" id="Fazland\ApiPlatformBundle\HttpKernel\BodyConverter">

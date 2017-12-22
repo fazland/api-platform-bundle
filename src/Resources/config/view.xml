@@ -7,7 +7,7 @@
     <services>
         <service class="Fazland\ApiPlatformBundle\HttpKernel\ViewHandler" id="Fazland\ApiPlatformBundle\HttpKernel\ViewHandler">
             <argument type="service" id="kcs_serializer.serializer" />
-            <argument type="service" id="kcs_api.view_serialization_context.prototype" />
+            <argument type="service" id="fazland_api.view_serialization_context.prototype" />
             <argument type="service" id="security.token_storage" on-invalid="null" />
 
             <tag name="kernel.event_subscriber" />

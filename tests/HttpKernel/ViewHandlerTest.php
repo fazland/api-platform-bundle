@@ -3,7 +3,7 @@
 namespace Fazland\ApiPlatformBundle\Tests\HttpKernel;
 
 use Fazland\ApiPlatformBundle\Annotation\View;
-use Fazland\ApiPlatformBundle\Doctrine\EntityIterator;
+use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\HttpKernel\ViewHandler;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\TestObject;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
@@ -228,7 +228,7 @@ class ViewHandlerTest extends TestCase
         $request = new Request();
         $request->attributes->set('_rest_view', new View());
 
-        $iterator = $this->prophesize(EntityIterator::class);
+        $iterator = $this->prophesize(ObjectIterator::class);
         $iterator->count()->willReturn(42);
         $iterator->rewind()->willReturn();
         $iterator->valid()->willReturn(false);

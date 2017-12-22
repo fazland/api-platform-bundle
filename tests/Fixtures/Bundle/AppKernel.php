@@ -3,6 +3,7 @@
 namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Bundle;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle;
 use Fazland\ApiPlatformBundle\ApiPlatformBundle;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\TestKernel;
 use Kcs\Serializer\Bundle\SerializerBundle;
@@ -24,6 +25,7 @@ class AppKernel extends TestKernel
             new SecurityBundle(),
             new SerializerBundle(),
             new DoctrineBundle(),
+            new DoctrineMongoDBBundle(),
             new ApiPlatformBundle(),
             new AppBundle(),
         ];

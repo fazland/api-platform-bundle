@@ -25,13 +25,28 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
-        default_repository_class: Fazland\ApiPlatformBundle\Doctrine\EntityRepository
+        default_repository_class: Fazland\ApiPlatformBundle\Doctrine\ORM\EntityRepository
         mappings:
             Fazland\ApiPlatformBundle\Tests\Fixtures:
                 is_bundle: false
                 type: annotation
                 dir: "%kernel.root_dir%/../Entity"
                 prefix: Fazland\ApiPlatformBundle\Tests\Fixtures
+
+doctrine_mongodb:
+    connections:
+        default:
+            server: 'mongodb://local:27017'
+            options: {}
+    document_managers:
+        default:
+            default_repository_class: Fazland\ApiPlatformBundle\Doctrine\Mongo\DocumentRepository
+            mappings:
+                Fazland\ApiPlatformBundle\Tests\Fixtures:
+                    is_bundle: false
+                    type: annotation
+                    dir: "%kernel.root_dir%/../Document"
+                    prefix: Fazland\ApiPlatformBundle\Tests\Fixtures
 
 sensio_framework_extra:
     router:      { annotations: true }
@@ -44,4 +59,8 @@ sensio_framework_extra:
 services:
     Doctrine\ORM\EntityManager:
         alias: 'doctrine.orm.default_entity_manager'
+        public: true
+
+    Doctrine\ODM\MongoDB\DocumentManager:
+        alias: 'doctrine_mongodb.odm.default_document_manager'
         public: true

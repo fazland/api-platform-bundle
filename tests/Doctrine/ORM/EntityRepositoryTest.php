@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Fazland\ApiPlatformBundle\Tests\Doctrine;
+namespace Fazland\ApiPlatformBundle\Tests\Doctrine\ORM;
 
 use Doctrine\DBAL\Cache\ArrayStatement;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Fazland\ApiPlatformBundle\Doctrine\EntityIterator;
-use Fazland\ApiPlatformBundle\Doctrine\EntityRepository;
+use Fazland\ApiPlatformBundle\Doctrine\ORM\EntityIterator;
+use Fazland\ApiPlatformBundle\Doctrine\ORM\EntityRepository;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Bundle\AppKernel;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Doctrine\EntityManagerMockTrait;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Entity\TestEntity;
@@ -60,7 +60,7 @@ class EntityRepositoryTest extends WebTestCase
 
     public function testCountWillReturnRowCount()
     {
-        $this->_innerConnection->query('SELECT COUNT(*) FROM TestEntity t0')
+        $this->_innerConnection->query('SELECT COUNT(t0_.id) AS sclr_0 FROM TestEntity t0_')
             ->willReturn(new ArrayStatement([
                 ['sclr_0' => '42'],
             ]));

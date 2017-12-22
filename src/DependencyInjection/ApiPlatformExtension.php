@@ -38,7 +38,7 @@ class ApiPlatformExtension extends Extension
         }
 
         if (method_exists($container, 'registerForAutoconfiguration')) {
-            $container->registerForAutoconfiguration(DecoderInterface::class)->addTag('kcs_api.decoder');
+            $container->registerForAutoconfiguration(DecoderInterface::class)->addTag('fazland_api.decoder');
         }
     }
 

@@ -1,14 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Fazland\ApiPlatformBundle\Doctrine;
+namespace Fazland\ApiPlatformBundle\Doctrine\ORM;
 
 use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Doctrine\ORM\QueryBuilder;
+use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 
 /**
  * This class allows iterating a query iterator for a single entity query.
  */
-class EntityIterator implements \Iterator, \Countable
+class EntityIterator implements ObjectIterator
 {
     /**
      * @var IterableResult
@@ -72,13 +73,9 @@ class EntityIterator implements \Iterator, \Countable
     }
 
     /**
-     * Registers a callable to apply to each element of the iterator.
-     *
-     * @param callable $func
-     *
-     * @return EntityIterator
+     * {@inheritdoc}
      */
-    public function apply(callable $func = null): self
+    public function apply(callable $func = null): ObjectIterator
     {
         if (null === $func) {
             $func = function ($val) {

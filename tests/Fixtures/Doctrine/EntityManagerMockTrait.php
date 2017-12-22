@@ -22,7 +22,7 @@ trait EntityManagerMockTrait
     private $_entityManager;
 
     /**
-     * @var Connection|ObjectProphecy
+     * @var Connection
      */
     private $_connection;
 
@@ -32,7 +32,7 @@ trait EntityManagerMockTrait
     private $_innerConnection;
 
     /**
-     * @var Configuration|ObjectProphecy
+     * @var Configuration
      */
     private $_configuration;
 

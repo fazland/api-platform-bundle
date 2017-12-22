@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Fazland\ApiPlatformBundle\Tests\Doctrine;
+namespace Fazland\ApiPlatformBundle\Tests\Doctrine\ORM;
 
 use Doctrine\DBAL\Cache\ArrayStatement;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
-use Fazland\ApiPlatformBundle\Doctrine\EntityIterator;
+use Fazland\ApiPlatformBundle\Doctrine\ORM\EntityIterator;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Doctrine\EntityManagerMockTrait;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Entity\FooBar;
 use PHPUnit\Framework\TestCase;

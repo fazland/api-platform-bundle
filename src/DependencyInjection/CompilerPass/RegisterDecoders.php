@@ -20,7 +20,7 @@ class RegisterDecoders implements CompilerPassInterface
 
         $decoders = [];
 
-        foreach ($container->findTaggedServiceIds('kcs_api.decoder') as $serviceId => $unused) {
+        foreach ($container->findTaggedServiceIds('fazland_api.decoder') as $serviceId => $unused) {
             $definition = $container->getDefinition($serviceId);
             $definition->setLazy(true);
 

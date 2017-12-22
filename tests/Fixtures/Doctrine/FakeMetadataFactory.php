@@ -5,13 +5,12 @@ namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Doctrine;
 use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\Common\Persistence\Mapping\RuntimeReflectionService;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata as ORMClassMetadata;
 
 class FakeMetadataFactory implements ClassMetadataFactory
 {
     private $_metadata = [];
-    private $entityManager;
     private $reflService;
 
     /**
@@ -22,12 +21,16 @@ class FakeMetadataFactory implements ClassMetadataFactory
         $this->reflService = new RuntimeReflectionService();
     }
 
-    /**
-     * @param mixed $entityManager
-     */
-    public function setEntityManager(EntityManager $entityManager)
+    public function setEntityManager(EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
+    }
+
+    public function setDocumentManager($documentManager)
+    {
+    }
+
+    public function setConfiguration()
+    {
     }
 
     public function setCacheDriver()
@@ -48,7 +51,7 @@ class FakeMetadataFactory implements ClassMetadataFactory
     public function getMetadataFor($className)
     {
         if (! isset($this->_metadata[$className])) {
-            throw new MappingException();
+            throw new MappingException('Cannot find metadata for "'.$className.'"');
         }
 
         return $this->_metadata[$className];
@@ -64,14 +67,15 @@ class FakeMetadataFactory implements ClassMetadataFactory
 
     /**
      * {@inheritdoc}
-     *
-     * @param ClassMetadata $class
      */
     public function setMetadataFor($className, $class)
     {
         $this->_metadata[$className] = $class;
-        $class->initializeReflection($this->reflService);
-        $class->wakeupReflection($this->reflService);
+
+        if ($class instanceof ORMClassMetadata) {
+            $class->initializeReflection($this->reflService);
+            $class->wakeupReflection($this->reflService);
+        }
     }
 
     /**

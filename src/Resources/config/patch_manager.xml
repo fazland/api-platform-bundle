@@ -7,11 +7,13 @@
     <services>
         <service class="Fazland\ApiPlatformBundle\PatchManager\PatchManager" id="Fazland\ApiPlatformBundle\PatchManager\PatchManager" public="true">
             <argument type="service" id="form.factory" />
+            <argument type="service" id="validator" />
             <call method="setCache">
                 <argument type="service" id="cache.app" on-invalid="null" />
             </call>
         </service>
 
-        <service alias="Fazland\ApiPlatformBundle\PatchManager\PatchManager" id="kcs_api.patch_manager" public="true" />
+        <service alias="Fazland\ApiPlatformBundle\PatchManager\PatchManager" id="fazland_api.patch_manager" public="true" />
+        <service alias="Fazland\ApiPlatformBundle\PatchManager\PatchManager" id="Fazland\ApiPlatformBundle\PatchManager\PatchManagerInterface" public="true" />
     </services>
 </container>
