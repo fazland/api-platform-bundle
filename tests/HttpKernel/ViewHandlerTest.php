@@ -187,6 +187,7 @@ class ViewHandlerTest extends TestCase
         $request->attributes->set('_rest_view', new View());
 
         $form = $this->prophesize(Form::class);
+        $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(false);
 
         $event = $this->prophesize(GetResponseForControllerResultEvent::class);
@@ -200,6 +201,26 @@ class ViewHandlerTest extends TestCase
         $event->setResponse(Argument::that(function ($response) {
             return $response instanceof Response && 400 == $response->getStatusCode();
         }))->shouldBeCalled();
+
+        $this->viewHandler->onView($event->reveal());
+    }
+
+    public function testShouldCallSubmitOnUnsubmittedForms()
+    {
+        $request = new Request();
+        $request->attributes->set('_rest_view', new View());
+
+        $form = $this->prophesize(Form::class);
+        $form->isSubmitted()->willReturn(false);
+        $form->isValid()->willReturn(false);
+
+        $form->submit(null)->shouldBeCalled();
+
+        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event->getRequest()->willReturn($request);
+        $event->getControllerResult()->willReturn($form->reveal());
+
+        $event->setResponse(Argument::any())->willReturn();
 
         $this->viewHandler->onView($event->reveal());
     }

@@ -3,7 +3,6 @@
 namespace Fazland\ApiPlatformBundle\HttpKernel;
 
 use Fazland\ApiPlatformBundle\Annotation\View;
-use Fazland\ApiPlatformBundle\Doctrine\EntityIterator;
 use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\HttpKernel\View\Context;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
@@ -81,10 +80,16 @@ class ViewHandler implements EventSubscriberInterface
         $format = $request->attributes->get('_format');
         $context = clone $this->serializationContext;
 
-        if ($result instanceof Form && ! $result->isValid()) {
-            $view->statusCode = Response::HTTP_BAD_REQUEST;
+        if ($result instanceof Form) {
+            if (! $result->isSubmitted()) {
+                $result->submit(null);
+            }
 
-            return $this->serializer->serialize($result, $format, $context);
+            if (! $result->isValid()) {
+                $view->statusCode = Response::HTTP_BAD_REQUEST;
+
+                return $this->serializer->serialize($result, $format, $context);
+            }
         }
 
         if ($method = $view->groupsProvider) {
