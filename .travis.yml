@@ -20,6 +20,10 @@ matrix:
         - SYMFONY_PHPUNIT_REMOVE=symfony/yaml
     - php: 7.1
       env:
+        - SYMFONY_VERSION='3.4.*'
+        - SYMFONY_PHPUNIT_REMOVE=symfony/yaml
+    - php: 7.1
+      env:
         - SYMFONY_VERSION='2.8.*'
         - SYMFONY_PHPUNIT_REMOVE=symfony/yaml
 
