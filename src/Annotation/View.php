@@ -26,6 +26,11 @@ class View implements ConfigurationInterface
     public $groupsProvider;
 
     /**
+     * @var string
+     */
+    public $serializationType;
+
+    /**
      * {@inheritdoc}
      */
     public function getAliasName()

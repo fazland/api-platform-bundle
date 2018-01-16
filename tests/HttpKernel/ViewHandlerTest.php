@@ -6,6 +6,7 @@ use Fazland\ApiPlatformBundle\Annotation\View;
 use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\HttpKernel\ViewHandler;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\TestObject;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
 use Kcs\Serializer\Serializer;
@@ -13,6 +14,7 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +22,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class ViewHandlerTest extends TestCase
+class ViewHandlerTest extends WebTestCase
 {
     /**
      * @var Serializer|ObjectProphecy
@@ -30,7 +32,7 @@ class ViewHandlerTest extends TestCase
     /**
      * @var HttpKernelInterface|ObjectProphecy
      */
-    private $kernel;
+    private $httpKernel;
 
     /**
      * @var ViewHandler
@@ -51,7 +53,7 @@ class ViewHandlerTest extends TestCase
     {
         $this->serializer = $this->prophesize(Serializer::class);
         $this->serializationContext = SerializationContext::create();
-        $this->kernel = $this->prophesize(HttpKernelInterface::class);
+        $this->httpKernel = $this->prophesize(HttpKernelInterface::class);
         $this->tokenStorage = $this->prophesize(TokenStorageInterface::class);
         $this->viewHandler = new ViewHandler($this->serializer->reveal(), $this->serializationContext, $this->tokenStorage->reveal());
     }
@@ -120,7 +122,7 @@ class ViewHandlerTest extends TestCase
         $event->getControllerResult()->willReturn(new TestObject());
 
         $this->serializer
-            ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::type(SerializationContext::class))
+            ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::type(SerializationContext::class), null)
             ->will(function ($args) {
                 /** @var SerializationContext $context */
                 list(, , $context) = $args;
@@ -147,7 +149,7 @@ class ViewHandlerTest extends TestCase
         $event->getControllerResult()->willReturn(new TestObject());
 
         $this->serializer
-            ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::type(SerializationContext::class))
+            ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::type(SerializationContext::class), null)
             ->will(function ($args) {
                 /** @var SerializationContext $context */
                 list(, , $context) = $args;
@@ -171,7 +173,7 @@ class ViewHandlerTest extends TestCase
         $event->getControllerResult()->willReturn(new \stdClass());
 
         $this->serializer
-            ->serialize(Argument::any(), Argument::any(), Argument::type(SerializationContext::class))
+            ->serialize(Argument::any(), Argument::any(), Argument::type(SerializationContext::class), null)
             ->willThrow(new UnsupportedFormatException());
 
         $event->setResponse(Argument::that(function ($response) {
@@ -195,7 +197,7 @@ class ViewHandlerTest extends TestCase
         $event->getControllerResult()->willReturn($form->reveal());
 
         $this->serializer
-            ->serialize($form->reveal(), Argument::any(), Argument::type(SerializationContext::class))
+            ->serialize($form->reveal(), Argument::any(), Argument::type(SerializationContext::class), null)
             ->shouldBeCalled();
 
         $event->setResponse(Argument::that(function ($response) {
@@ -237,7 +239,7 @@ class ViewHandlerTest extends TestCase
         $event->getControllerResult()->willReturn($iterator);
 
         $this->serializer
-            ->serialize(['foo' => 'bar'], Argument::any(), Argument::type(SerializationContext::class))
+            ->serialize(['foo' => 'bar'], Argument::any(), Argument::type(SerializationContext::class), null)
             ->shouldBeCalled();
         $event->setResponse(Argument::type(Response::class))->willReturn();
 
@@ -259,7 +261,7 @@ class ViewHandlerTest extends TestCase
         $event->getControllerResult()->willReturn($iterator);
 
         $this->serializer
-            ->serialize(Argument::type('array'), Argument::any(), Argument::type(SerializationContext::class))
+            ->serialize(Argument::type('array'), Argument::any(), Argument::type(SerializationContext::class), null)
             ->shouldBeCalled();
 
         $event->setResponse(Argument::that(function ($response) {
@@ -283,7 +285,7 @@ class ViewHandlerTest extends TestCase
 
         $self = $this;
         $this->serializer
-            ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::type(SerializationContext::class))
+            ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::type(SerializationContext::class), null)
             ->will(function ($args) use ($self) {
                 /** @var SerializationContext $context */
                 list(, , $context) = $args;
@@ -295,5 +297,32 @@ class ViewHandlerTest extends TestCase
         $event->setResponse(Argument::type(Response::class))->willReturn();
 
         $this->viewHandler->onView($event->reveal());
+    }
+
+    protected static function createKernel(array $options = [])
+    {
+        return new AppKernel('test', true);
+    }
+
+    public function testShouldSetCorrectSerializationType()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/custom-serialization-type', [], [], ['HTTP_ACCEPT' => 'application/json']);
+
+        $response = $client->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertJsonStringEqualsJsonString('[{"data":"foobar","additional":"foo"},{"test":"barbar","additional":"foo"}]', $response->getContent());
+    }
+
+    public function testShouldSetCorrectSerializationTypeWhenProcessingAnIterator()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/custom-serialization-type-iterator', [], [], ['HTTP_ACCEPT' => 'application/json']);
+
+        $response = $client->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertJsonStringEqualsJsonString('[{"data":"foobar","additional":"foo"},{"test":"barbar","additional":"foo"}]', $response->getContent());
     }
 }

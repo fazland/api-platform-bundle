@@ -8,6 +8,7 @@ use Fazland\ApiPlatformBundle\HttpKernel\View\Context;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
 use Kcs\Serializer\Serializer;
+use Kcs\Serializer\Type\Type;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,7 +100,8 @@ class ViewHandler implements EventSubscriberInterface
             $context->setGroups($groups);
         }
 
-        return $this->serializer->serialize($result, $format, $context);
+        $type = $view->serializationType === null ? null : Type::parse($view->serializationType);
+        return $this->serializer->serialize($result, $format, $context, $type);
     }
 
     /**

@@ -13,3 +13,11 @@ form_not_submitted:
 invalid_json:
     path: /invalid-json
     defaults: { _controller: 'AppBundle:Test:invalidJsonException' }
+
+custom_serialization_type:
+    path: /custom-serialization-type
+    defaults: { _controller: 'AppBundle:Test:customSerializationType' }
+
+custom_serialization_type_iterator:
+    path: /custom-serialization-type-iterator
+    defaults: { _controller: 'AppBundle:Test:customSerializationTypeWithIterator' }

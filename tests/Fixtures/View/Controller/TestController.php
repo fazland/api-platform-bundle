@@ -56,10 +56,32 @@ class TestController extends Controller
     }
 
     /**
-     * @View()
+     * @View(serializationType="stdClass")
      */
     public function invalidJsonExceptionAction()
     {
         throw new InvalidJSONException('Invalid.');
+    }
+
+    /**
+     * @View(serializationType="array<FooObject>")
+     */
+    public function customSerializationTypeAction()
+    {
+        return [
+            ['data' => 'foobar'],
+            ['test' => 'barbar']
+        ];
+    }
+
+    /**
+     * @View(serializationType="array<FooObject>")
+     */
+    public function customSerializationTypeWithIteratorAction()
+    {
+        return new \ArrayIterator([
+            ['data' => 'foobar'],
+            ['test' => 'barbar']
+        ]);
     }
 }
