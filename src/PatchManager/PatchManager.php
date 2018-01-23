@@ -8,6 +8,7 @@ use Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use JsonSchema\Validator;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
@@ -73,7 +74,7 @@ class PatchManager implements PatchManagerInterface
 
             try {
                 $op->execute($patchable, $operation);
-            } catch (NoSuchPropertyException | UnexpectedTypeException $exception) {
+            } catch (NoSuchPropertyException | UnexpectedTypeException | TransformationFailedException $exception) {
                 throw new InvalidJSONException('Operation failed at path "'.$operation->path.'"', 0, $exception);
             }
         }
