@@ -33,5 +33,6 @@ sensio_framework_extra:
 
 services:
     Fazland\ApiPlatformBundle\Tests\Fixtures\View\Serializer\FooHandler:
+        class: Fazland\ApiPlatformBundle\Tests\Fixtures\View\Serializer\FooHandler
         tags:
             - { name: 'kcs_serializer.handler' }
