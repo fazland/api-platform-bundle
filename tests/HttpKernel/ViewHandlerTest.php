@@ -2,9 +2,12 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\HttpKernel;
 
+use Cake\Chronos\Chronos;
 use Fazland\ApiPlatformBundle\Annotation\View;
 use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\HttpKernel\ViewHandler;
+use Fazland\ApiPlatformBundle\Pagination\PageToken;
+use Fazland\ApiPlatformBundle\Pagination\PaginatorIterator;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\TestObject;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
@@ -271,6 +274,31 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
+    public function testShouldAddXContinuationTokenHeaderForPaginatorIterators()
+    {
+        $request = new Request();
+        $request->attributes->set('_rest_view', new View());
+
+        $iterator = $this->prophesize(PaginatorIterator::class);
+        $iterator->getNextPageToken()->willReturn(new PageToken(new Chronos('1991-11-24 02:00:00'), 1, 1275024653));
+        $iterator->rewind()->willReturn();
+        $iterator->valid()->willReturn(false);
+
+        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event->getRequest()->willReturn($request);
+        $event->getControllerResult()->willReturn($iterator);
+
+        $this->serializer
+            ->serialize(Argument::type('array'), Argument::any(), Argument::type(SerializationContext::class), null)
+            ->shouldBeCalled();
+
+        $event->setResponse(Argument::that(function ($response) {
+            return $response instanceof Response && '8tf0lkw0_1_l347bh' === $response->headers->get('X-Continuation-Token');
+        }))->shouldBeCalled();
+
+        $this->viewHandler->onView($event->reveal());
+    }
+
     public function testSerializationContextShouldBeReusable()
     {
         $annot = new View();
@@ -299,11 +327,6 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    protected static function createKernel(array $options = [])
-    {
-        return new AppKernel('test', true);
-    }
-
     public function testShouldSetCorrectSerializationType()
     {
         $client = static::createClient();
@@ -324,5 +347,10 @@ class ViewHandlerTest extends WebTestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString('[{"data":"foobar","additional":"foo"},{"test":"barbar","additional":"foo"}]', $response->getContent());
+    }
+
+    protected static function createKernel(array $options = [])
+    {
+        return new AppKernel('test', true);
     }
 }

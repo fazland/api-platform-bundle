@@ -5,6 +5,7 @@ namespace Fazland\ApiPlatformBundle\HttpKernel;
 use Fazland\ApiPlatformBundle\Annotation\View;
 use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\HttpKernel\View\Context;
+use Fazland\ApiPlatformBundle\Pagination\PaginatorIterator;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
 use Kcs\Serializer\Serializer;
@@ -60,6 +61,10 @@ class ViewHandler implements EventSubscriberInterface
 
         if ($result instanceof ObjectIterator) {
             $headers['X-Total-Count'] = $result->count();
+        }
+
+        if ($result instanceof PaginatorIterator) {
+            $headers['X-Continuation-Token'] = (string) $result->getNextPageToken();
         }
 
         if ($result instanceof \Iterator) {
