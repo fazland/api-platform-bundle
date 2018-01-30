@@ -78,7 +78,7 @@ class DocumentIterator implements ObjectIterator
     /**
      * {@inheritdoc}
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->internalIterator->valid();
     }

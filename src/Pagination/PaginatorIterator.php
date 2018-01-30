@@ -94,7 +94,7 @@ class PaginatorIterator implements \Iterator
     /**
      * {@inheritdoc}
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->valid;
     }

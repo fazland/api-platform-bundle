@@ -82,7 +82,7 @@ class EntityIterator implements ObjectIterator
     /**
      * {@inheritdoc}
      */
-    public function valid()
+    public function valid(): bool
     {
         return $this->internalIterator->valid();
     }

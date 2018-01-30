@@ -61,4 +61,11 @@ trait IteratorTrait
 
         return $this->_current;
     }
+
+    /**
+     * Checks if current position is valid.
+     *
+     * @return bool
+     */
+    abstract public function valid(): bool;
 }
