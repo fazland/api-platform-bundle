@@ -64,7 +64,7 @@ class DocumentIteratorTest extends TestCase
                     'n' => 42,
                     'query' => (object) [],
                     'ok' => true,
-                ]
+                ],
             ]));
 
         $this->assertCount(42, $this->iterator);

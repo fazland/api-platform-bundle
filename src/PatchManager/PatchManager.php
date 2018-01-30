@@ -171,11 +171,11 @@ class PatchManager implements PatchManagerInterface
     protected function validate(PatchableInterface $patchable): void
     {
         $violations = $this->validator->validate($patchable);
-        if (count($violations) === 0) {
+        if (0 === count($violations)) {
             return;
         }
 
-        throw new InvalidJSONException("Invalid entity: ".(string)$violations);
+        throw new InvalidJSONException('Invalid entity: '.(string) $violations);
     }
 
     /**

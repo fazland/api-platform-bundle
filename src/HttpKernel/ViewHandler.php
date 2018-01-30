@@ -100,7 +100,8 @@ class ViewHandler implements EventSubscriberInterface
             $context->setGroups($groups);
         }
 
-        $type = $view->serializationType === null ? null : Type::parse($view->serializationType);
+        $type = null === $view->serializationType ? null : Type::parse($view->serializationType);
+
         return $this->serializer->serialize($result, $format, $context, $type);
     }
 

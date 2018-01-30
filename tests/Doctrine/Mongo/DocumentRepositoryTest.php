@@ -62,7 +62,7 @@ class DocumentRepositoryTest extends WebTestCase
                     'n' => 42,
                     'query' => (object) [],
                     'ok' => true,
-                ]
+                ],
             ]));
 
         $this->assertSame(42, $this->repository->count());

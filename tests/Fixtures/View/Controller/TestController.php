@@ -70,7 +70,7 @@ class TestController extends Controller
     {
         return [
             ['data' => 'foobar'],
-            ['test' => 'barbar']
+            ['test' => 'barbar'],
         ];
     }
 
@@ -81,7 +81,7 @@ class TestController extends Controller
     {
         return new \ArrayIterator([
             ['data' => 'foobar'],
-            ['test' => 'barbar']
+            ['test' => 'barbar'],
         ]);
     }
 }

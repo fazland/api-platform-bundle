@@ -99,6 +99,7 @@ class DocumentRepository extends BaseRepository implements ObjectRepository
 
         return $object;
     }
+
     /**
      * Builds a query builder for find operations.
      *

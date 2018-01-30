@@ -9,7 +9,6 @@ use Doctrine\ODM\MongoDB\SchemaManager;
 use MongoDB\Client;
 use MongoDB\Collection;
 use MongoDB\Database;
-use MongoDB\Driver\Manager;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 

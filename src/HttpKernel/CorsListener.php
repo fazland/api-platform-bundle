@@ -40,7 +40,7 @@ class CorsListener implements EventSubscriberInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
@@ -96,7 +96,7 @@ class CorsListener implements EventSubscriberInterface
         $response->headers->set('Access-Control-Allow-Origin', $origin);
 
         $vary = $response->getVary();
-        if ($origin !== '*' && ! in_array('Origin', $vary)) {
+        if ('*' !== $origin && ! in_array('Origin', $vary)) {
             $vary[] = 'Origin';
             $response->setVary($vary);
         }

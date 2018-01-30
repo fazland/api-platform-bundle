@@ -27,11 +27,11 @@ interface ObjectRepository extends BaseRepository
     /**
      * Finds a single object by a set of criteria and cache the result for next calls.
      *
-     * @param array $criteria
+     * @param array      $criteria
      * @param array|null $orderBy
-     * @param int $ttl
+     * @param int        $ttl
      *
-     * @return object|null The entity instance or NULL if the entity can not be found.
+     * @return object|null the entity instance or NULL if the entity can not be found
      *
      * @throws NonUniqueResultException
      */
@@ -40,11 +40,11 @@ interface ObjectRepository extends BaseRepository
     /**
      * Finds objects by a set of criteria and cache the result for next calls.
      *
-     * @param array $criteria
+     * @param array      $criteria
      * @param array|null $orderBy
      * @param int|null   $limit
      * @param int|null   $offset
-     * @param int $ttl
+     * @param int        $ttl
      *
      * @return array The objects
      */
@@ -55,8 +55,8 @@ interface ObjectRepository extends BaseRepository
      * Throws an exception if the object cannot be found.
      *
      * @param mixed $id
-     * @param null $lockMode
-     * @param null $lockVersion
+     * @param null  $lockMode
+     * @param null  $lockVersion
      *
      * @return object
      *
@@ -67,7 +67,7 @@ interface ObjectRepository extends BaseRepository
     /**
      * Finds a single object by a set of criteria and cache the result for next calls.
      *
-     * @param array $criteria
+     * @param array      $criteria
      * @param array|null $orderBy
      *
      * @return object
@@ -81,9 +81,9 @@ interface ObjectRepository extends BaseRepository
      * Finds a single object by a set of criteria and cache the result for next calls.
      * Throws an exception if the object cannot be found.
      *
-     * @param array $criteria
+     * @param array      $criteria
      * @param array|null $orderBy
-     * @param int $ttl
+     * @param int        $ttl
      *
      * @return object
      *

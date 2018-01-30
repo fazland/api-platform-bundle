@@ -2,7 +2,6 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\PatchManager;
 
-use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Fazland\ApiPlatformBundle\PatchManager\PatchableInterface;
 use Fazland\ApiPlatformBundle\PatchManager\PatchManager;
 use Fazland\ApiPlatformBundle\PatchManager\PatchManagerInterface;
@@ -258,7 +257,7 @@ class PatchManagerTest extends TestCase
         $object->reveal()->a = ['b' => ['c' => 'foo']];
 
         $this->validator->validate($object)->willReturn(new ConstraintViolationList([
-            new ConstraintViolation('Invalid', 'Invalid', ['a'], '', 'property', 'invalid')
+            new ConstraintViolation('Invalid', 'Invalid', ['a'], '', 'property', 'invalid'),
         ]));
 
         $request = $this->prophesize(Request::class);

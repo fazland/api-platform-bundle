@@ -5,12 +5,15 @@ namespace Fazland\ApiPlatformBundle\Doctrine\Mongo;
 use Doctrine\MongoDB\Iterator;
 use Doctrine\ODM\MongoDB\Query\Builder;
 use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
+use Fazland\ApiPlatformBundle\Doctrine\Traits\IteratorTrait;
 
 /**
  * This class allows iterating a query iterator for a single entity query.
  */
 class DocumentIterator implements ObjectIterator
 {
+    use IteratorTrait;
+
     /**
      * @var Iterator
      */
@@ -25,21 +28,6 @@ class DocumentIterator implements ObjectIterator
      * @var null|int
      */
     private $_totalCount;
-
-    /**
-     * @var null|callable
-     */
-    private $_apply;
-
-    /**
-     * @var mixed
-     */
-    private $_currentElement;
-
-    /**
-     * @var mixed
-     */
-    private $_current;
 
     public function __construct(Builder $queryBuilder)
     {
@@ -64,39 +52,6 @@ class DocumentIterator implements ObjectIterator
         }
 
         return $this->_totalCount;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function apply(callable $func = null): ObjectIterator
-    {
-        if (null === $func) {
-            $func = function ($val) {
-                return $val;
-            };
-        }
-
-        $this->_current = null;
-        $this->_apply = $func;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function current()
-    {
-        if (! $this->valid()) {
-            return null;
-        }
-
-        if (null === $this->_current) {
-            $this->_current = call_user_func($this->_apply, $this->_currentElement);
-        }
-
-        return $this->_current;
     }
 
     /**
