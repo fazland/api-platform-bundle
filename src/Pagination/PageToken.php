@@ -111,7 +111,7 @@ final class PageToken
      */
     public static function fromRequest(Request $request): ?self
     {
-        if (null === ($token = $request->query->get('continue'))) {
+        if (empty($token = $request->query->get('continue'))) {
             return null;
         }
 
