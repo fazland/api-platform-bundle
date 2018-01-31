@@ -6,7 +6,7 @@ use Cake\Chronos\Chronos;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-class PaginatorIterator implements \Iterator
+class PagerIterator implements \Iterator
 {
     const DEFAULT_PAGE_SIZE = 10;
 
@@ -223,7 +223,7 @@ class PaginatorIterator implements \Iterator
     }
 
     /**
-     * Main function of the Paginator:
+     * Main function of the Pager:
      * - if we have no objects to paginate, we must return an empty array. This means that
      *      a) we have no objects in the database OR
      *      b) from the given timestamp on, there are no results.

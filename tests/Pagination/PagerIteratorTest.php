@@ -4,12 +4,12 @@ namespace Fazland\ApiPlatformBundle\Tests\Pagination;
 
 use Cake\Chronos\Chronos;
 use Fazland\ApiPlatformBundle\Pagination\PageToken;
-use Fazland\ApiPlatformBundle\Pagination\PaginatorIterator;
+use Fazland\ApiPlatformBundle\Pagination\PagerIterator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
-class PaginatorIteratorTest extends TestCase
+class PagerIteratorTest extends TestCase
 {
     const PAGE_SIZE = 3;
 
@@ -67,7 +67,7 @@ class PaginatorIteratorTest extends TestCase
 
     public function testPagerShouldGenerateFirstPageWithToken(): void
     {
-        $pager = new PaginatorIterator(
+        $pager = new PagerIterator(
             $this->generatePageableInterfaceListFromArray($this->case1, $this->uuids), ['timestamp' => 'ASC', 'id' => 'ASC']
         );
         $pager->setPageSize(3);
@@ -93,7 +93,7 @@ class PaginatorIteratorTest extends TestCase
 
     public function testPagerShouldGenerateSecondPageWithTokenAndLastPage(): void
     {
-        $pager = new PaginatorIterator(
+        $pager = new PagerIterator(
             $this->generatePageableInterfaceListFromArray($this->case1, $this->uuids), ['timestamp' => 'ASC', 'id' => 'ASC']
         );
         $pager->setPageSize(3);
@@ -119,7 +119,7 @@ class PaginatorIteratorTest extends TestCase
 
     public function testOffsetShouldWork(): void
     {
-        $pager = new PaginatorIterator(
+        $pager = new PagerIterator(
             $this->generatePageableInterfaceListFromArray($this->case2, $this->uuids), ['timestamp' => 'ASC', 'id' => 'ASC']
         );
         $pager->setPageSize(3);
@@ -157,7 +157,7 @@ class PaginatorIteratorTest extends TestCase
 
     public function testPagerShouldReturnFirstPageWithTimestampDifference(): void
     {
-        $pager = new PaginatorIterator(
+        $pager = new PagerIterator(
             $this->generatePageableInterfaceListFromArray($this->case1, $this->uuids, '+2 hours'), ['timestamp' => 'ASC', 'id' => 'ASC']
         );
         $pager->setPageSize(3);
@@ -183,7 +183,7 @@ class PaginatorIteratorTest extends TestCase
 
     public function testPagerShouldReturnFirstPageWithChecksumDifference(): void
     {
-        $pager = new PaginatorIterator(
+        $pager = new PagerIterator(
             $this->generatePageableInterfaceListFromArray($this->case1, $this->wrong_uuids), ['timestamp' => 'ASC', 'id' => 'ASC']
         );
         $pager->setPageSize(3);
@@ -206,16 +206,4 @@ class PaginatorIteratorTest extends TestCase
             '8tf4vwg0_1_7gqxdp', (string) $pager->getNextPageToken()
         );
     }
-}
-
-class TestObject
-{
-    public function __construct($id, $timestamp)
-    {
-        $this->id = $id;
-        $this->timestamp = $timestamp;
-    }
-
-    public $id;
-    public $timestamp;
 }

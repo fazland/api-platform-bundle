@@ -7,7 +7,7 @@ use Fazland\ApiPlatformBundle\Annotation\View;
 use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\HttpKernel\ViewHandler;
 use Fazland\ApiPlatformBundle\Pagination\PageToken;
-use Fazland\ApiPlatformBundle\Pagination\PaginatorIterator;
+use Fazland\ApiPlatformBundle\Pagination\PagerIterator;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\TestObject;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
@@ -274,12 +274,12 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testShouldAddXContinuationTokenHeaderForPaginatorIterators()
+    public function testShouldAddXContinuationTokenHeaderForPagerIterators()
     {
         $request = new Request();
         $request->attributes->set('_rest_view', new View());
 
-        $iterator = $this->prophesize(PaginatorIterator::class);
+        $iterator = $this->prophesize(PagerIterator::class);
         $iterator->getNextPageToken()->willReturn(new PageToken(new Chronos('1991-11-24 02:00:00'), 1, 1275024653));
         $iterator->rewind()->willReturn();
         $iterator->valid()->willReturn(false);

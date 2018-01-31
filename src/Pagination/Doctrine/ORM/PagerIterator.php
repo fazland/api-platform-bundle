@@ -6,9 +6,9 @@ use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\Doctrine\Traits\IteratorTrait;
 use Fazland\ApiPlatformBundle\Pagination\Orderings;
-use Fazland\ApiPlatformBundle\Pagination\PaginatorIterator as BaseIterator;
+use Fazland\ApiPlatformBundle\Pagination\PagerIterator as BaseIterator;
 
-final class PaginatorIterator extends BaseIterator implements ObjectIterator
+final class PagerIterator extends BaseIterator implements ObjectIterator
 {
     use IteratorTrait;
 
@@ -22,9 +22,9 @@ final class PaginatorIterator extends BaseIterator implements ObjectIterator
      */
     private $_totalCount;
 
-    public function __construct(QueryBuilder $queryBuilder, $orderBy)
+    public function __construct(QueryBuilder $searchable, $orderBy)
     {
-        $this->queryBuilder = clone $queryBuilder;
+        $this->queryBuilder = clone $searchable;
         $this->apply(null);
 
         parent::__construct([], $orderBy);
@@ -69,6 +69,9 @@ final class PaginatorIterator extends BaseIterator implements ObjectIterator
         $this->_currentElement = parent::current();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getObjects(): array
     {
         $queryBuilder = clone $this->queryBuilder;

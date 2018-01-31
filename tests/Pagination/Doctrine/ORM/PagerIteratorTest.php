@@ -1,20 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace Fazland\ApiPlatformBundle\Tests\Pagination\Doctrine\ORM;
+namespace Fazland\ApiPlatformBundle\Tests\Pagination\ORM;
 
 use Cake\Chronos\Chronos;
 use Doctrine\DBAL\Cache\ArrayStatement;
 use Doctrine\DBAL\Driver\Statement;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
-use Fazland\ApiPlatformBundle\Pagination\Doctrine\ORM\PaginatorIterator;
+use Fazland\ApiPlatformBundle\Pagination\Doctrine\ORM\PagerIterator;
 use Fazland\ApiPlatformBundle\Pagination\PageToken;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Doctrine\EntityManagerMockTrait;
+use Fazland\ApiPlatformBundle\Tests\Pagination\TestObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
-class PaginatorIteratorTest extends TestCase
+class PagerIteratorTest extends TestCase
 {
     use EntityManagerMockTrait;
 
@@ -24,11 +25,14 @@ class PaginatorIteratorTest extends TestCase
     private $queryBuilder;
 
     /**
-     * @var PaginatorIterator
+     * @var PagerIterator
      */
     private $iterator;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->getEntityManager()->getMetadataFactory()->setMetadataFor(TestObject::class, $metadata = new ClassMetadata(TestObject::class));
 
@@ -60,7 +64,7 @@ class PaginatorIteratorTest extends TestCase
 
         $this->_innerConnection->query('')->shouldNotBeCalled();
 
-        $this->iterator = new PaginatorIterator($this->queryBuilder, ['timestamp', 'id']);
+        $this->iterator = new PagerIterator($this->queryBuilder, ['timestamp', 'id']);
         $this->iterator->setPageSize(3);
     }
 
@@ -237,16 +241,4 @@ class PaginatorIteratorTest extends TestCase
 
         $this->assertEquals('8tf4vwg0_1_7gqxdp', (string) $this->iterator->getNextPageToken());
     }
-}
-
-class TestObject
-{
-    public function __construct($id, $timestamp)
-    {
-        $this->id = $id;
-        $this->timestamp = $timestamp;
-    }
-
-    public $id;
-    public $timestamp;
 }
