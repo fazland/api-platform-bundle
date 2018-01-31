@@ -111,6 +111,7 @@ class CorsListener implements EventSubscriberInterface
 
         $response = $event->getResponse();
         $response->headers->set('Access-Control-Allow-Origin', $origin);
+        $response->headers->set('Access-Control-Expose-Headers', $this->exposedHeaders);
 
         $vary = $response->getVary();
         if ('*' !== $origin && ! in_array('Origin', $vary)) {
