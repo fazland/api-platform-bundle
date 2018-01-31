@@ -21,12 +21,20 @@ class CorsListener implements EventSubscriberInterface
     private $allowedOrigins;
 
     /**
+     * Allowed exposed headers.
+     *
+     * @var string
+     */
+    private $exposedHeaders;
+
+    /**
      * Constructor.
      * An array of domain globs could be passed to disallow forbidden origins.
      *
      * @param array|null $allowedOrigins
+     * @param array      $exposedHeaders
      */
-    public function __construct(array $allowedOrigins = null)
+    public function __construct(array $allowedOrigins = null, array $exposedHeaders = [])
     {
         if (null !== $allowedOrigins) {
             $allowedOrigins = (function (string ...$origins) {
@@ -37,6 +45,15 @@ class CorsListener implements EventSubscriberInterface
         }
 
         $this->allowedOrigins = $allowedOrigins;
+
+        $headers = [];
+        $exposedHeaders = array_merge(array_values($exposedHeaders), ['Authorization', 'Content-Length', 'X-Total-Count', 'X-Continuation-Token']);
+
+        foreach ($exposedHeaders as $header) {
+            $headers[strtolower($header)] = $header;
+        }
+
+        $this->exposedHeaders = implode(', ', $headers);
     }
 
     /**
@@ -69,7 +86,7 @@ class CorsListener implements EventSubscriberInterface
             $response->headers->set('Access-Control-Allow-Headers', $headers);
         }
 
-        $response->headers->set('Access-Control-Expose-Headers', 'Authorization, Content-Length, X-Total-Count');
+        $response->headers->set('Access-Control-Expose-Headers', $this->exposedHeaders);
 
         $event->setResponse($response);
 

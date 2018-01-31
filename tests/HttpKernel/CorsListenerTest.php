@@ -104,7 +104,7 @@ class CorsListenerTest extends WebTestCase
         $this->assertArrayHasKey('access-control-allow-headers', $headers);
         $this->assertEquals(['Authorization'], $headers['access-control-allow-headers']);
         $this->assertArrayHasKey('access-control-expose-headers', $headers);
-        $this->assertEquals(['Authorization, Content-Length, X-Total-Count'], $headers['access-control-expose-headers']);
+        $this->assertEquals(['Authorization, Content-Length, X-Total-Count, X-Continuation-Token'], $headers['access-control-expose-headers']);
     }
 
     public function testOnResponseShouldNotSetHeaderIfNoOriginIsSpecified()

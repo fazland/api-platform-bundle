@@ -3,6 +3,7 @@
 namespace Fazland\ApiPlatformBundle\DependencyInjection;
 
 use Fazland\ApiPlatformBundle\Decoder\DecoderInterface;
+use Fazland\ApiPlatformBundle\HttpKernel\CorsListener;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -33,8 +34,8 @@ class ApiPlatformExtension extends Extension
             $loader->load('exception.xml');
         }
 
-        if ($config['cors']) {
-            $loader->load('cors.xml');
+        if ($config['cors']['enabled']) {
+            $this->loadCors($loader, $container, $config['cors']);
         }
 
         if (method_exists($container, 'registerForAutoconfiguration')) {
@@ -45,5 +46,14 @@ class ApiPlatformExtension extends Extension
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
         return new Configuration();
+    }
+
+    private function loadCors(XmlFileLoader $loader, ContainerBuilder $container, array $config)
+    {
+        $loader->load('cors.xml');
+
+        $definition = $container->findDefinition(CorsListener::class);
+        $definition->setArgument(0, 0 < count($config['origins']) ? $config['origins'] : null);
+        $definition->setArgument(1, $config['exposed_headers']);
     }
 }
