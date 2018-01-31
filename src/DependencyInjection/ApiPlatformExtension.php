@@ -53,7 +53,9 @@ class ApiPlatformExtension extends Extension
         $loader->load('cors.xml');
 
         $definition = $container->findDefinition(CorsListener::class);
-        $definition->setArgument(0, 0 < count($config['origins']) ? $config['origins'] : null);
-        $definition->setArgument(1, $config['exposed_headers']);
+        $definition->setArguments([
+            0 < count($config['origins']) ? $config['origins'] : null,
+            $config['exposed_headers'],
+        ]);
     }
 }
