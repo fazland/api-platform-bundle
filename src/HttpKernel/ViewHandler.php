@@ -63,12 +63,12 @@ class ViewHandler implements EventSubscriberInterface
             $headers['X-Total-Count'] = $result->count();
         }
 
-        if ($result instanceof \Iterator) {
-            $result = iterator_to_array($result);
-        }
-
         if ($result instanceof PaginatorIterator) {
             $headers['X-Continuation-Token'] = (string) $result->getNextPageToken();
+        }
+
+        if ($result instanceof \Iterator) {
+            $result = iterator_to_array($result);
         }
 
         try {

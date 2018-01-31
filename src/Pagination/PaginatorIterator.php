@@ -145,6 +145,10 @@ class PaginatorIterator implements \Iterator
      */
     public function getNextPageToken(): ?PageToken
     {
+        if (null === $this->page) {
+            $this->rewind();
+        }
+
         if (empty($this->page)) {
             return null;
         }
