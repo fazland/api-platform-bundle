@@ -104,9 +104,11 @@ class PagerIterator implements \Iterator
      */
     public function rewind()
     {
-        $this->page = $this->getPage();
-        reset($this->page);
+        if (null === $this->page) {
+            $this->page = $this->getPage();
+        }
 
+        reset($this->page);
         $this->valid = count($this->page) > 0;
     }
 
@@ -120,6 +122,7 @@ class PagerIterator implements \Iterator
     public function setPageSize(int $pageSize = self::DEFAULT_PAGE_SIZE): self
     {
         $this->pageSize = $pageSize;
+        $this->page = null;
 
         return $this;
     }
@@ -134,6 +137,7 @@ class PagerIterator implements \Iterator
     public function setToken(?PageToken $token): self
     {
         $this->token = $token;
+        $this->page = null;
 
         return $this;
     }
