@@ -59,7 +59,7 @@ class FakeElasticaMetadataFactory extends MetadataFactory
     /**
      * {@inheritdoc}
      */
-    public function isTransient($className)
+    public function isTransient($className): bool
     {
         return false;
     }
