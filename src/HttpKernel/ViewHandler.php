@@ -2,16 +2,14 @@
 
 namespace Fazland\ApiPlatformBundle\HttpKernel;
 
-use Fazland\ApiPlatformBundle\Annotation\View;
-use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
+use Fazland\ApiPlatformBundle\Annotation\View as ViewAnnotation;
 use Fazland\ApiPlatformBundle\HttpKernel\View\Context;
-use Fazland\ApiPlatformBundle\Pagination\PagerIterator;
+use Fazland\ApiPlatformBundle\HttpKernel\View\View;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
 use Kcs\Serializer\Serializer;
 use Kcs\Serializer\Type\Type;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
@@ -42,7 +40,12 @@ class ViewHandler implements EventSubscriberInterface
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function onView(GetResponseForControllerResultEvent $event)
+    /**
+     * Handles the result of a controller, serializing it when needed.
+     *
+     * @param GetResponseForControllerResultEvent $event
+     */
+    public function onView(GetResponseForControllerResultEvent $event): void
     {
         $request = $event->getRequest();
         $result = $event->getControllerResult();
@@ -51,29 +54,30 @@ class ViewHandler implements EventSubscriberInterface
         }
 
         $annotation = $request->attributes->get('_rest_view');
-        if (! $annotation instanceof View) {
+        if (! $annotation instanceof ViewAnnotation) {
             return;
         }
 
-        $headers = [
-            'Content-Type' => $request->getMimeType($request->attributes->get('_format')),
-        ];
+        if (! $result instanceof View) {
+            $view = new View($result, $annotation->statusCode);
+            $view->serializationType = null === $annotation->serializationType ? null : Type::parse($annotation->serializationType);
 
-        if ($result instanceof ObjectIterator) {
-            $headers['X-Total-Count'] = $result->count();
+            if ($method = $annotation->groupsProvider) {
+                $viewContext = Context::create($request, $this->tokenStorage);
+                $view->serializationGroups = $result->$method($viewContext);
+            } elseif ($groups = $annotation->groups) {
+                $view->serializationGroups = $groups;
+            }
+
+            $result = $view;
         }
 
-        if ($result instanceof PagerIterator) {
-            $headers['X-Continuation-Token'] = (string) $result->getNextPageToken();
-        }
-
-        if ($result instanceof \Iterator) {
-            $result = iterator_to_array($result);
-        }
+        $headers = $result->headers;
+        $headers['Content-Type'] = $request->getMimeType($request->attributes->get('_format'));
 
         try {
-            $content = $this->handle($result, $request, $annotation = clone $annotation);
-            $response = new Response($content, $annotation->statusCode, $headers);
+            $content = $this->handle($result, $request);
+            $response = new Response($content, $result->statusCode, $headers);
         } catch (UnsupportedFormatException $e) {
             $response = new Response(null, Response::HTTP_NOT_ACCEPTABLE);
         }
@@ -81,33 +85,24 @@ class ViewHandler implements EventSubscriberInterface
         $event->setResponse($response);
     }
 
-    private function handle($result, Request $request, View $view)
+    /**
+     * Serializes the view with given serialization groups
+     * and given type.
+     *
+     * @param View    $view
+     * @param Request $request
+     *
+     * @return mixed|string
+     */
+    private function handle(View $view, Request $request)
     {
         $format = $request->attributes->get('_format');
         $context = clone $this->serializationContext;
 
-        if ($result instanceof Form) {
-            if (! $result->isSubmitted()) {
-                $result->submit(null);
-            }
+        $result = $view->result;
+        $context->setGroups($view->serializationGroups);
 
-            if (! $result->isValid()) {
-                $view->statusCode = Response::HTTP_BAD_REQUEST;
-
-                return $this->serializer->serialize($result, $format, $context);
-            }
-        }
-
-        if ($method = $view->groupsProvider) {
-            $viewContext = Context::create($request, $this->tokenStorage);
-            $context->setGroups($result->$method($viewContext));
-        } elseif ($groups = $view->groups) {
-            $context->setGroups($groups);
-        }
-
-        $type = null === $view->serializationType ? null : Type::parse($view->serializationType);
-
-        return $this->serializer->serialize($result, $format, $context, $type);
+        return $this->serializer->serialize($result, $format, $context, $view->serializationType);
     }
 
     /**

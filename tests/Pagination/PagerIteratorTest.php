@@ -3,8 +3,8 @@
 namespace Fazland\ApiPlatformBundle\Tests\Pagination;
 
 use Cake\Chronos\Chronos;
-use Fazland\ApiPlatformBundle\Pagination\PageToken;
 use Fazland\ApiPlatformBundle\Pagination\PagerIterator;
+use Fazland\ApiPlatformBundle\Pagination\PageToken;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;

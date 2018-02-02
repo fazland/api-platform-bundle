@@ -96,7 +96,7 @@ class PagerIteratorTest extends TestCase
             ],
             'sort' => [
                 ['timestamp' => 'asc'],
-                ['id' => 'asc']
+                ['id' => 'asc'],
             ],
             'size' => 3,
         ];
@@ -107,7 +107,7 @@ class PagerIteratorTest extends TestCase
             '_shards' => [
                 'total' => 3,
                 'successful' => 3,
-                "failed" => 0,
+                'failed' => 0,
             ],
             'hits' => [
                 'total' => 1000,
@@ -182,7 +182,7 @@ class PagerIteratorTest extends TestCase
             ],
             'sort' => [
                 ['timestamp' => 'asc'],
-                ['id' => 'asc']
+                ['id' => 'asc'],
             ],
             'size' => 4,
         ];
@@ -193,7 +193,7 @@ class PagerIteratorTest extends TestCase
             '_shards' => [
                 'total' => 4,
                 'successful' => 4,
-                "failed" => 0,
+                'failed' => 0,
             ],
             'hits' => [
                 'total' => 1000,
@@ -269,7 +269,7 @@ class PagerIteratorTest extends TestCase
             ],
             'sort' => [
                 ['timestamp' => 'asc'],
-                ['id' => 'asc']
+                ['id' => 'asc'],
             ],
             'size' => 3,
         ];
@@ -280,7 +280,7 @@ class PagerIteratorTest extends TestCase
             '_shards' => [
                 'total' => 3,
                 'successful' => 3,
-                "failed" => 0,
+                'failed' => 0,
             ],
             'hits' => [
                 'total' => 1000,
@@ -357,7 +357,7 @@ class PagerIteratorTest extends TestCase
             ],
             'sort' => [
                 ['timestamp' => 'asc'],
-                ['id' => 'asc']
+                ['id' => 'asc'],
             ],
             'size' => 5,
         ];
@@ -368,7 +368,7 @@ class PagerIteratorTest extends TestCase
             '_shards' => [
                 'total' => 5,
                 'successful' => 5,
-                "failed" => 0,
+                'failed' => 0,
             ],
             'hits' => [
                 'total' => 1000,
@@ -454,7 +454,7 @@ class PagerIteratorTest extends TestCase
             ],
             'sort' => [
                 ['timestamp' => 'asc'],
-                ['id' => 'asc']
+                ['id' => 'asc'],
             ],
             'size' => 4,
         ];
@@ -465,7 +465,7 @@ class PagerIteratorTest extends TestCase
             '_shards' => [
                 'total' => 4,
                 'successful' => 4,
-                "failed" => 0,
+                'failed' => 0,
             ],
             'hits' => [
                 'total' => 1000,
@@ -549,7 +549,7 @@ class PagerIteratorTest extends TestCase
             ],
             'sort' => [
                 ['timestamp' => 'asc'],
-                ['id' => 'asc']
+                ['id' => 'asc'],
             ],
             'size' => 4,
         ];
@@ -560,7 +560,7 @@ class PagerIteratorTest extends TestCase
             '_shards' => [
                 'total' => 4,
                 'successful' => 4,
-                "failed" => 0,
+                'failed' => 0,
             ],
             'hits' => [
                 'total' => 1000,
@@ -624,4 +624,3 @@ class PagerIteratorTest extends TestCase
         $this->assertEquals('8tf4vwg0_1_7gqxdp', (string) $this->iterator->getNextPageToken());
     }
 }
-

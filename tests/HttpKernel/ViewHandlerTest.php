@@ -3,11 +3,12 @@
 namespace Fazland\ApiPlatformBundle\Tests\HttpKernel;
 
 use Cake\Chronos\Chronos;
-use Fazland\ApiPlatformBundle\Annotation\View;
+use Fazland\ApiPlatformBundle\Annotation\View as ViewAnnotation;
 use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
+use Fazland\ApiPlatformBundle\HttpKernel\View\View;
 use Fazland\ApiPlatformBundle\HttpKernel\ViewHandler;
-use Fazland\ApiPlatformBundle\Pagination\PageToken;
 use Fazland\ApiPlatformBundle\Pagination\PagerIterator;
+use Fazland\ApiPlatformBundle\Pagination\PageToken;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\TestObject;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
@@ -91,7 +92,7 @@ class ViewHandlerTest extends WebTestCase
 
     public function testShouldSetStatusCode()
     {
-        $annot = new View();
+        $annot = new ViewAnnotation();
         $annot->statusCode = 201;
 
         $request = new Request();
@@ -114,7 +115,7 @@ class ViewHandlerTest extends WebTestCase
 
     public function testShouldSerializeWithCorrectGroups()
     {
-        $annot = new View();
+        $annot = new ViewAnnotation();
         $annot->groups = ['group_foo', 'bar_bar'];
 
         $request = new Request();
@@ -141,7 +142,7 @@ class ViewHandlerTest extends WebTestCase
 
     public function testShouldCallSerializationGroupProvider()
     {
-        $annot = new View();
+        $annot = new ViewAnnotation();
         $annot->groupsProvider = 'testGroupProvider';
 
         $request = new Request();
@@ -169,7 +170,7 @@ class ViewHandlerTest extends WebTestCase
     public function testShouldSetResponseCode405IfFormatIsNotSupported()
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new View());
+        $request->attributes->set('_rest_view', new ViewAnnotation());
 
         $event = $this->prophesize(GetResponseForControllerResultEvent::class);
         $event->getRequest()->willReturn($request);
@@ -189,7 +190,7 @@ class ViewHandlerTest extends WebTestCase
     public function testShouldSerializeInvalidFormAndSetBadRequestStatus()
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new View());
+        $request->attributes->set('_rest_view', new ViewAnnotation());
 
         $form = $this->prophesize(Form::class);
         $form->isSubmitted()->willReturn(true);
@@ -213,7 +214,7 @@ class ViewHandlerTest extends WebTestCase
     public function testShouldCallSubmitOnUnsubmittedForms()
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new View());
+        $request->attributes->set('_rest_view', new ViewAnnotation());
 
         $form = $this->prophesize(Form::class);
         $form->isSubmitted()->willReturn(false);
@@ -233,7 +234,7 @@ class ViewHandlerTest extends WebTestCase
     public function testShouldTransformAnIteratorIntoAnArrayBeforeSerializing()
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new View());
+        $request->attributes->set('_rest_view', new ViewAnnotation());
 
         $iterator = new \ArrayIterator(['foo' => 'bar']);
 
@@ -252,7 +253,7 @@ class ViewHandlerTest extends WebTestCase
     public function testShouldAddXTotalCountHeaderForEntityIterators()
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new View());
+        $request->attributes->set('_rest_view', new ViewAnnotation());
 
         $iterator = $this->prophesize(ObjectIterator::class);
         $iterator->count()->willReturn(42);
@@ -277,7 +278,7 @@ class ViewHandlerTest extends WebTestCase
     public function testShouldAddXContinuationTokenHeaderForPagerIterators()
     {
         $request = new Request();
-        $request->attributes->set('_rest_view', new View());
+        $request->attributes->set('_rest_view', new ViewAnnotation());
 
         $iterator = $this->prophesize(PagerIterator::class);
         $iterator->getNextPageToken()->willReturn(new PageToken(new Chronos('1991-11-24 02:00:00'), 1, 1275024653));
@@ -301,7 +302,7 @@ class ViewHandlerTest extends WebTestCase
 
     public function testSerializationContextShouldBeReusable()
     {
-        $annot = new View();
+        $annot = new ViewAnnotation();
         $annot->groups = ['group_foo', 'bar_bar'];
 
         $request = new Request();
@@ -323,6 +324,34 @@ class ViewHandlerTest extends WebTestCase
             })
             ->shouldBeCalled();
         $event->setResponse(Argument::type(Response::class))->willReturn();
+
+        $this->viewHandler->onView($event->reveal());
+    }
+
+    public function testViewObjectShouldBeCorrectlyHandled()
+    {
+        $request = new Request();
+        $request->attributes->set('_rest_view', new ViewAnnotation());
+
+        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event->getRequest()->willReturn($request);
+        $event->getControllerResult()->willReturn(new View(['foobar' => 'no no no'], Response::HTTP_PAYMENT_REQUIRED));
+
+        $self = $this;
+        $this->serializer
+            ->serialize(Argument::type('array'), Argument::any(), Argument::type(SerializationContext::class), null)
+            ->will(function ($args) use ($self) {
+                /** @var SerializationContext $context */
+                list(, , $context) = $args;
+                Assert::assertNotEquals(spl_object_hash($self->serializationContext), spl_object_hash($context));
+
+                return '{"foobar": "no no no"}';
+            })
+            ->shouldBeCalled();
+
+        $event->setResponse(Argument::that(function (Response $response) {
+            return Response::HTTP_PAYMENT_REQUIRED === $response->getStatusCode();
+        }))->willReturn();
 
         $this->viewHandler->onView($event->reveal());
     }
