@@ -231,12 +231,24 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testShouldTransformAnIteratorIntoAnArrayBeforeSerializing()
+    public function provideIterator()
+    {
+        yield [ new \ArrayIterator(['foo' => 'bar']) ];
+        yield [ new class implements \IteratorAggregate {
+            public function getIterator()
+            {
+                yield from ['foo' => 'bar'];
+            }
+        } ];
+    }
+
+    /**
+     * @dataProvider provideIterator
+     */
+    public function testShouldTransformAnIteratorIntoAnArrayBeforeSerializing($iterator)
     {
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
-
-        $iterator = new \ArrayIterator(['foo' => 'bar']);
 
         $event = $this->prophesize(GetResponseForControllerResultEvent::class);
         $event->getRequest()->willReturn($request);

@@ -39,7 +39,7 @@ final class View
             if (! $result->isValid()) {
                 $this->statusCode = Response::HTTP_BAD_REQUEST;
             }
-        } elseif ($result instanceof \Iterator) {
+        } elseif ($result instanceof \Iterator || $result instanceof \IteratorAggregate) {
             $result = iterator_to_array($result);
         }
 
