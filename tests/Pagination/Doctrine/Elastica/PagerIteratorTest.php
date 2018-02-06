@@ -170,7 +170,7 @@ class PagerIteratorTest extends TestCase
                     'filter' => [[
                         'range' => [
                             'timestamp' => [
-                                'gte' => new \DateTimeImmutable('1991-11-24 02:00:00Z'),
+                                'gte' => '1991-11-24T02:00:00+0000',
                             ],
                         ],
                     ]],
@@ -345,7 +345,7 @@ class PagerIteratorTest extends TestCase
                     'filter' => [[
                         'range' => [
                             'timestamp' => [
-                                'gte' => new \DateTimeImmutable('1991-11-24 01:00:00Z'),
+                                'gte' => '1991-11-24T01:00:00+0000',
                             ],
                         ],
                     ]],
@@ -442,7 +442,7 @@ class PagerIteratorTest extends TestCase
                     'filter' => [[
                         'range' => [
                             'timestamp' => [
-                                'gte' => new \DateTimeImmutable('1991-11-24 02:00:00Z'),
+                                'gte' => '1991-11-24T02:00:00+0000',
                             ],
                         ],
                     ]],
@@ -537,7 +537,7 @@ class PagerIteratorTest extends TestCase
                     'filter' => [[
                         'range' => [
                             'timestamp' => [
-                                'gte' => new \DateTimeImmutable('1991-11-24 02:00:00Z'),
+                                'gte' => '1991-11-24T02:00:00+0000',
                             ],
                         ],
                     ]],
