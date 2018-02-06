@@ -90,7 +90,9 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
             $mainOrder = $this->orderBy[0];
             $direction = Orderings::SORT_ASC === $mainOrder[1] ? 'gte' : 'lte';
 
-            $query->addFilter(new Query\Range($mainOrder[0], [$direction => $this->token->getTimestamp()]));
+            $query->addFilter(new Query\Range($mainOrder[0], [
+                $direction => $this->token->getTimestamp()->format(\DateTime::ISO8601),
+            ]));
         }
 
         $search
