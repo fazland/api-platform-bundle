@@ -10,7 +10,7 @@ use Kcs\Serializer\VisitorInterface;
 
 class FooHandler implements SubscribingHandlerInterface
 {
-    public static function getSubscribingMethods()
+    public function getSubscribingMethods()
     {
         yield [
             'type' => 'FooObject',
