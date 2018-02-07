@@ -22,14 +22,7 @@ final class View
     {
         $this->statusCode = $statusCode;
         $this->headers = [];
-
-        if ($result instanceof ObjectIterator) {
-            $this->headers['X-Total-Count'] = $result->count();
-        }
-
-        if ($result instanceof PagerIterator) {
-            $this->headers['X-Continuation-Token'] = (string) $result->getNextPageToken();
-        }
+        $this->result = $result;
 
         if ($result instanceof Form) {
             if (! $result->isSubmitted()) {
@@ -39,10 +32,24 @@ final class View
             if (! $result->isValid()) {
                 $this->statusCode = Response::HTTP_BAD_REQUEST;
             }
-        } elseif ($result instanceof \Iterator || $result instanceof \IteratorAggregate) {
-            $result = iterator_to_array($result);
+
+            return;
         }
 
-        $this->result = $result;
+        if ($result instanceof \IteratorAggregate) {
+            $result = $result->getIterator();
+        }
+
+        if ($result instanceof ObjectIterator) {
+            $this->headers['X-Total-Count'] = $result->count();
+        }
+
+        if ($result instanceof PagerIterator) {
+            $this->headers['X-Continuation-Token'] = (string) $result->getNextPageToken();
+        }
+
+        if ($result instanceof \Iterator) {
+            $this->result = iterator_to_array($result);
+        }
     }
 }

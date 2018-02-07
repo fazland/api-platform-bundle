@@ -285,6 +285,45 @@ class ViewHandlerTest extends WebTestCase
         }))->shouldBeCalled();
 
         $this->viewHandler->onView($event->reveal());
+
+        return $iterator;
+    }
+
+    /**
+     * @depends testShouldAddXTotalCountHeaderForEntityIterators
+     */
+    public function testShouldUnwrapIteratorFromIteratorAggregate(ObjectProphecy $iterator)
+    {
+        $result = new class($iterator->reveal()) implements \IteratorAggregate {
+            private $iterator;
+
+            public function __construct(\Iterator $iterator)
+            {
+                $this->iterator = $iterator;
+            }
+
+            public function getIterator()
+            {
+                return $this->iterator;
+            }
+        };
+
+        $request = new Request();
+        $request->attributes->set('_rest_view', new ViewAnnotation());
+
+        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event->getRequest()->willReturn($request);
+        $event->getControllerResult()->willReturn($result);
+
+        $this->serializer
+            ->serialize(Argument::type('array'), Argument::any(), Argument::type(SerializationContext::class), null)
+            ->shouldBeCalled();
+
+        $event->setResponse(Argument::that(function ($response) {
+            return $response instanceof Response && 42 == $response->headers->get('X-Total-Count');
+        }))->shouldBeCalled();
+
+        $this->viewHandler->onView($event->reveal());
     }
 
     public function testShouldAddXContinuationTokenHeaderForPagerIterators()
