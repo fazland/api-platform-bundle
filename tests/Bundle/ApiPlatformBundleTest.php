@@ -12,7 +12,7 @@ class ApiPlatformBundleTest extends WebTestCase
      */
     protected static function createKernel(array $options = [])
     {
-        return new AppKernel($options['env'] ?? 'test', true);
+        return new AppKernel($options['env'] ?? 'test', $options['debug'] ?? true);
     }
 
     public function testIndexShouldBeOk()
@@ -62,7 +62,7 @@ class ApiPlatformBundleTest extends WebTestCase
 
     public function testViewHandlerCanBeDisabled()
     {
-        $client = static::createClient(['env' => 'no_view']);
+        $client = static::createClient(['env' => 'no_view', 'debug' => false]);
         $client->request('GET', '/', [], [], [
             'HTTP_ACCEPT' => 'application/json',
         ]);
@@ -70,6 +70,6 @@ class ApiPlatformBundleTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertEquals(500, $response->getStatusCode());
-        $this->assertEquals('An error has occurred: The controller must return a response (Array(test_foo => foo.test) given).', $response->getContent());
+        $this->assertEquals('An error has occurred: Internal Server Error', $response->getContent());
     }
 }

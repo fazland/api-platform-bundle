@@ -91,6 +91,6 @@ class ExceptionControllerTest extends TestCase
             ->shouldHaveBeenCalled();
 
         $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals('An error has occurred: A message.', $response->getContent());
+        $this->assertEquals('An error has occurred: Bad Request', $response->getContent());
     }
 }

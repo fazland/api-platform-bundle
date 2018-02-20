@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\HttpKernel\Exception;
 
 use Kcs\Serializer\Annotation as Serializer;
 use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This class is used as helper to serialize an exception.
@@ -18,18 +19,18 @@ class SerializableException
      *
      * @Serializer\Type("string")
      */
-    private $errorMessage;
+    protected $errorMessage;
 
     /**
      * @var int
      *
      * @Serializer\Type("int")
      */
-    private $errorCode;
+    protected $errorCode;
 
     public function __construct(FlattenException $exception)
     {
-        $this->errorMessage = $exception->getMessage();
+        $this->errorMessage = Response::$statusTexts[$exception->getStatusCode()] ?? 'Unknown error';
         $this->errorCode = $exception->getCode();
     }
 

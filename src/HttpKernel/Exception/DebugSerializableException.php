@@ -23,8 +23,9 @@ class DebugSerializableException extends SerializableException
 
     public function __construct(FlattenException $exception)
     {
-        $this->exception = $exception->toArray();
-
         parent::__construct($exception);
+
+        $this->exception = $exception->toArray();
+        $this->errorMessage = $exception->getMessage();
     }
 }

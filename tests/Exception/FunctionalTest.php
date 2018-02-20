@@ -24,7 +24,7 @@ class FunctionalTest extends WebTestCase
 
         $this->assertEquals(404, $response->getStatusCode());
 
-        $array = '{"error_message":"No route found for \"GET \/non-existent\"","error_code":0}';
+        $array = '{"error_message":"Not Found","error_code":0}';
         $this->assertEquals($array, $response->getContent());
     }
 
@@ -42,6 +42,7 @@ class FunctionalTest extends WebTestCase
 
         $res = json_decode($content, true);
         $this->assertArrayHasKey('error_message', $res);
+        $this->assertEquals('No route found for "GET /non-existent"', $res['error_message']);
         $this->assertArrayHasKey('error_code', $res);
         $this->assertArrayHasKey('exception', $res);
         $this->assertInternalType('array', $res['exception']);
