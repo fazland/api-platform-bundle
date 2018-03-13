@@ -233,13 +233,13 @@ class ViewHandlerTest extends WebTestCase
 
     public function provideIterator()
     {
-        yield [ new \ArrayIterator(['foo' => 'bar']) ];
-        yield [ new class implements \IteratorAggregate {
+        yield [new \ArrayIterator(['foo' => 'bar'])];
+        yield [new class() implements \IteratorAggregate {
             public function getIterator()
             {
                 yield from ['foo' => 'bar'];
             }
-        } ];
+        }];
     }
 
     /**

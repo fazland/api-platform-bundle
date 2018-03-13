@@ -13,6 +13,7 @@
         }
     ],
     "require": {
+        "php": "^7.1",
         "cakephp/chronos": "^1.1",
         "justinrainbow/json-schema": "^5.2",
         "kcs/metadata": "^2.1",

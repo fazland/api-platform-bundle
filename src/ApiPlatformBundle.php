@@ -8,9 +8,13 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class ApiPlatformBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilder $container): void
     {
         $container
-            ->addCompilerPass(new RegisterDecoders());
+            ->addCompilerPass(new RegisterDecoders())
+        ;
     }
 }
