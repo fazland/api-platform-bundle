@@ -11,6 +11,7 @@ use Fazland\ApiPlatformBundle\Pagination\PagerIterator;
 use Fazland\ApiPlatformBundle\Pagination\PageToken;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\TestObject;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
+use Fazland\ApiPlatformBundle\Tests\Fixtures\View\Controller\TestController;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
 use Kcs\Serializer\Serializer;
@@ -22,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -407,6 +409,38 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
+    public function testDeprecatedAnnotationShouldBeHandled()
+    {
+        $controller = new TestController();
+
+        $request = new Request();
+        $request->attributes->set('_controller', [$controller, 'deprecatedAction']);
+
+        $event = $this->prophesize(FilterControllerEvent::class);
+        $event->getRequest()->willReturn($request);
+        $event->getController()->willReturn($request->attributes->get('_controller'));
+
+        $this->viewHandler->onController($event->reveal());
+
+        $this->assertTrue($request->attributes->has('_deprecated'));
+    }
+
+    public function testDeprecatedWithCommentAnnotationShouldBeHandled()
+    {
+        $controller = new TestController();
+
+        $request = new Request();
+        $request->attributes->set('_controller', [$controller, 'deprecatedWithNoticeAction']);
+
+        $event = $this->prophesize(FilterControllerEvent::class);
+        $event->getRequest()->willReturn($request);
+        $event->getController()->willReturn($request->attributes->get('_controller'));
+
+        $this->viewHandler->onController($event->reveal());
+
+        $this->assertEquals('With Notice', $request->attributes->get('_deprecated'));
+    }
+
     public function testShouldSetCorrectSerializationType()
     {
         $client = static::createClient();
@@ -427,6 +461,17 @@ class ViewHandlerTest extends WebTestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString('[{"data":"foobar","additional":"foo"},{"test":"barbar","additional":"foo"}]', $response->getContent());
+    }
+
+    public function testShouldSetEmitXDeprecatedHeader()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/deprecated', [], [], ['HTTP_ACCEPT' => 'application/json']);
+
+        $response = $client->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('This endpoint has been deprecated and will be discontinued in a future version. Please upgrade your application.', $response->headers->get('X-Deprecated'));
     }
 
     protected static function createKernel(array $options = [])

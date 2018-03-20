@@ -2,6 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle\HttpKernel;
 
+use Doctrine\Common\Util\ClassUtils;
 use Fazland\ApiPlatformBundle\Annotation\View as ViewAnnotation;
 use Fazland\ApiPlatformBundle\HttpKernel\View\Context;
 use Fazland\ApiPlatformBundle\HttpKernel\View\View;
@@ -12,6 +13,7 @@ use Kcs\Serializer\Type\Type;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -75,6 +77,11 @@ class ViewHandler implements EventSubscriberInterface
         $headers = $result->headers;
         $headers['Content-Type'] = $request->getMimeType($request->attributes->get('_format'));
 
+        if ($request->attributes->has('_deprecated')) {
+            $notice = $request->attributes->get('_deprecated');
+            $headers['X-Deprecated'] = true === $notice ? 'This endpoint has been deprecated and will be discontinued in a future version. Please upgrade your application.' : $notice;
+        }
+
         try {
             $content = $this->handle($result, $request);
             $response = new Response($content, $result->statusCode, $headers);
@@ -83,6 +90,35 @@ class ViewHandler implements EventSubscriberInterface
         }
 
         $event->setResponse($response);
+    }
+
+    /**
+     * Checks the controller for the deprecated annotation.
+     *
+     * @param FilterControllerEvent $event
+     *
+     * @throws \ReflectionException
+     */
+    public function onController(FilterControllerEvent $event)
+    {
+        $controller = $event->getController();
+        if (! is_array($controller) && method_exists($controller, '__invoke')) {
+            $controller = [$controller, '__invoke'];
+        }
+
+        if (! is_array($controller)) {
+            return;
+        }
+
+        $className = class_exists(ClassUtils::class) ? ClassUtils::getClass($controller[0]) : get_class($controller[0]);
+        $object = new \ReflectionClass($className);
+        $method = $object->getMethod($controller[1]);
+
+        $doc = $method->getDocComment();
+        if (false !== $doc && false !== stripos($doc, '@deprecated') && preg_match('#^(?:/\*\*|\s*+\*)\s*+@deprecated(.*)$#mi', $doc, $matches)) {
+            $request = $event->getRequest();
+            $request->attributes->set('_deprecated', isset($matches[1]) && $matches[1] ? trim($matches[1]) : true);
+        }
     }
 
     /**
@@ -112,6 +148,7 @@ class ViewHandler implements EventSubscriberInterface
     {
         return [
             KernelEvents::VIEW => 'onView',
+            KernelEvents::CONTROLLER => 'onController',
         ];
     }
 }

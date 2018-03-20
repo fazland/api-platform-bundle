@@ -21,3 +21,7 @@ custom_serialization_type:
 custom_serialization_type_iterator:
     path: /custom-serialization-type-iterator
     defaults: { _controller: 'AppBundle:Test:customSerializationTypeWithIterator' }
+
+deprecated:
+    path: /deprecated
+    defaults: { _controller: 'AppBundle:Test:deprecated' }

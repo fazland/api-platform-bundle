@@ -84,4 +84,22 @@ class TestController extends Controller
             ['test' => 'barbar'],
         ]);
     }
+
+    /**
+     * @deprecated
+     * @View()
+     */
+    public function deprecatedAction()
+    {
+        return ['foo' => 'bar'];
+    }
+
+    /**
+     * @deprecated With Notice
+     * @View()
+     */
+    public function deprecatedWithNoticeAction()
+    {
+        return ['foo' => 'bar'];
+    }
 }
