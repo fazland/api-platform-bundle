@@ -40,6 +40,8 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
             $alias = $queryBuilder->getRootAliases()[0];
 
             $this->_totalCount = (int) $queryBuilder->select('COUNT(DISTINCT '.$alias.')')
+                ->setFirstResult(0)
+                ->setMaxResults(1)
                 ->getQuery()
                 ->getSingleScalarResult();
         }
