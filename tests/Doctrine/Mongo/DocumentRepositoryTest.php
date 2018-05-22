@@ -176,12 +176,12 @@ class DocumentRepositoryTest extends WebTestCase
         $kernel->boot();
         $container = $kernel->getContainer();
 
-        /** @var DocumentManager $em */
-        $em = $container->get(DocumentManager::class);
+        /** @var DocumentManager $dm */
+        $dm = $container->get('doctrine_mongodb')->getManager();
 
         /** @var ClassMetadata $metadata */
-        foreach ($em->getMetadataFactory()->getAllMetadata() as $metadata) {
-            yield [get_class($em->getRepository($metadata->name))];
+        foreach ($dm->getMetadataFactory()->getAllMetadata() as $metadata) {
+            yield [get_class($dm->getRepository($metadata->name))];
         }
 
         $kernel->shutdown();
