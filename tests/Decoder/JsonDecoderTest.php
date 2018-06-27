@@ -55,7 +55,7 @@ class JsonDecoderTest extends WebTestCase
         $array = <<<EOF
 array:1 [
   "options" => array:1 [
-    "option" => null
+    "option" => false
   ]
 ]
 EOF;
