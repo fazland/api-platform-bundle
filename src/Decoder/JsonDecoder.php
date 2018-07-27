@@ -22,7 +22,9 @@ class JsonDecoder implements DecoderInterface
         }
 
         array_walk_recursive($content, function (&$value) {
-            if (! is_string($value) && ! is_bool($value)) {
+            if (false === $value) {
+                $value = '0';
+            } elseif (! is_string($value)) {
                 $value = strval($value);
             }
         });

@@ -21,12 +21,15 @@ class JsonDecoderTest extends WebTestCase
         return new AppKernel('test', true);
     }
 
-    public function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp(): void
     {
         $this->decoder = new JsonDecoder();
     }
 
-    public function dataProviderForDecode()
+    public function dataProviderForDecode(): array
     {
         return [
             [[], ''],
@@ -40,12 +43,12 @@ class JsonDecoderTest extends WebTestCase
     /**
      * @dataProvider dataProviderForDecode
      */
-    public function testDecode(array $expected, string $input)
+    public function testDecode(array $expected, string $input): void
     {
         $this->assertEquals($expected, $this->decoder->decode($input));
     }
 
-    public function testShouldDecodeContentCorrectly()
+    public function testShouldDecodeContentCorrectly(): void
     {
         $client = static::createClient();
 
@@ -55,7 +58,7 @@ class JsonDecoderTest extends WebTestCase
         $array = <<<EOF
 array:1 [
   "options" => array:1 [
-    "option" => false
+    "option" => "0"
   ]
 ]
 EOF;
