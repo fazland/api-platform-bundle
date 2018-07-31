@@ -49,7 +49,7 @@ doctrine_mongodb:
                     prefix: Fazland\ApiPlatformBundle\Tests\Fixtures
 
 sensio_framework_extra:
-    router:      { annotations: true }
+    router:      { annotations: false }
     request:     { converters: true, auto_convert: true }
     view:        { annotations: false }
     cache:       { annotations: true }

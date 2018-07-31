@@ -3,6 +3,7 @@
 namespace Fazland\ApiPlatformBundle\PatchManager;
 
 use Fazland\ApiPlatformBundle\Exception\TypeError;
+use Fazland\ApiPlatformBundle\JSONPointer\Path;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
@@ -14,6 +15,8 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
+use Symfony\Component\PropertyAccess\PropertyPath;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PatchManager implements PatchManagerInterface
@@ -80,7 +83,7 @@ class PatchManager implements PatchManagerInterface
             }
         }
 
-        $this->validate($patchable);
+        $this->validate($object, $patchable);
         $this->commit($patchable);
     }
 
@@ -165,13 +168,37 @@ class PatchManager implements PatchManagerInterface
      * Calls the validator service and throws an InvalidJSONException
      * if the object is invalid.
      *
+     * @param array $operations
      * @param PatchableInterface $patchable
      *
      * @throws InvalidJSONException
      */
-    protected function validate(PatchableInterface $patchable): void
+    protected function validate(array $operations, PatchableInterface $patchable): void
     {
         $violations = $this->validator->validate($patchable);
+        if (0 === count($violations)) {
+            return;
+        }
+
+        $paths = [];
+        foreach ($operations as $operation) {
+            $path = new Path($operation->path);
+            $paths[] = $path->getElement(0);
+        }
+
+        $paths = array_unique($paths);
+        foreach ($violations as $i => $violation) {
+            $path = $violation->getPropertyPath();
+            if (! $path) {
+                continue;
+            }
+
+            $path = new PropertyPath($path);
+            if (! in_array($path->getElement(0), $paths)) {
+                $violations->remove($i);
+            }
+        }
+
         if (0 === count($violations)) {
             return;
         }

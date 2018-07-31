@@ -261,9 +261,33 @@ class PatchManagerTest extends TestCase
     public function testPatchShouldThrowInvalidJSONExceptionIfObjectIsInvalid(): void
     {
         $object = $this->prophesize(PatchableInterface::class);
-        $object->reveal()->a = ['b' => ['c' => 'foo']];
+        $object->a = ['b' => ['c' => 'foo']];
 
         $this->validator->validate($object)->willReturn(new ConstraintViolationList([
+            new ConstraintViolation('Invalid', 'Invalid', ['a'], '', 'non-patched-property', 'invalid'),
+            new ConstraintViolation('Invalid', 'Invalid', ['a'], '', 'property', 'invalid'),
+            new ConstraintViolation('Invalid', 'Invalid', ['a'], '', 'a[b]', 'invalid'),
+        ]));
+
+        $request = $this->prophesize(Request::class);
+        $request->reveal()->headers = new HeaderBag();
+        $request->reveal()->request = new ParameterBag([
+            ['op' => 'test', 'path' => '/a/b/c', 'value' => 'foo'],
+        ]);
+
+        $this->patchManager->patch($object->reveal(), $request->reveal());
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testPatchShouldNotThrowOnObjectInvalidForNonPatchedProperty(): void
+    {
+        $object = $this->prophesize(PatchableInterface::class);
+        $object->a = ['b' => ['c' => 'foo']];
+
+        $this->validator->validate($object)->willReturn(new ConstraintViolationList([
+            new ConstraintViolation('Invalid', 'Invalid', ['a'], '', 'non-patched-property', 'invalid'),
             new ConstraintViolation('Invalid', 'Invalid', ['a'], '', 'property', 'invalid'),
         ]));
 
@@ -276,8 +300,27 @@ class PatchManagerTest extends TestCase
         $this->patchManager->patch($object->reveal(), $request->reveal());
     }
 
-    public function getOperationNotAllowedObject(): iterable
+    /**
+     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
+     * @expectedExceptionMessageRegExp /Invalid entity: /
+     */
+    public function testPatchShouldNotIgnoreRootErrors(): void
     {
+        $object = $this->prophesize(PatchableInterface::class);
+        $object->a = ['b' => ['c' => 'foo']];
+
+        $this->validator->validate($object)->willReturn(new ConstraintViolationList([
+            new ConstraintViolation('Invalid', 'Invalid', ['a'], '', null, 'invalid'),
+            new ConstraintViolation('Invalid', 'Invalid', ['a'], '', 'property', 'invalid'),
+        ]));
+
+        $request = $this->prophesize(Request::class);
+        $request->reveal()->headers = new HeaderBag();
+        $request->reveal()->request = new ParameterBag([
+            ['op' => 'test', 'path' => '/a/b/c', 'value' => 'foo'],
+        ]);
+
+        $this->patchManager->patch($object->reveal(), $request->reveal());
     }
 
     /**
