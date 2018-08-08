@@ -23,7 +23,7 @@ class BodyConverter implements EventSubscriberInterface
         $this->decoderProvider = $decoderProvider;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event): void
     {
         $request = $event->getRequest();
         $contentType = $request->headers->get('Content-Type', 'application/x-www-form-urlencoded');

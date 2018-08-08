@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\Tests\JSONPointer;
 
 use Fazland\ApiPlatformBundle\JSONPointer\Accessor;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 abstract class AccessorArrayAccessTest extends TestCase
 {
@@ -12,14 +13,17 @@ abstract class AccessorArrayAccessTest extends TestCase
      */
     protected $propertyAccessor;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->propertyAccessor = new Accessor();
     }
 
     abstract protected function getContainer(array $array);
 
-    public function getValidPropertyPaths()
+    public function getValidPropertyPaths(): iterable
     {
         return [
             [$this->getContainer(['firstName' => 'Bernhard']), '/firstName', 'Bernhard'],
@@ -30,7 +34,7 @@ abstract class AccessorArrayAccessTest extends TestCase
     /**
      * @dataProvider getValidPropertyPaths
      */
-    public function testGetValue($collection, $path, $value)
+    public function testGetValue($collection, string $path, string $value): void
     {
         $this->assertSame($value, $this->propertyAccessor->getValue($collection, $path));
     }
@@ -38,7 +42,7 @@ abstract class AccessorArrayAccessTest extends TestCase
     /**
      * @dataProvider getValidPropertyPaths
      */
-    public function testSetValue($collection, $path)
+    public function testSetValue($collection, string $path): void
     {
         $this->propertyAccessor->setValue($collection, $path, 'Updated');
 
@@ -48,7 +52,7 @@ abstract class AccessorArrayAccessTest extends TestCase
     /**
      * @dataProvider getValidPropertyPaths
      */
-    public function testIsReadable($collection, $path)
+    public function testIsReadable($collection, string $path): void
     {
         $this->assertTrue($this->propertyAccessor->isReadable($collection, $path));
     }
@@ -56,7 +60,7 @@ abstract class AccessorArrayAccessTest extends TestCase
     /**
      * @dataProvider getValidPropertyPaths
      */
-    public function testIsWritable($collection, $path)
+    public function testIsWritable($collection, string $path): void
     {
         $this->assertTrue($this->propertyAccessor->isWritable($collection, $path));
     }

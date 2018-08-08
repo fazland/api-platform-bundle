@@ -35,7 +35,7 @@ interface ObjectRepository extends BaseRepository
      *
      * @throws NonUniqueResultException
      */
-    public function findOneByCached(array $criteria, array $orderBy = null, $ttl = 28800);
+    public function findOneByCached(array $criteria, array $orderBy = null, int $ttl = 28800);
 
     /**
      * Finds objects by a set of criteria and cache the result for next calls.
@@ -48,7 +48,13 @@ interface ObjectRepository extends BaseRepository
      *
      * @return array The objects
      */
-    public function findByCached(array $criteria, array $orderBy = null, $limit = null, $offset = null, $ttl = 28800);
+    public function findByCached(
+        array $criteria,
+        array $orderBy = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        int $ttl = 28800
+    );
 
     /**
      * Finds an object by its primary key / identifier.
@@ -90,5 +96,5 @@ interface ObjectRepository extends BaseRepository
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
-    public function getOneByCached(array $criteria, array $orderBy = null, $ttl = 28800);
+    public function getOneByCached(array $criteria, array $orderBy = null, int $ttl = 28800);
 }

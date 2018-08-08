@@ -17,7 +17,7 @@ class TestController extends Controller
      *
      * @View()
      */
-    public function indexAction()
+    public function indexAction(): array
     {
         return [
             'test_foo' => 'foo.test',
@@ -27,7 +27,7 @@ class TestController extends Controller
     /**
      * @View()
      */
-    public function formInvalidExceptionAction()
+    public function formInvalidExceptionAction(): void
     {
         /** @var FormInterface $form */
         $form = $this->createFormBuilder()
@@ -44,7 +44,7 @@ class TestController extends Controller
     /**
      * @View()
      */
-    public function formNotSubmittedExceptionAction()
+    public function formNotSubmittedExceptionAction(): void
     {
         /** @var FormInterface $form */
         $form = $this->createFormBuilder()
@@ -58,7 +58,7 @@ class TestController extends Controller
     /**
      * @View(serializationType="stdClass")
      */
-    public function invalidJsonExceptionAction()
+    public function invalidJsonExceptionAction(): void
     {
         throw new InvalidJSONException('Invalid.');
     }
@@ -66,7 +66,7 @@ class TestController extends Controller
     /**
      * @View(serializationType="array<FooObject>")
      */
-    public function customSerializationTypeAction()
+    public function customSerializationTypeAction(): array
     {
         return [
             ['data' => 'foobar'],
@@ -77,7 +77,7 @@ class TestController extends Controller
     /**
      * @View(serializationType="array<FooObject>")
      */
-    public function customSerializationTypeWithIteratorAction()
+    public function customSerializationTypeWithIteratorAction(): iterable
     {
         return new \ArrayIterator([
             ['data' => 'foobar'],
@@ -89,7 +89,7 @@ class TestController extends Controller
      * @deprecated
      * @View()
      */
-    public function deprecatedAction()
+    public function deprecatedAction(): array
     {
         return ['foo' => 'bar'];
     }
@@ -98,7 +98,7 @@ class TestController extends Controller
      * @deprecated With Notice
      * @View()
      */
-    public function deprecatedWithNoticeAction()
+    public function deprecatedWithNoticeAction(): array
     {
         return ['foo' => 'bar'];
     }

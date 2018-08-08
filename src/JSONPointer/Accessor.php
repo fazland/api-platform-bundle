@@ -267,11 +267,11 @@ class Accessor implements PropertyAccessorInterface
     /**
      * Gets a PropertyPath instance and caches it.
      *
-     * @param string|Path $propertyPath
+     * @param string|PropertyPathInterface $propertyPath
      *
-     * @return Path
+     * @return PropertyPathInterface
      */
-    private function getPath($propertyPath)
+    private function getPath($propertyPath): PropertyPathInterface
     {
         if ($propertyPath instanceof PropertyPathInterface) {
             // Don't call the copy constructor has it is not needed here
@@ -304,7 +304,7 @@ class Accessor implements PropertyAccessorInterface
      * @throws UnexpectedTypeException if a value within the path is neither object nor array
      * @throws NoSuchIndexException    If a non-existing index is accessed
      */
-    private function readPropertiesUntil($zval, PropertyPathInterface $propertyPath, $lastIndex)
+    private function readPropertiesUntil(array $zval, PropertyPathInterface $propertyPath, int $lastIndex): array
     {
         if (! is_object($zval[self::VALUE]) && ! is_array($zval[self::VALUE])) {
             throw new UnexpectedTypeException($zval[self::VALUE], $propertyPath, 0);
@@ -366,7 +366,7 @@ class Accessor implements PropertyAccessorInterface
      *
      * @throws NoSuchIndexException If the array does not implement \ArrayAccess or it is not an array
      */
-    private function readIndex($zval, $index)
+    private function readIndex(array $zval, $index): array
     {
         $result = self::$resultProto;
 
@@ -395,7 +395,7 @@ class Accessor implements PropertyAccessorInterface
      *
      * @throws NoSuchPropertyException if the property does not exist or is not public
      */
-    private function readProperty($zval, $property)
+    private function readProperty(array $zval, string $property): array
     {
         $result = self::$resultProto;
         $object = $zval[self::VALUE];

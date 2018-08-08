@@ -7,9 +7,6 @@ use Fazland\ApiPlatformBundle\Doctrine\Exception\NoResultException as NoResultEx
 
 class NoResultException extends MongoDBException implements NoResultExceptionInterface
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct('No result was found for query although at least one document was expected.');

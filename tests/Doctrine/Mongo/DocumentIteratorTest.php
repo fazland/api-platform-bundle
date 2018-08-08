@@ -25,7 +25,10 @@ class DocumentIteratorTest extends TestCase
      */
     private $iterator;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $documentManager = $this->getDocumentManager();
         $documentManager->getMetadataFactory()->setMetadataFor(FooBar::class, $class = new ClassMetadata(FooBar::class));
@@ -41,17 +44,17 @@ class DocumentIteratorTest extends TestCase
         $this->iterator = new DocumentIterator($this->builder);
     }
 
-    public function testShouldBeIterable()
+    public function testShouldBeIterable(): void
     {
         $this->assertTrue(is_iterable($this->iterator));
     }
 
-    public function testShouldBeAnIterator()
+    public function testShouldBeAnIterator(): void
     {
         $this->assertInstanceOf(\Iterator::class, $this->iterator);
     }
 
-    public function testCountShouldExecuteACountQuery()
+    public function testCountShouldExecuteACountQuery(): void
     {
         $this->_db->command(new BSONDocument([
             'count' => 'FooBar',
@@ -70,7 +73,7 @@ class DocumentIteratorTest extends TestCase
         $this->assertCount(42, $this->iterator);
     }
 
-    public function testShouldIterateAgainstAQueryResult()
+    public function testShouldIterateAgainstAQueryResult(): void
     {
         $this->_collection->find([], Argument::any())
             ->willReturn(new \ArrayIterator([
@@ -98,7 +101,7 @@ class DocumentIteratorTest extends TestCase
         $this->assertEquals([$obj1, $obj2, $obj3], iterator_to_array($this->iterator));
     }
 
-    public function testShouldCallCallableSpecifiedWithApply()
+    public function testShouldCallCallableSpecifiedWithApply(): void
     {
         $this->_collection->find([], Argument::any())
             ->willReturn(new \ArrayIterator([

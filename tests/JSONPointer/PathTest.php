@@ -10,14 +10,14 @@ class PathTest extends TestCase
     /**
      * @dataProvider providePath
      */
-    public function testPathShouldBeCleanedUp(string $expected, string $path)
+    public function testPathShouldBeCleanedUp(string $expected, string $path): void
     {
         $path = new Path($path);
 
         $this->assertEquals($expected, $path->getPath());
     }
 
-    public function providePath()
+    public function providePath(): iterable
     {
         yield ['/foo', '/foo'];
         yield ['/foo/0', '/foo/0'];
@@ -44,7 +44,7 @@ class PathTest extends TestCase
         yield ['/m~0n', '#/m~0n'];
     }
 
-    public function provideInvalidPath()
+    public function provideInvalidPath(): iterable
     {
         yield ['##foo'];
         yield ['bar'];
@@ -55,12 +55,12 @@ class PathTest extends TestCase
      * @dataProvider provideInvalidPath
      * @expectedException \Symfony\Component\PropertyAccess\Exception\InvalidPropertyPathException
      */
-    public function testPathShouldThrowOnInvalidPaths($value)
+    public function testPathShouldThrowOnInvalidPaths(string $value): void
     {
         new Path($value);
     }
 
-    public function testPathShouldBeIterable()
+    public function testPathShouldBeIterable(): void
     {
         $path = new Path('/foo/0/a~1b/c%d/m~0n');
 
@@ -73,14 +73,14 @@ class PathTest extends TestCase
         ], iterator_to_array($path));
     }
 
-    public function testParentOfRootShouldReturnNull()
+    public function testParentOfRootShouldReturnNull(): void
     {
         $path = new Path('/root_prop');
 
         $this->assertNull($path->getParent());
     }
 
-    public function testParentShouldWork()
+    public function testParentShouldWork(): void
     {
         $path = new Path('/foo/0/a~1b/c%d/m~0n');
 
@@ -90,14 +90,14 @@ class PathTest extends TestCase
         $this->assertEquals('/foo', (string) ($path = $path->getParent()));
     }
 
-    public function testIsPropertyIsAlwaysTrue()
+    public function testIsPropertyIsAlwaysTrue(): void
     {
         $path = new Path('/foo');
 
         $this->assertTrue($path->isProperty(null));
     }
 
-    public function testIsIndexIsAlwaysFalse()
+    public function testIsIndexIsAlwaysFalse(): void
     {
         $path = new Path('/foo');
 
@@ -107,13 +107,13 @@ class PathTest extends TestCase
     /**
      * @expectedException \Symfony\Component\PropertyAccess\Exception\OutOfBoundsException
      */
-    public function testGetElementShouldThrowIfOutOfBoundElementIsRequested()
+    public function testGetElementShouldThrowIfOutOfBoundElementIsRequested(): void
     {
         $path = new Path('/foo/bar');
         $path->getElement(2);
     }
 
-    public function testGetElementShouldReturnUnescapedValues()
+    public function testGetElementShouldReturnUnescapedValues(): void
     {
         $path = new Path('/foo/0/a~1b/c%d/m~0n');
 

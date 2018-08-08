@@ -10,7 +10,10 @@ use Kcs\Serializer\VisitorInterface;
 
 class FooHandler implements SubscribingHandlerInterface
 {
-    public function getSubscribingMethods()
+    /**
+     * {@inheritdoc}
+     */
+    public function getSubscribingMethods(): iterable
     {
         yield [
             'type' => 'FooObject',
@@ -19,6 +22,14 @@ class FooHandler implements SubscribingHandlerInterface
         ];
     }
 
+    /**
+     * @param VisitorInterface $visitor
+     * @param array $data
+     * @param Type $type
+     * @param Context $context
+     *
+     * @return mixed
+     */
     public function serialize(VisitorInterface $visitor, array $data, Type $type, Context $context)
     {
         $data['additional'] = 'foo';

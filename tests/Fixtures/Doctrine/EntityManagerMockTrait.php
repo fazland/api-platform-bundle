@@ -11,13 +11,14 @@ use Doctrine\DBAL\Driver\PDOConnection;
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Fazland\ApiPlatformBundle\Tests\Doctrine\Mocks\MockPlatform;
 use Prophecy\Prophecy\ObjectProphecy;
 
 trait EntityManagerMockTrait
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $_entityManager;
 
@@ -36,7 +37,7 @@ trait EntityManagerMockTrait
      */
     private $_configuration;
 
-    public function getEntityManager()
+    public function getEntityManager(): EntityManagerInterface
     {
         if (null === $this->_entityManager) {
             $this->_configuration = new Configuration();

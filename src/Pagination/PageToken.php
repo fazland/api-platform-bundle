@@ -57,7 +57,7 @@ final class PageToken
         $this->checksum = $checksum;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         /*
          * Example token, with "_" Delimiter: 1262338074_1_3632233996

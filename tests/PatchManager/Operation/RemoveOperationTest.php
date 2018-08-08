@@ -13,12 +13,15 @@ class RemoveOperationTest extends TestCase
      */
     private $operation;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->operation = new RemoveOperation();
     }
 
-    public function testShouldRemoveValue()
+    public function testShouldRemoveValue(): void
     {
         $obj = ['one' => 'bar'];
         $this->operation->execute($obj, (object) ['path' => '/one']);
@@ -26,7 +29,7 @@ class RemoveOperationTest extends TestCase
         $this->assertArrayNotHasKey('one', $obj);
     }
 
-    public function testShouldRemoveValueNested()
+    public function testShouldRemoveValueNested(): void
     {
         $obj = ['one' => ['bar' => ['baz', 'two']]];
         $this->operation->execute($obj, (object) ['path' => '/one/bar/1']);
@@ -34,7 +37,7 @@ class RemoveOperationTest extends TestCase
         $this->assertCount(1, $obj['one']['bar']);
     }
 
-    public function testShouldRemoveValueNestedCollection()
+    public function testShouldRemoveValueNestedCollection(): void
     {
         $obj = ['one' => new ArrayCollection(['bar' => ['baz', 'two']])];
         $this->operation->execute($obj, (object) ['path' => '/one/bar/1']);
@@ -42,7 +45,7 @@ class RemoveOperationTest extends TestCase
         $this->assertCount(1, $obj['one']['bar']);
     }
 
-    public function testShouldRemoveValueNestedIterable()
+    public function testShouldRemoveValueNestedIterable(): void
     {
         $iterable = new class() implements \IteratorAggregate {
             public function getIterator()
@@ -57,7 +60,7 @@ class RemoveOperationTest extends TestCase
         $this->assertCount(1, $obj['one']['bar']);
     }
 
-    public function testShouldRemoveValueNull()
+    public function testShouldRemoveValueNull(): void
     {
         $obj = ['one' => ['bar' => null]];
         $this->operation->execute($obj, (object) ['path' => '/one/bar/1']);
@@ -65,7 +68,7 @@ class RemoveOperationTest extends TestCase
         $this->assertNull($obj['one']['bar']);
     }
 
-    public function testShouldRemoveValueFromObject()
+    public function testShouldRemoveValueFromObject(): void
     {
         $obj = (object) ['one' => 'bar'];
         $this->operation->execute($obj, (object) ['path' => '/one']);
@@ -73,7 +76,7 @@ class RemoveOperationTest extends TestCase
         $this->assertFalse(isset($obj->one));
     }
 
-    public function testShouldRemoveWhenNullShouldNotThrow()
+    public function testShouldRemoveWhenNullShouldNotThrow(): void
     {
         $obj = (object) ['one' => null];
         $this->operation->execute($obj, (object) ['path' => '/one']);
@@ -81,7 +84,7 @@ class RemoveOperationTest extends TestCase
         $this->assertFalse(isset($obj->one));
     }
 
-    public function testShouldRemoveShouldUnsetIfObjectHasArrayAccess()
+    public function testShouldRemoveShouldUnsetIfObjectHasArrayAccess(): void
     {
         $obj = new \ArrayObject(['one' => 'bar']);
         $this->operation->execute($obj, (object) ['path' => '/one']);
@@ -92,7 +95,7 @@ class RemoveOperationTest extends TestCase
     /**
      * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
      */
-    public function testShouldThrowIfPropertyIsNotAccessible()
+    public function testShouldThrowIfPropertyIsNotAccessible(): void
     {
         $obj = new class() {
             private $elements = [];

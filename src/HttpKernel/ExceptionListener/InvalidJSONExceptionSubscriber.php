@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class InvalidJSONExceptionSubscriber implements EventSubscriberInterface
 {
-    public function onException(GetResponseForExceptionEvent $event)
+    public function onException(GetResponseForExceptionEvent $event): void
     {
         $exception = $event->getException();
         if (! $exception instanceof InvalidJSONException) {
@@ -26,7 +26,7 @@ class InvalidJSONExceptionSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::EXCEPTION => 'onException',

@@ -32,7 +32,7 @@ final class Orderings implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * {@inheritdoc}
      */
-    public function getIterator()
+    public function getIterator(): iterable
     {
         yield from $this->orderings;
     }

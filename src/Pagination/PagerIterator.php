@@ -283,9 +283,9 @@ class PagerIterator implements \Iterator
      *
      * @param array $objects
      *
-     * @return \Generator
+     * @return iterable
      */
-    private function getLastObjectsWithCommonTimestamp(array $objects): \Generator
+    private function getLastObjectsWithCommonTimestamp(array $objects): iterable
     {
         $reference = array_pop($objects);
         $referenceTimestamp = Chronos::instance($this->getTimestampForObject($reference));

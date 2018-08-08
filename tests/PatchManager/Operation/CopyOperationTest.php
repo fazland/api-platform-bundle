@@ -12,12 +12,15 @@ class CopyOperationTest extends TestCase
      */
     private $operation;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->operation = new CopyOperation();
     }
 
-    public function testShouldCopyValue()
+    public function testShouldCopyValue(): void
     {
         $obj = ['one' => 'foo'];
         $this->operation->execute($obj, (object) ['path' => '/two', 'from' => '/one']);
@@ -29,7 +32,7 @@ class CopyOperationTest extends TestCase
     /**
      * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
      */
-    public function testShouldThrowIfPropertyDoesNotExist()
+    public function testShouldThrowIfPropertyDoesNotExist(): void
     {
         $obj = (object) ['bar' => 'foo'];
         $this->operation->execute($obj, (object) ['path' => '/two', 'from' => '/one']);

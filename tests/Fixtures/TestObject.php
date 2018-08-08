@@ -6,7 +6,7 @@ use Fazland\ApiPlatformBundle\HttpKernel\View\Context;
 
 class TestObject
 {
-    public function testGroupProvider(Context $context)
+    public function testGroupProvider(Context $context): array
     {
         return ['foobar'];
     }

@@ -15,6 +15,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class CorsListenerTest extends WebTestCase
 {
@@ -26,19 +27,22 @@ class CorsListenerTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    protected static function createKernel(array $options = [])
+    protected static function createKernel(array $options = []): KernelInterface
     {
         return new AppKernel('test', true);
     }
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->listener = new CorsListener();
     }
 
-    public function wrongExceptionRequestProvider()
+    public function wrongExceptionRequestProvider(): iterable
     {
-        $exception = new MethodNotAllowedHttpException(['POST']);
+        $exception = new MethodNotAllowedHttpException([Request::METHOD_POST]);
         $request = $this->prophesize(Request::class);
         $request->getMethod()->willReturn('GET');
 
@@ -54,8 +58,10 @@ class CorsListenerTest extends WebTestCase
     /**
      * @dataProvider wrongExceptionRequestProvider
      */
-    public function testOnExceptionShouldNotSetAResponseForWrongExceptionOrRequestMethod(\Exception $exception, ObjectProphecy $request)
-    {
+    public function testOnExceptionShouldNotSetAResponseForWrongExceptionOrRequestMethod(
+        \Throwable $exception,
+        ObjectProphecy $request
+    ): void {
         $event = new GetResponseForExceptionEvent(
             $this->prophesize(HttpKernelInterface::class)->reveal(),
             $request->reveal(),
@@ -67,7 +73,7 @@ class CorsListenerTest extends WebTestCase
         $this->assertFalse($event->hasResponse());
     }
 
-    public function testOnExceptionShouldSetAResponse()
+    public function testOnExceptionShouldSetAResponse(): void
     {
         $exception = new MethodNotAllowedHttpException(['GET', 'POST']);
         $request = $this->prophesize(Request::class);
@@ -107,7 +113,7 @@ class CorsListenerTest extends WebTestCase
         $this->assertEquals(['Authorization, Content-Length, X-Total-Count, X-Continuation-Token'], $headers['access-control-expose-headers']);
     }
 
-    public function testOnResponseShouldNotSetHeaderIfNoOriginIsSpecified()
+    public function testOnResponseShouldNotSetHeaderIfNoOriginIsSpecified(): void
     {
         $request = $this->prophesize(Request::class);
         $request->headers = new HeaderBag();
@@ -124,7 +130,7 @@ class CorsListenerTest extends WebTestCase
         $this->assertFalse($response->headers->has('Access-Control-Allow-Origin'));
     }
 
-    public function testOnResponseShouldNotSetHeaderIfOriginIsStar()
+    public function testOnResponseShouldNotSetHeaderIfOriginIsStar(): void
     {
         $request = $this->prophesize(Request::class);
         $request->headers = new HeaderBag(['Origin' => '*']);
@@ -141,7 +147,7 @@ class CorsListenerTest extends WebTestCase
         $this->assertFalse($response->headers->has('Access-Control-Allow-Origin'));
     }
 
-    public function testOnResponseShouldSetHeaderAsStar()
+    public function testOnResponseShouldSetHeaderAsStar(): void
     {
         $request = $this->prophesize(Request::class);
         $request->headers = new HeaderBag(['Origin' => 'https://localhost']);
@@ -159,7 +165,7 @@ class CorsListenerTest extends WebTestCase
         $this->assertEquals('*', $response->headers->get('Access-Control-Allow-Origin'));
     }
 
-    public function testOnResponseShouldNotSetHeaderIfOriginIsNotAllowed()
+    public function testOnResponseShouldNotSetHeaderIfOriginIsNotAllowed(): void
     {
         $request = $this->prophesize(Request::class);
         $request->headers = new HeaderBag(['Origin' => 'https://localhost']);
@@ -177,7 +183,7 @@ class CorsListenerTest extends WebTestCase
         $this->assertFalse($response->headers->has('Access-Control-Allow-Origin'));
     }
 
-    public function testOnResponseShouldSetHeaderIfOriginIsAllowed()
+    public function testOnResponseShouldSetHeaderIfOriginIsAllowed(): void
     {
         $request = $this->prophesize(Request::class);
         $request->headers = new HeaderBag(['Origin' => 'https://www.foobar.com']);
@@ -196,7 +202,7 @@ class CorsListenerTest extends WebTestCase
         $this->assertEquals('https://www.foobar.com', $response->headers->get('Access-Control-Allow-Origin'));
     }
 
-    public function testListenerShouldWork()
+    public function testListenerShouldWork(): void
     {
         $client = static::createClient();
 

@@ -8,21 +8,21 @@ use PHPUnit\Framework\TestCase;
 
 class DecoderProviderTest extends TestCase
 {
-    public function getProviders()
+    public function getProviders(): iterable
     {
         return [
             'json' => $this->prophesize(DecoderInterface::class)->reveal(),
         ];
     }
 
-    public function testSupportShouldReturnFalseIfFormatIsNotSupported()
+    public function testSupportShouldReturnFalseIfFormatIsNotSupported(): void
     {
         $provider = new DecoderProvider($this->getProviders());
 
         $this->assertFalse($provider->supports('xml'));
     }
 
-    public function testSupportShouldReturnTrueIfFormatIsSupported()
+    public function testSupportShouldReturnTrueIfFormatIsSupported(): void
     {
         $provider = new DecoderProvider($this->getProviders());
 
@@ -32,14 +32,14 @@ class DecoderProviderTest extends TestCase
     /**
      * @expectedException \Fazland\ApiPlatformBundle\Decoder\Exception\UnsupportedFormatException
      */
-    public function testGetShouldThrowIfFormatIsNotSupported()
+    public function testGetShouldThrowIfFormatIsNotSupported(): void
     {
         $provider = new DecoderProvider($this->getProviders());
 
         $provider->get('xml');
     }
 
-    public function testGetShouldNotThrowIfFormatIsSupported()
+    public function testGetShouldNotThrowIfFormatIsSupported(): void
     {
         $provider = new DecoderProvider($this->getProviders());
 

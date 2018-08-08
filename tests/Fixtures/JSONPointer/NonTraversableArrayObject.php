@@ -8,6 +8,9 @@ namespace Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer;
  */
 class NonTraversableArrayObject implements \ArrayAccess, \Countable, \Serializable
 {
+    /**
+     * @var array
+     */
     private $array;
 
     public function __construct(array $array = null)
@@ -15,17 +18,26 @@ class NonTraversableArrayObject implements \ArrayAccess, \Countable, \Serializab
         $this->array = $array ?: [];
     }
 
-    public function offsetExists($offset)
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->array);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function offsetGet($offset)
     {
         return $this->array[$offset];
     }
 
-    public function offsetSet($offset, $value)
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetSet($offset, $value): void
     {
         if (null === $offset) {
             $this->array[] = $value;
@@ -34,22 +46,34 @@ class NonTraversableArrayObject implements \ArrayAccess, \Countable, \Serializab
         }
     }
 
-    public function offsetUnset($offset)
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetUnset($offset): void
     {
         unset($this->array[$offset]);
     }
 
-    public function count()
+    /**
+     * {@inheritdoc}
+     */
+    public function count(): int
     {
         return count($this->array);
     }
 
-    public function serialize()
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize(): string
     {
         return serialize($this->array);
     }
 
-    public function unserialize($serialized)
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized): void
     {
         $this->array = (array) unserialize((string) $serialized);
     }

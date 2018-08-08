@@ -11,7 +11,7 @@ class TestController extends Controller
 {
     use VarDumperTestTrait;
 
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): Response
     {
         return new Response($this->getDump($request->request->all()));
     }

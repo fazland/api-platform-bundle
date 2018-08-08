@@ -3,6 +3,7 @@
 namespace Fazland\ApiPlatformBundle\Tests\PatchManager;
 
 use Fazland\ApiPlatformBundle\PatchManager\Exception\OperationNotAllowedException;
+use Fazland\ApiPlatformBundle\PatchManager\MergeablePatchableInterface;
 use Fazland\ApiPlatformBundle\PatchManager\PatchableInterface;
 use Fazland\ApiPlatformBundle\PatchManager\PatchManager;
 use Fazland\ApiPlatformBundle\PatchManager\PatchManagerInterface;
@@ -77,7 +78,7 @@ class PatchManagerTest extends TestCase
             'content-type' => 'application/merge-patch+json',
         ]);
 
-        $patchable = $this->prophesize(PatchableInterface::class);
+        $patchable = $this->prophesize(MergeablePatchableInterface::class);
         $patchable->getTypeClass()->willReturn('Test\\TestType');
         $patchable->commit()->shouldBeCalled();
 
@@ -103,7 +104,7 @@ class PatchManagerTest extends TestCase
             'content-type' => 'application/merge-patch+json',
         ]);
 
-        $patchable = $this->prophesize(PatchableInterface::class);
+        $patchable = $this->prophesize(MergeablePatchableInterface::class);
         $patchable->getTypeClass()->willReturn('Test\\TestType');
         $patchable->commit()->shouldNotBeCalled();
 
@@ -128,7 +129,7 @@ class PatchManagerTest extends TestCase
             'content-type' => 'application/merge-patch+json',
         ]);
 
-        $patchable = $this->prophesize(PatchableInterface::class);
+        $patchable = $this->prophesize(MergeablePatchableInterface::class);
         $patchable->getTypeClass()->willReturn('Test\\TestType');
         $patchable->commit()->shouldNotBeCalled();
 
@@ -178,11 +179,6 @@ class PatchManagerTest extends TestCase
             new class() implements PatchableInterface {
                 public $b;
 
-                public function getTypeClass(): string
-                {
-                    return '';
-                }
-
                 public function commit(): void
                 {
                 }
@@ -195,11 +191,6 @@ class PatchManagerTest extends TestCase
             ],
             new class() implements PatchableInterface {
                 public $a = 'foobar';
-
-                public function getTypeClass(): string
-                {
-                    return '';
-                }
 
                 public function commit(): void
                 {
@@ -359,11 +350,6 @@ class PatchManagerTest extends TestCase
                 throw new OperationNotAllowedException();
             }
 
-            public function getTypeClass(): string
-            {
-                return '';
-            }
-
             public function commit(): void
             {
             }
@@ -374,6 +360,22 @@ class PatchManagerTest extends TestCase
         $request->reveal()->request = new ParameterBag($params);
 
         $this->patchManager->patch($object, $request->reveal());
+    }
+
+    /**
+     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\UnmergeablePatchException
+     * @expectedExceptionMessage Resource cannot be merge patched.
+     */
+    public function testPatchShouldThrowIfObjectIsNotInstanceOfMergeablePatchableInterface(): void
+    {
+        $object = $this->prophesize(PatchableInterface::class);
+        $request = $this->prophesize(Request::class);
+
+        $request->reveal()->headers = new HeaderBag([
+            'content-type' => 'application/merge-patch+json',
+        ]);
+
+        $this->patchManager->patch($object->reveal(), $request->reveal());
     }
 
     protected function createPatchManager(): PatchManagerInterface

@@ -4,18 +4,25 @@ namespace Fazland\ApiPlatformBundle\Tests\Exception;
 
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Exception\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpKernel\KernelInterface;
 
+/**
+ * Marked as legacy. As of Symfony 4.1:
+ * Referencing controllers with a single colon is deprecated since Symfony 4.1. Use fazland_api.exception_controller::showAction instead.
+ *
+ * @group legacy
+ */
 class FunctionalTest extends WebTestCase
 {
     /**
      * {@inheritdoc}
      */
-    protected static function createKernel(array $options = [])
+    protected static function createKernel(array $options = []): KernelInterface
     {
         return new AppKernel('test', $options['debug'] ?? true);
     }
 
-    public function testShouldCatchExceptions()
+    public function testShouldCatchExceptions(): void
     {
         $client = static::createClient(['debug' => false]);
 
@@ -28,7 +35,7 @@ class FunctionalTest extends WebTestCase
         $this->assertEquals($array, $response->getContent());
     }
 
-    public function testShouldCatchExceptionsAndExposeTracesInDebugMode()
+    public function testShouldCatchExceptionsAndExposeTracesInDebugMode(): void
     {
         $client = static::createClient(['debug' => true]);
 

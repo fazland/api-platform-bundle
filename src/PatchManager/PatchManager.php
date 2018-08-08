@@ -8,6 +8,7 @@ use Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\OperationNotAllowedException;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\UnmergeablePatchException;
 use JsonSchema\Validator;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -56,7 +57,21 @@ class PatchManager implements PatchManagerInterface
             throw TypeError::createArgumentInvalid(1, __METHOD__, PatchableInterface::class, $patchable);
         }
 
+        if (method_exists($patchable, 'getTypeClass') && ! $patchable instanceof MergeablePatchableInterface) {
+            trigger_error(sprintf(
+                '%s does not implement %s. %s::getTypeClass() is deprecated and will be removed in the first stable release.',
+                get_class($patchable),
+                MergeablePatchableInterface::class,
+                PatchableInterface::class
+            ), E_USER_DEPRECATED);
+        }
+
         if (preg_match('#application/merge-patch\\+json#i', $request->headers->get('Content-Type', ''))) {
+            // TODO: this should be if (! $patchable instanceof MergeablePatchableInterface).
+            if (! method_exists($patchable, 'getTypeClass')) {
+                throw new UnmergeablePatchException('Resource cannot be merge patched.');
+            }
+
             $this->mergePatch($patchable, $request);
 
             return;

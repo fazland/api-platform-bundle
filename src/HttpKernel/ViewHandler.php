@@ -99,7 +99,7 @@ class ViewHandler implements EventSubscriberInterface
      *
      * @throws \ReflectionException
      */
-    public function onController(FilterControllerEvent $event)
+    public function onController(FilterControllerEvent $event): void
     {
         $controller = $event->getController();
         if (! is_array($controller) && method_exists($controller, '__invoke')) {
@@ -144,7 +144,7 @@ class ViewHandler implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::VIEW => 'onView',

@@ -17,17 +17,20 @@ class InvalidJSONExceptionSubscriberTest extends WebTestCase
      */
     private $subscriber;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->subscriber = new InvalidJSONExceptionSubscriber();
     }
 
-    public function testShouldSubscribeExceptionEvent()
+    public function testShouldSubscribeExceptionEvent(): void
     {
         $this->assertArrayHasKey('kernel.exception', InvalidJSONExceptionSubscriber::getSubscribedEvents());
     }
 
-    public function testShouldSkipIncorrectExceptions()
+    public function testShouldSkipIncorrectExceptions(): void
     {
         $event = $this->prophesize(GetResponseForExceptionEvent::class);
         $event->getException()->willReturn(new \Exception());
@@ -36,7 +39,7 @@ class InvalidJSONExceptionSubscriberTest extends WebTestCase
         $this->subscriber->onException($event->reveal());
     }
 
-    public function testShouldHandleInvalidJSONException()
+    public function testShouldHandleInvalidJSONException(): void
     {
         $event = $this->prophesize(GetResponseForExceptionEvent::class);
         $event->getException()->willReturn($exception = $this->prophesize(InvalidJSONException::class));
@@ -45,19 +48,22 @@ class InvalidJSONExceptionSubscriberTest extends WebTestCase
         $this->subscriber->onException($event->reveal());
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected static function createKernel(array $options = [])
     {
         return new AppKernel('test', true);
     }
 
-    public function testShouldInterceptFormNotSubmittedExceptionsAndReturnsCorrectResponse()
+    public function testShouldInterceptFormNotSubmittedExceptionsAndReturnsCorrectResponse(): void
     {
         $client = static::createClient();
         $client->request('GET', '/invalid-json', [], [], ['HTTP_ACCEPT' => 'application/json']);
 
         $response = $client->getResponse();
 
-        $this->assertEquals(422, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString('{"error":"Invalid."}', $response->getContent());
     }
 }

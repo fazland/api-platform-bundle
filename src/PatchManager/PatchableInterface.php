@@ -3,17 +3,10 @@
 namespace Fazland\ApiPlatformBundle\PatchManager;
 
 /**
- * Represents an object that can be patched.
+ * Represents an object that can be patched (and not merge patched).
  */
 interface PatchableInterface
 {
-    /**
-     * Get type for the current object.
-     *
-     * @return string
-     */
-    public function getTypeClass(): string;
-
     /**
      * Commit modifications to the underlying object.
      */

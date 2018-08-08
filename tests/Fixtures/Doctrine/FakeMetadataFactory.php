@@ -2,6 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Doctrine;
 
+use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
 use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\Common\Persistence\Mapping\RuntimeReflectionService;
@@ -21,26 +22,26 @@ class FakeMetadataFactory implements ClassMetadataFactory
         $this->reflService = new RuntimeReflectionService();
     }
 
-    public function setEntityManager(EntityManagerInterface $entityManager)
+    public function setEntityManager(EntityManagerInterface $entityManager): void
     {
     }
 
-    public function setDocumentManager($documentManager)
+    public function setDocumentManager($documentManager): void
     {
     }
 
-    public function setConfiguration()
+    public function setConfiguration(): void
     {
     }
 
-    public function setCacheDriver()
+    public function setCacheDriver(): void
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAllMetadata()
+    public function getAllMetadata(): array
     {
         return array_values($this->_metadata);
     }
@@ -48,7 +49,7 @@ class FakeMetadataFactory implements ClassMetadataFactory
     /**
      * {@inheritdoc}
      */
-    public function getMetadataFor($className)
+    public function getMetadataFor($className): ClassMetadata
     {
         if (! isset($this->_metadata[$className])) {
             throw new MappingException('Cannot find metadata for "'.$className.'"');
@@ -60,7 +61,7 @@ class FakeMetadataFactory implements ClassMetadataFactory
     /**
      * {@inheritdoc}
      */
-    public function hasMetadataFor($className)
+    public function hasMetadataFor($className): bool
     {
         return isset($this->_metadata[$className]);
     }
@@ -68,7 +69,7 @@ class FakeMetadataFactory implements ClassMetadataFactory
     /**
      * {@inheritdoc}
      */
-    public function setMetadataFor($className, $class)
+    public function setMetadataFor($className, $class): void
     {
         $this->_metadata[$className] = $class;
 
@@ -81,7 +82,7 @@ class FakeMetadataFactory implements ClassMetadataFactory
     /**
      * {@inheritdoc}
      */
-    public function isTransient($className)
+    public function isTransient($className): bool
     {
         return false;
     }

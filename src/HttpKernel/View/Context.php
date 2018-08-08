@@ -30,7 +30,7 @@ class Context
         }
     }
 
-    public static function create(Request $request, TokenStorageInterface $tokenStorage = null)
+    public static function create(Request $request, TokenStorageInterface $tokenStorage = null): self
     {
         return new static($request, $tokenStorage);
     }
@@ -46,7 +46,7 @@ class Context
     /**
      * @return UserInterface|null
      */
-    public function getUser()
+    public function getUser(): ?UserInterface
     {
         return $this->user;
     }

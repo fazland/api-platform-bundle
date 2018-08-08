@@ -2,26 +2,25 @@
 
 namespace Fazland\ApiPlatformBundle\HttpKernel\ExceptionListener;
 
-use Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\UnmergeablePatchException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class FormNotSubmittedExceptionSubscriber implements EventSubscriberInterface
+class UnmergeablePatchExceptionSubscriber implements EventSubscriberInterface
 {
     public function onException(GetResponseForExceptionEvent $event): void
     {
         $exception = $event->getException();
-        if (! $exception instanceof FormNotSubmittedException) {
+        if (! $exception instanceof UnmergeablePatchException) {
             return;
         }
 
         $event->setResponse(new JsonResponse([
-            'error' => 'No data sent.',
-            'name' => $exception->getForm()->getName(),
-        ], Response::HTTP_BAD_REQUEST));
+            'error' => $exception->getMessage() ?: 'Unmergeable resource.',
+        ], Response::HTTP_NOT_ACCEPTABLE));
     }
 
     /**

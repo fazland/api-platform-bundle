@@ -12,12 +12,15 @@ class AddOperationTest extends TestCase
      */
     private $operation;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->operation = new AddOperation();
     }
 
-    public function testShouldAddValue()
+    public function testShouldAddValue(): void
     {
         $obj = [];
         $this->operation->execute($obj, (object) ['path' => '/one', 'value' => 'foo']);

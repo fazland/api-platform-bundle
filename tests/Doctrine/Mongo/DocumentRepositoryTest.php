@@ -23,12 +23,18 @@ class DocumentRepositoryTest extends WebTestCase
      */
     private $repository;
 
-    protected static function getKernelClass()
+    /**
+     * {@inheritdoc}
+     */
+    protected static function getKernelClass(): string
     {
         return AppKernel::class;
     }
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $documentManager = $this->getDocumentManager();
         $documentManager->getMetadataFactory()->setMetadataFor(FooBar::class, $class = new ClassMetadata(FooBar::class));
@@ -39,17 +45,16 @@ class DocumentRepositoryTest extends WebTestCase
         ]);
         $class->setIdentifier('id');
 
-        $this->repository = new class($documentManager, $documentManager->getUnitOfWork(), $class) extends DocumentRepository {
-        };
+        $this->repository = new class($documentManager, $documentManager->getUnitOfWork(), $class) extends DocumentRepository { };
     }
 
-    public function testAllShouldReturnAnEntityIterator()
+    public function testAllShouldReturnAnEntityIterator(): void
     {
         $this->_collection->find([], Argument::any())->willReturn(new \ArrayIterator([]));
         $this->assertInstanceOf(DocumentIterator::class, $this->repository->all());
     }
 
-    public function testCountWillReturnRowCount()
+    public function testCountWillReturnRowCount(): void
     {
         $this->_db->command(new BSONDocument([
             'count' => 'FooBar',
@@ -68,7 +73,7 @@ class DocumentRepositoryTest extends WebTestCase
         $this->assertSame(42, $this->repository->count());
     }
 
-    public function testFindOneByCachedShouldCheckCache()
+    public function testFindOneByCachedShouldCheckCache(): void
     {
         $this->markTestSkipped('Mongo ODM does not support result cache');
     }
@@ -76,22 +81,22 @@ class DocumentRepositoryTest extends WebTestCase
     /**
      * @expectedException \Doctrine\ORM\NonUniqueResultException
      */
-    public function testFindOneByCachedShouldThrowIdNonUniqueResultHasBeenReturned()
+    public function testFindOneByCachedShouldThrowIdNonUniqueResultHasBeenReturned(): void
     {
         $this->markTestSkipped('Mongo ODM does not support result cache');
     }
 
-    public function testFindByCachedShouldCheckCache()
+    public function testFindByCachedShouldCheckCache(): void
     {
         $this->markTestSkipped('Mongo ODM does not support result cache');
     }
 
-    public function testFindByCachedShouldFireTheCorrectQuery()
+    public function testFindByCachedShouldFireTheCorrectQuery(): void
     {
         $this->markTestSkipped('Mongo ODM does not support result cache');
     }
 
-    public function testGetShouldReturnADocument()
+    public function testGetShouldReturnADocument(): void
     {
         $this->_collection->find(new BSONDocument([
             '_id' => '5a3d346ab7f26e18ba119308',
@@ -113,7 +118,7 @@ class DocumentRepositoryTest extends WebTestCase
     /**
      * @expectedException \Fazland\ApiPlatformBundle\Doctrine\Exception\NoResultException
      */
-    public function testGetShouldThrowIfNoResultIsFound()
+    public function testGetShouldThrowIfNoResultIsFound(): void
     {
         $this->_collection->find(new BSONDocument([
             '_id' => '5a3d346ab7f26e18ba119308',
@@ -124,7 +129,7 @@ class DocumentRepositoryTest extends WebTestCase
         $this->repository->get('5a3d346ab7f26e18ba119308');
     }
 
-    public function testGetOneByShouldReturnADocument()
+    public function testGetOneByShouldReturnADocument(): void
     {
         $this->_collection->find(new BSONDocument([
             '_id' => '5a3d346ab7f26e18ba119308',
@@ -146,7 +151,7 @@ class DocumentRepositoryTest extends WebTestCase
     /**
      * @expectedException \Fazland\ApiPlatformBundle\Doctrine\Exception\NoResultException
      */
-    public function testGetOneByShouldThrowIfNoResultIsFound()
+    public function testGetOneByShouldThrowIfNoResultIsFound(): void
     {
         $this->_collection->find(new BSONDocument([
             '_id' => '5a3d346ab7f26e18ba119308',
@@ -157,7 +162,7 @@ class DocumentRepositoryTest extends WebTestCase
         $this->repository->getOneBy(['id' => '5a3d346ab7f26e18ba119308']);
     }
 
-    public function testGetOneByCachedShouldCheckTheCache()
+    public function testGetOneByCachedShouldCheckTheCache(): void
     {
         $this->markTestSkipped('Mongo ODM does not support result cache');
     }
@@ -165,12 +170,12 @@ class DocumentRepositoryTest extends WebTestCase
     /**
      * @dataProvider getDocumentClasses
      */
-    public function testRepositoryIsInstanceOfDocumentRepository($class)
+    public function testRepositoryIsInstanceOfDocumentRepository(string $class): void
     {
         $this->assertTrue(DocumentRepository::class === $class || is_subclass_of($class, DocumentRepository::class));
     }
 
-    public function getDocumentClasses()
+    public function getDocumentClasses(): iterable
     {
         $kernel = $this->createKernel();
         $kernel->boot();

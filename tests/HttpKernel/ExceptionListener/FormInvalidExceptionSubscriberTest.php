@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class FormInvalidExceptionSubscriberTest extends WebTestCase
 {
@@ -20,17 +21,20 @@ class FormInvalidExceptionSubscriberTest extends WebTestCase
      */
     private $subscriber;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->subscriber = new FormInvalidExceptionSubscriber();
     }
 
-    public function testShouldSubscribeExceptionEvent()
+    public function testShouldSubscribeExceptionEvent(): void
     {
         $this->assertArrayHasKey('kernel.exception', FormInvalidExceptionSubscriber::getSubscribedEvents());
     }
 
-    public function testShouldSkipIncorrectExceptions()
+    public function testShouldSkipIncorrectExceptions(): void
     {
         $event = $this->prophesize(GetResponseForExceptionEvent::class);
         $event->getException()->willReturn(new \Exception());
@@ -39,7 +43,7 @@ class FormInvalidExceptionSubscriberTest extends WebTestCase
         $this->subscriber->onException($event->reveal());
     }
 
-    public function testShouldHandleFormInvalidException()
+    public function testShouldHandleFormInvalidException(): void
     {
         $event = $this->prophesize(GetResponseForExceptionEvent::class);
         $event->getException()->willReturn($exception = $this->prophesize(FormInvalidException::class));
@@ -59,19 +63,22 @@ class FormInvalidExceptionSubscriberTest extends WebTestCase
         $this->subscriber->onException($event->reveal());
     }
 
-    protected static function createKernel(array $options = [])
+    /**
+     * {@inheritdoc}
+     */
+    protected static function createKernel(array $options = []): KernelInterface
     {
         return new AppKernel('test', true);
     }
 
-    public function testShouldInterceptFormInvalidExceptionsAndReturnsCorrectResponse()
+    public function testShouldInterceptFormInvalidExceptionsAndReturnsCorrectResponse(): void
     {
         $client = static::createClient();
         $client->request('GET', '/form-invalid', [], [], ['HTTP_ACCEPT' => 'application/json']);
 
         $response = $client->getResponse();
 
-        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString('{"errors":[],"children":[{"errors":["Foo error."],"children":[],"name":"first"},{"errors":[],"children":[],"name":"second"}],"name":"form"}', $response->getContent());
     }
 }

@@ -8,10 +8,19 @@ use Negotiation\Exception\InvalidMediaType;
 
 class Priority extends BaseAccept implements AcceptHeader
 {
+    /**
+     * @var string
+     */
     private $basePart;
 
+    /**
+     * @var string
+     */
     private $subPart;
 
+    /**
+     * @var string|null
+     */
     private $version;
 
     public function __construct($value)
@@ -30,31 +39,31 @@ class Priority extends BaseAccept implements AcceptHeader
     /**
      * @return string
      */
-    public function getSubPart()
-    {
-        return $this->subPart;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBasePart()
+    public function getBasePart(): string
     {
         return $this->basePart;
     }
 
     /**
-     * @param int $version
+     * @return string
      */
-    public function setVersion($version)
+    public function getSubPart(): string
+    {
+        return $this->subPart;
+    }
+
+    /**
+     * @param string $version
+     */
+    public function setVersion(?string $version): void
     {
         $this->version = $version;
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getVersion()
+    public function getVersion(): ?string
     {
         return $this->version;
     }

@@ -21,7 +21,7 @@ trait ElasticaDocumentManagerMockTrait
      */
     private $client;
 
-    public function getDocumentManager()
+    public function getDocumentManager(): DocumentManagerInterface
     {
         if (null === $this->documentManager) {
             $this->client = $this->prophesize(Client::class);

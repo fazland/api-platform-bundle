@@ -25,12 +25,18 @@ class EntityRepositoryTest extends WebTestCase
      */
     private $repository;
 
-    protected static function getKernelClass()
+    /**
+     * {@inheritdoc}
+     */
+    protected static function getKernelClass(): string
     {
         return AppKernel::class;
     }
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $classMetadata = new ClassMetadata(TestEntity::class);
         $classMetadata->identifier = ['id'];
@@ -46,11 +52,10 @@ class EntityRepositoryTest extends WebTestCase
 
         $this->getEntityManager()->getMetadataFactory()->setMetadataFor(TestEntity::class, $classMetadata);
 
-        $this->repository = new class($this->getEntityManager(), $classMetadata) extends EntityRepository {
-        };
+        $this->repository = new class($this->getEntityManager(), $classMetadata) extends EntityRepository { };
     }
 
-    public function testAllShouldReturnAnEntityIterator()
+    public function testAllShouldReturnAnEntityIterator(): void
     {
         $this->_innerConnection->query('SELECT t0_.id AS id_0 FROM TestEntity t0_')
             ->willReturn(new ArrayStatement([]));
@@ -58,7 +63,7 @@ class EntityRepositoryTest extends WebTestCase
         $this->assertInstanceOf(EntityIterator::class, $this->repository->all());
     }
 
-    public function testCountWillReturnRowCount()
+    public function testCountWillReturnRowCount(): void
     {
         $this->_innerConnection->query('SELECT COUNT(t0_.id) AS sclr_0 FROM TestEntity t0_')
             ->willReturn(new ArrayStatement([
@@ -68,7 +73,7 @@ class EntityRepositoryTest extends WebTestCase
         $this->assertSame(42, $this->repository->count());
     }
 
-    public function testFindOneByCachedShouldCheckCache()
+    public function testFindOneByCachedShouldCheckCache(): void
     {
         $this->_innerConnection->query('SELECT t0_.id AS id_0 FROM TestEntity t0_ LIMIT 1')
             ->willReturn($statement = $this->prophesize(Statement::class))
@@ -95,7 +100,7 @@ class EntityRepositoryTest extends WebTestCase
     /**
      * @expectedException \Doctrine\ORM\NonUniqueResultException
      */
-    public function testFindOneByCachedShouldThrowIdNonUniqueResultHasBeenReturned()
+    public function testFindOneByCachedShouldThrowIdNonUniqueResultHasBeenReturned(): void
     {
         $this->_innerConnection->query('SELECT t0_.id AS id_0 FROM TestEntity t0_ LIMIT 1')
             ->willReturn($statement = $this->prophesize(Statement::class))
@@ -113,7 +118,7 @@ class EntityRepositoryTest extends WebTestCase
         $this->repository->findOneByCached([]);
     }
 
-    public function testFindByCachedShouldCheckCache()
+    public function testFindByCachedShouldCheckCache(): void
     {
         $this->_innerConnection->query('SELECT t0_.id AS id_0 FROM TestEntity t0_')
             ->willReturn($statement = $this->prophesize(Statement::class))
@@ -141,7 +146,7 @@ class EntityRepositoryTest extends WebTestCase
         $this->assertEquals(3, $objs[2]->id);
     }
 
-    public function testFindByCachedShouldFireTheCorrectQuery()
+    public function testFindByCachedShouldFireTheCorrectQuery(): void
     {
         $this->_innerConnection->prepare('SELECT t0_.id AS id_0 FROM TestEntity t0_ WHERE t0_.id IN (?, ?) ORDER BY t0_.id ASC LIMIT 2 OFFSET 1')
             ->willReturn($statement = $this->prophesize(Statement::class))
@@ -168,7 +173,7 @@ class EntityRepositoryTest extends WebTestCase
         $this->assertEquals(3, $objs[1]->id);
     }
 
-    public function testGetShouldReturnAnEntity()
+    public function testGetShouldReturnAnEntity(): void
     {
         $this->_innerConnection->prepare('SELECT t0.id AS id_1 FROM TestEntity t0 WHERE t0.id = ?')
             ->willReturn($statement = $this->prophesize(Statement::class))
@@ -194,7 +199,7 @@ class EntityRepositoryTest extends WebTestCase
     /**
      * @expectedException \Doctrine\ORM\NoResultException
      */
-    public function testGetShouldThrowIfNoResultIsFound()
+    public function testGetShouldThrowIfNoResultIsFound(): void
     {
         $this->_innerConnection->prepare('SELECT t0.id AS id_1 FROM TestEntity t0 WHERE t0.id = ?')
             ->willReturn($statement = $this->prophesize(Statement::class))
@@ -213,7 +218,7 @@ class EntityRepositoryTest extends WebTestCase
         $this->repository->get(1);
     }
 
-    public function testGetOneByShouldReturnAnEntity()
+    public function testGetOneByShouldReturnAnEntity(): void
     {
         $this->_innerConnection->prepare('SELECT t0.id AS id_1 FROM TestEntity t0 WHERE t0.id = ? LIMIT 1')
             ->willReturn($statement = $this->prophesize(Statement::class))
@@ -239,7 +244,7 @@ class EntityRepositoryTest extends WebTestCase
     /**
      * @expectedException \Doctrine\ORM\NoResultException
      */
-    public function testGetOneByShouldThrowIfNoResultIsFound()
+    public function testGetOneByShouldThrowIfNoResultIsFound(): void
     {
         $this->_innerConnection->prepare('SELECT t0.id AS id_1 FROM TestEntity t0 WHERE t0.id = ? LIMIT 1')
             ->willReturn($statement = $this->prophesize(Statement::class))
@@ -258,7 +263,7 @@ class EntityRepositoryTest extends WebTestCase
         $this->repository->getOneBy(['id' => 12]);
     }
 
-    public function testGetOneByCachedShouldCheckTheCache()
+    public function testGetOneByCachedShouldCheckTheCache(): void
     {
         $this->_innerConnection->prepare('SELECT t0_.id AS id_0 FROM TestEntity t0_ WHERE t0_.id = ? LIMIT 1')
             ->willReturn($statement = $this->prophesize(Statement::class))
@@ -288,12 +293,12 @@ class EntityRepositoryTest extends WebTestCase
     /**
      * @dataProvider getEntityClasses
      */
-    public function testRepositoryIsInstanceOfEntityRepository($class)
+    public function testRepositoryIsInstanceOfEntityRepository(string $class): void
     {
         $this->assertTrue(EntityRepository::class === $class || is_subclass_of($class, EntityRepository::class));
     }
 
-    public function getEntityClasses()
+    public function getEntityClasses(): iterable
     {
         $kernel = $this->createKernel();
         $kernel->boot();

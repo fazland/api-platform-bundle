@@ -91,7 +91,7 @@ class AccessorCollectionTest_CarStructure
 
 abstract class AccessorCollectionTest extends AccessorArrayAccessTest
 {
-    public function testSetValueCallsAdderAndRemoverForCollections()
+    public function testSetValueCallsAdderAndRemoverForCollections(): void
     {
         $axesBefore = $this->getContainer([1 => 'second', 3 => 'fourth', 4 => 'fifth']);
         $axesMerged = $this->getContainer([1 => 'first', 2 => 'second', 3 => 'third']);
@@ -110,7 +110,7 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
         $this->assertEquals($axesMergedCopy, $axesMerged);
     }
 
-    public function testSetValueCallsAdderAndRemoverForNestedCollections()
+    public function testSetValueCallsAdderAndRemoverForNestedCollections(): void
     {
         $car = $this->getMockBuilder(__CLASS__.'_CompositeCar')->getMock();
         $structure = $this->getMockBuilder(__CLASS__.'_CarStructure')->getMock();
@@ -141,7 +141,7 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
      * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
      * @expectedExceptionMessage Could not determine access type for property "axes".
      */
-    public function testSetValueFailsIfNoAdderNorRemoverFound()
+    public function testSetValueFailsIfNoAdderNorRemoverFound(): void
     {
         $car = $this->getMockBuilder(__CLASS__.'_CarNoAdderAndRemover')->getMock();
         $axesBefore = $this->getContainer([1 => 'second', 3 => 'fourth']);
@@ -154,25 +154,25 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
         $this->propertyAccessor->setValue($car, '/axes', $axesAfter);
     }
 
-    public function testIsWritableReturnsTrueIfAdderAndRemoverExists()
+    public function testIsWritableReturnsTrueIfAdderAndRemoverExists(): void
     {
         $car = $this->getMockBuilder(__CLASS__.'_Car')->getMock();
         $this->assertTrue($this->propertyAccessor->isWritable($car, '/axes'));
     }
 
-    public function testIsWritableReturnsFalseIfOnlyAdderExists()
+    public function testIsWritableReturnsFalseIfOnlyAdderExists(): void
     {
         $car = $this->getMockBuilder(__CLASS__.'_CarOnlyAdder')->getMock();
         $this->assertFalse($this->propertyAccessor->isWritable($car, '/axes'));
     }
 
-    public function testIsWritableReturnsFalseIfOnlyRemoverExists()
+    public function testIsWritableReturnsFalseIfOnlyRemoverExists(): void
     {
         $car = $this->getMockBuilder(__CLASS__.'_CarOnlyRemover')->getMock();
         $this->assertFalse($this->propertyAccessor->isWritable($car, '/axes'));
     }
 
-    public function testIsWritableReturnsFalseIfNoAdderNorRemoverExists()
+    public function testIsWritableReturnsFalseIfNoAdderNorRemoverExists(): void
     {
         $car = $this->getMockBuilder(__CLASS__.'_CarNoAdderAndRemover')->getMock();
         $this->assertFalse($this->propertyAccessor->isWritable($car, '/axes'));
@@ -182,7 +182,7 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
      * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
      * expectedExceptionMessageRegExp /The property "axes" in class "Mock_PropertyAccessorCollectionTest_Car[^"]*" can be defined with the methods "addAxis()", "removeAxis()" but the new value must be an array or an instance of \Traversable, "string" given./
      */
-    public function testSetValueFailsIfAdderAndRemoverExistButValueIsNotTraversable()
+    public function testSetValueFailsIfAdderAndRemoverExistButValueIsNotTraversable(): void
     {
         $car = $this->getMockBuilder(__CLASS__.'_Car')->getMock();
 

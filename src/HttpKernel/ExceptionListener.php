@@ -6,6 +6,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -29,7 +30,7 @@ class ExceptionListener implements EventSubscriberInterface
         $this->logger = $logger;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(GetResponseForExceptionEvent $event): void
     {
         $exception = $event->getException();
         $request = $event->getRequest();
@@ -61,6 +62,9 @@ class ExceptionListener implements EventSubscriberInterface
         $event->setResponse($response);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -74,7 +78,7 @@ class ExceptionListener implements EventSubscriberInterface
      * @param \Exception $exception The \Exception instance
      * @param string     $message   The error message to log
      */
-    protected function logException(\Exception $exception, $message)
+    protected function logException(\Exception $exception, string $message): void
     {
         if (null !== $this->logger) {
             $method = 'error';
@@ -83,11 +87,11 @@ class ExceptionListener implements EventSubscriberInterface
                 $statusCode = $exception->getStatusCode();
 
                 switch (true) {
-                    case $statusCode < 400:
+                    case $statusCode < Response::HTTP_BAD_REQUEST:
                         $method = 'notice';
                         break;
 
-                    case $statusCode >= 400 && $statusCode < 500:
+                    case $statusCode >= Response::HTTP_BAD_REQUEST && $statusCode < Response::HTTP_INTERNAL_SERVER_ERROR:
                         $method = 'warning';
                         break;
 
@@ -109,7 +113,7 @@ class ExceptionListener implements EventSubscriberInterface
      *
      * @return Request $request The cloned request
      */
-    protected function duplicateRequest(\Exception $exception, Request $request)
+    protected function duplicateRequest(\Exception $exception, Request $request): Request
     {
         $attributes = [
             '_controller' => $this->controller,

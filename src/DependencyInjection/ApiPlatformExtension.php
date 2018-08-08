@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\DependencyInjection;
 
 use Fazland\ApiPlatformBundle\Decoder\DecoderInterface;
 use Fazland\ApiPlatformBundle\HttpKernel\CorsListener;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -11,7 +12,10 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 class ApiPlatformExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    /**
+     * {@inheritdoc}
+     */
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
@@ -43,12 +47,15 @@ class ApiPlatformExtension extends Extension
         }
     }
 
-    public function getConfiguration(array $config, ContainerBuilder $container)
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfiguration(array $config, ContainerBuilder $container): ?ConfigurationInterface
     {
         return new Configuration();
     }
 
-    private function loadCors(XmlFileLoader $loader, ContainerBuilder $container, array $config)
+    private function loadCors(XmlFileLoader $loader, ContainerBuilder $container, array $config): void
     {
         $loader->load('cors.xml');
 

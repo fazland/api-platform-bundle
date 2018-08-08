@@ -17,7 +17,7 @@ class VersionAwareNegotiator
      *
      * @return Accept
      */
-    protected function acceptFactory($header): Accept
+    protected function acceptFactory(string $header): Accept
     {
         return new Accept($header);
     }
@@ -29,7 +29,7 @@ class VersionAwareNegotiator
      *
      * @return Priority
      */
-    public function priorityFactory($priority): Priority
+    public function priorityFactory(string $priority): Priority
     {
         $priority = new Priority($priority);
 
@@ -47,7 +47,7 @@ class VersionAwareNegotiator
      *
      * @return Priority|null best matching type
      */
-    public function getBest($header, array $priorities): ?Priority
+    public function getBest(string $header, array $priorities): ?Priority
     {
         if (empty($priorities)) {
             throw new InvalidArgument('A set of server priorities should be given.');
@@ -79,7 +79,15 @@ class VersionAwareNegotiator
         return $priority;
     }
 
-    protected function match(Accept $accept, Priority $priority, $index, $headerIndex)
+    /**
+     * @param Accept $accept
+     * @param Priority $priority
+     * @param string|int $index
+     * @param string|int $headerIndex
+     *
+     * @return Match|null
+     */
+    protected function match(Accept $accept, Priority $priority, $index, $headerIndex): ?Match
     {
         $ab = $accept->getBasePart();
         $pb = $priority->getBasePart();
@@ -112,7 +120,7 @@ class VersionAwareNegotiator
      *
      * @return string[]
      */
-    private function parseHeader($header): array
+    private function parseHeader(string $header): array
     {
         $res = preg_match_all('/(?:[^,"]++(?:"[^"]*+")?)+[^,"]*+/', $header, $matches);
 

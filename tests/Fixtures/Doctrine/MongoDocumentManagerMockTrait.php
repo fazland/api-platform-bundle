@@ -44,7 +44,7 @@ trait MongoDocumentManagerMockTrait
      */
     private $_configuration;
 
-    public function getDocumentManager()
+    public function getDocumentManager(): DocumentManager
     {
         if (null === $this->_documentManager) {
             $mongoDb = null;

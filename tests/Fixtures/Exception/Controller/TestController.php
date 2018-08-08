@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TestController extends Controller
 {
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): void
     {
     }
 }

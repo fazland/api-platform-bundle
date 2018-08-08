@@ -13,6 +13,7 @@ use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -39,7 +40,10 @@ class ExceptionControllerTest extends TestCase
      */
     private $request;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $status = ob_get_status(true);
 
@@ -53,7 +57,7 @@ class ExceptionControllerTest extends TestCase
         $this->controller = new ExceptionController($this->serializer->reveal(), $this->serializationContext, false);
     }
 
-    public function testShouldSerializeDebugExceptionIfDebugIsEnabled()
+    public function testShouldSerializeDebugExceptionIfDebugIsEnabled(): void
     {
         $this->serializer->serialize(Argument::cetera())->willReturn();
         $controller = new ExceptionController($this->serializer->reveal(), $this->serializationContext, true);
@@ -64,10 +68,10 @@ class ExceptionControllerTest extends TestCase
             ->serialize(Argument::type(DebugSerializableException::class), 'json', $this->serializationContext)
             ->shouldHaveBeenCalled();
 
-        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
-    public function testShouldSerializeException()
+    public function testShouldSerializeException(): void
     {
         $this->serializer->serialize(Argument::cetera())->willReturn();
         $response = $this->controller->showAction($this->request, FlattenException::create(new AccessDeniedHttpException()));
@@ -76,10 +80,10 @@ class ExceptionControllerTest extends TestCase
             ->serialize(Argument::type(SerializableException::class), 'json', $this->serializationContext)
             ->shouldHaveBeenCalled();
 
-        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
-    public function testShouldReturnATextResponseIfFormatIsNotSerializable()
+    public function testShouldReturnATextResponseIfFormatIsNotSerializable(): void
     {
         $this->serializer->serialize(Argument::cetera())->willThrow(new UnsupportedFormatException());
         $this->request->setRequestFormat('md');
@@ -90,7 +94,7 @@ class ExceptionControllerTest extends TestCase
             ->serialize(Argument::type(SerializableException::class), 'md', $this->serializationContext)
             ->shouldHaveBeenCalled();
 
-        $this->assertEquals(400, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $this->assertEquals('An error has occurred: Bad Request', $response->getContent());
     }
 }

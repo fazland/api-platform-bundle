@@ -15,12 +15,15 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class AcceptHeaderParserTest extends TestCase
 {
-    public function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp(): void
     {
         $this->parser = new AcceptHeaderParser();
     }
 
-    public function dataProviderForNotAcceptableHeader()
+    public function dataProviderForNotAcceptableHeader(): iterable
     {
         return [
             ['text/html'],
@@ -35,7 +38,7 @@ class AcceptHeaderParserTest extends TestCase
      * @dataProvider dataProviderForNotAcceptableHeader
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException
      */
-    public function testNotAcceptableHeader(string $header)
+    public function testNotAcceptableHeader(string $header): void
     {
         $event = $this->prophesize(GetResponseEvent::class);
         $event->getRequest()->willReturn(Request::create('/', Request::METHOD_GET, [], [], [], ['HTTP_ACCEPT' => $header]));
@@ -43,7 +46,7 @@ class AcceptHeaderParserTest extends TestCase
         $this->parser->onKernelRequest($event->reveal());
     }
 
-    public function dataProviderForAcceptableHeader()
+    public function dataProviderForAcceptableHeader(): iterable
     {
         return [
             ['application/json; version=2016-02-28'],
@@ -55,7 +58,7 @@ class AcceptHeaderParserTest extends TestCase
     /**
      * @dataProvider dataProviderForAcceptableHeader
      */
-    public function testAcceptableHeader(string $header)
+    public function testAcceptableHeader(string $header): void
     {
         Chronos::setTestNow(Chronos::createFromDate(2016, 2, 28));
         $request = Request::create('/', Request::METHOD_GET, [], [], [], ['HTTP_ACCEPT' => $header]);
@@ -68,7 +71,7 @@ class AcceptHeaderParserTest extends TestCase
         $this->assertEquals(20160228, $request->attributes->get('_version'));
     }
 
-    public function testPriorityMustBeHigherThenRoutersOne()
+    public function testPriorityMustBeHigherThenRoutersOne(): void
     {
         $events = $this->parser->getSubscribedEvents();
         $this->assertArrayHasKey(KernelEvents::REQUEST, $events);

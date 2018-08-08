@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class FormInvalidExceptionSubscriber implements EventSubscriberInterface
 {
-    public function onException(GetResponseForExceptionEvent $event)
+    public function onException(GetResponseForExceptionEvent $event): void
     {
         $exception = $event->getException();
         if (! $exception instanceof FormInvalidException) {
@@ -34,7 +34,7 @@ class FormInvalidExceptionSubscriber implements EventSubscriberInterface
      *
      * @return Request $request The cloned request
      */
-    protected function duplicateRequest(FormInterface $form, Request $request)
+    protected function duplicateRequest(FormInterface $form, Request $request): Request
     {
         $attributes = [
             '_controller' => [$this, 'formAction'],
@@ -59,7 +59,7 @@ class FormInvalidExceptionSubscriber implements EventSubscriberInterface
      *
      * @internal
      */
-    public function formAction(FormInterface $form)
+    public function formAction(FormInterface $form): FormInterface
     {
         return $form;
     }
@@ -67,7 +67,7 @@ class FormInvalidExceptionSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::EXCEPTION => 'onException',

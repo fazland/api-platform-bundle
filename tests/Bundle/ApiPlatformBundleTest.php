@@ -4,29 +4,31 @@ namespace Fazland\ApiPlatformBundle\Tests\HttpKernel;
 
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Bundle\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class ApiPlatformBundleTest extends WebTestCase
 {
     /**
      * {@inheritdoc}
      */
-    protected static function createKernel(array $options = [])
+    protected static function createKernel(array $options = []): KernelInterface
     {
         return new AppKernel($options['env'] ?? 'test', $options['debug'] ?? true);
     }
 
-    public function testIndexShouldBeOk()
+    public function testIndexShouldBeOk(): void
     {
         $client = static::createClient();
         $client->request('GET', '/', [], [], ['HTTP_ACCEPT' => 'application/json']);
 
         $response = $client->getResponse();
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals('{"test_foo":"foo.test"}', $response->getContent());
     }
 
-    public function testBodyConvertersAreEnabled()
+    public function testBodyConvertersAreEnabled(): void
     {
         $client = static::createClient();
         $client->request('POST', '/body', [], [], [
@@ -36,7 +38,7 @@ class ApiPlatformBundleTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals(
 'array:1 [
   "foo" => "bar"
@@ -44,7 +46,7 @@ class ApiPlatformBundleTest extends WebTestCase
 "{"foo":"bar"}"', $response->getContent());
     }
 
-    public function testBodyConvertersCanBeDisabled()
+    public function testBodyConvertersCanBeDisabled(): void
     {
         $client = static::createClient(['env' => 'no_body']);
         $client->request('POST', '/body', [], [], [
@@ -54,13 +56,19 @@ class ApiPlatformBundleTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals(
 '[]
 "{"foo":"bar"}"', $response->getContent());
     }
 
-    public function testViewHandlerCanBeDisabled()
+    /**
+     * Marked as legacy. As of Symfony 4.1:
+     * Referencing controllers with a single colon is deprecated since Symfony 4.1. Use fazland_api.exception_controller::showAction instead.
+     *
+     * @group legacy
+     */
+    public function testViewHandlerCanBeDisabled(): void
     {
         $client = static::createClient(['env' => 'no_view', 'debug' => false]);
         $client->request('GET', '/', [], [], [
@@ -69,7 +77,7 @@ class ApiPlatformBundleTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(500, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
         $this->assertEquals('An error has occurred: Internal Server Error', $response->getContent());
     }
 }

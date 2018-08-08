@@ -13,12 +13,15 @@ class OperationFactoryTest extends TestCase
      */
     private $factory;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->factory = new OperationFactory();
     }
 
-    public function getOperations()
+    public function getOperations(): iterable
     {
         yield ['test'];
         yield ['remove'];
@@ -31,7 +34,7 @@ class OperationFactoryTest extends TestCase
     /**
      * @dataProvider getOperations
      */
-    public function testFactoryShouldReturnAnOperationObject($op)
+    public function testFactoryShouldReturnAnOperationObject(string $op): void
     {
         $this->assertInstanceOf(OperationInterface::class, $this->factory->factory($op));
     }
@@ -39,7 +42,7 @@ class OperationFactoryTest extends TestCase
     /**
      * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\UnknownOperationException
      */
-    public function testFactoryShouldThrowIfOperationIsUnknown()
+    public function testFactoryShouldThrowIfOperationIsUnknown(): void
     {
         $this->factory->factory('non-existent');
     }

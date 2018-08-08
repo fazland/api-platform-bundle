@@ -59,7 +59,7 @@ class CorsListener implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::RESPONSE => 'onResponse',
@@ -67,7 +67,7 @@ class CorsListener implements EventSubscriberInterface
         ];
     }
 
-    public function onException(GetResponseForExceptionEvent $event)
+    public function onException(GetResponseForExceptionEvent $event): void
     {
         $exception = $event->getException();
         $request = $event->getRequest();
@@ -95,7 +95,7 @@ class CorsListener implements EventSubscriberInterface
         }
     }
 
-    public function onResponse(FilterResponseEvent $event)
+    public function onResponse(FilterResponseEvent $event): void
     {
         $request = $event->getRequest();
         $origin = $request->headers->get('Origin');

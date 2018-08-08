@@ -14,12 +14,12 @@ class TypeHinted
      */
     private $countable;
 
-    public function setDate(\DateTime $date)
+    public function setDate(\DateTimeInterface $date)
     {
         $this->date = $date;
     }
 
-    public function getDate()
+    public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
     }
@@ -27,7 +27,7 @@ class TypeHinted
     /**
      * @return \Countable
      */
-    public function getCountable()
+    public function getCountable(): \Countable
     {
         return $this->countable;
     }
@@ -35,7 +35,7 @@ class TypeHinted
     /**
      * @param \Countable $countable
      */
-    public function setCountable(\Countable $countable)
+    public function setCountable(\Countable $countable): void
     {
         $this->countable = $countable;
     }

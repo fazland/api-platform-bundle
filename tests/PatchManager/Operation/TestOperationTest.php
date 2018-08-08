@@ -12,7 +12,10 @@ class TestOperationTest extends TestCase
      */
     private $operation;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->operation = new TestOperation();
     }
@@ -20,7 +23,7 @@ class TestOperationTest extends TestCase
     /**
      * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
      */
-    public function testShouldThrowIfValuesAreNotEqual()
+    public function testShouldThrowIfValuesAreNotEqual(): void
     {
         $op = (object) ['a' => 'foo'];
         $this->operation->execute($op, (object) ['path' => '/a', 'value' => 'bar']);
@@ -43,7 +46,7 @@ class TestOperationTest extends TestCase
         ];
     }
 
-    public function getEqualValues()
+    public function getEqualValues(): iterable
     {
         yield ['/boolT', true];
         yield ['/boolT', 'true'];
@@ -82,7 +85,7 @@ class TestOperationTest extends TestCase
     /**
      * @dataProvider getEqualValues
      */
-    public function testEqualValues($path, $value)
+    public function testEqualValues($path, $value): void
     {
         $testObj = $this->getTestObject();
 
@@ -90,7 +93,7 @@ class TestOperationTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function getUnequalValues()
+    public function getUnequalValues(): iterable
     {
         yield ['/boolT', false];
         yield ['/boolT', 'false'];
@@ -129,7 +132,7 @@ class TestOperationTest extends TestCase
     /**
      * @dataProvider getEqualValues
      */
-    public function testUnequalValues($path, $value)
+    public function testUnequalValues($path, $value): void
     {
         $testObj = $this->getTestObject();
 

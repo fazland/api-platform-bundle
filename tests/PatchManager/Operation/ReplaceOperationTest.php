@@ -12,12 +12,15 @@ class ReplaceOperationTest extends TestCase
      */
     private $operation;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->operation = new ReplaceOperation();
     }
 
-    public function testShouldReplaceValueIfExists()
+    public function testShouldReplaceValueIfExists(): void
     {
         $obj = (object) ['one' => 'bar'];
         $this->operation->execute($obj, (object) ['path' => '/one', 'value' => 'foo']);
@@ -29,7 +32,7 @@ class ReplaceOperationTest extends TestCase
      * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
      * @expectedExceptionMessage Element at path "/one" does not exist.
      */
-    public function testShouldThrowIfPathDoesNotExists()
+    public function testShouldThrowIfPathDoesNotExists(): void
     {
         $obj = (object) [];
         $this->operation->execute($obj, (object) ['path' => '/one', 'value' => 'foo']);

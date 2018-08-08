@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class TypeErrorTest extends TestCase
 {
-    public function providerForCreateArgumentInvalid()
+    public function providerForCreateArgumentInvalid(): iterable
     {
         $tests = [];
 
@@ -33,7 +33,7 @@ class TypeErrorTest extends TestCase
     /**
      * @dataProvider providerForCreateArgumentInvalid
      */
-    public function testCreateArgumentInvalidShouldFormatMessageCorrectly($message, $no, $function, $expected, $given)
+    public function testCreateArgumentInvalidShouldFormatMessageCorrectly(string $message, int $no, string $function, $expected, $given): void
     {
         $this->assertEquals($message, TypeError::createArgumentInvalid($no, $function, $expected, $given)->getMessage());
     }

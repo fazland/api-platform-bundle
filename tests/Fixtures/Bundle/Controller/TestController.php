@@ -22,14 +22,14 @@ class TestController extends Controller
      *
      * @View()
      */
-    public function indexAction()
+    public function indexAction(): array
     {
         return [
             'test_foo' => 'foo.test',
         ];
     }
 
-    public function bodyAction(Request $request)
+    public function bodyAction(Request $request): Response
     {
         return new Response(
             $this->getDump($request->request->all())."\n".
@@ -40,7 +40,7 @@ class TestController extends Controller
     /**
      * @View()
      */
-    public function formInvalidExceptionAction()
+    public function formInvalidExceptionAction(): void
     {
         /** @var FormInterface $form */
         $form = $this->createFormBuilder()
@@ -57,7 +57,7 @@ class TestController extends Controller
     /**
      * @View()
      */
-    public function formNotSubmittedExceptionAction()
+    public function formNotSubmittedExceptionAction(): void
     {
         /** @var FormInterface $form */
         $form = $this->createFormBuilder()
@@ -71,7 +71,7 @@ class TestController extends Controller
     /**
      * @View()
      */
-    public function invalidJsonExceptionAction()
+    public function invalidJsonExceptionAction(): void
     {
         throw new InvalidJSONException('Invalid.');
     }

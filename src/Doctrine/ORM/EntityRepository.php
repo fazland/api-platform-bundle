@@ -51,8 +51,13 @@ class EntityRepository extends BaseRepository implements ObjectRepository
     /**
      * {@inheritdoc}
      */
-    public function findByCached(array $criteria, array $orderBy = null, $limit = null, $offset = null, $ttl = 28800)
-    {
+    public function findByCached(
+        array $criteria,
+        array $orderBy = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        int $ttl = 28800
+    ) {
         $query = $this->buildQueryForFind($criteria, $orderBy);
         if (null !== $limit) {
             $query->setMaxResults($limit);
@@ -98,7 +103,7 @@ class EntityRepository extends BaseRepository implements ObjectRepository
     /**
      * {@inheritdoc}
      */
-    public function getOneByCached(array $criteria, array $orderBy = null, $ttl = 28800)
+    public function getOneByCached(array $criteria, array $orderBy = null, int $ttl = 28800)
     {
         $query = $this->buildQueryForFind($criteria, $orderBy);
         $query->setMaxResults(1);

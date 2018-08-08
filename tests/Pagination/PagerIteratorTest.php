@@ -39,7 +39,7 @@ class PagerIteratorTest extends TestCase
         'b4902bde-28d2-4ff9-8971-8bfeb3e943c1',
     ];
 
-    protected function generatePageableInterfaceListFromArray(array $template, array $uuid_list, $modify = '+1 hours')
+    protected function generatePageableInterfaceListFromArray(array $template, array $uuid_list, $modify = '+1 hours'): array
     {
         $previous = null;
         $previousTimestamp = null;

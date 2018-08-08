@@ -33,7 +33,7 @@ class View implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getAliasName()
+    public function getAliasName(): string
     {
         return 'rest_view';
     }
@@ -41,7 +41,7 @@ class View implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function allowArray()
+    public function allowArray(): bool
     {
         return false;
     }

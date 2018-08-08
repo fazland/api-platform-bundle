@@ -12,12 +12,15 @@ class MoveOperationTest extends TestCase
      */
     private $operation;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->operation = new MoveOperation();
     }
 
-    public function testShouldMoveValue()
+    public function testShouldMoveValue(): void
     {
         $obj = ['one' => 'foo'];
         $this->operation->execute($obj, (object) ['path' => '/two', 'from' => '/one']);

@@ -4,25 +4,28 @@ namespace Fazland\ApiPlatformBundle\Tests\HttpKernel;
 
 use Fazland\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class ViewSerializationTest extends WebTestCase
 {
     /**
      * {@inheritdoc}
      */
-    protected static function createKernel(array $options = [])
+    protected static function createKernel(array $options = []): KernelInterface
     {
         return new AppKernel('test', true);
     }
 
-    public function testAuthenticationOkForCorrectCredentials()
+    public function testAuthenticationOkForCorrectCredentials(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/', [], [], ['HTTP_ACCEPT' => 'application/json']);
+        $client->request(Request::METHOD_GET, '/', [], [], ['HTTP_ACCEPT' => 'application/json']);
 
         $response = $client->getResponse();
 
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals('{"test_foo":"foo.test"}', $response->getContent());
     }
 }

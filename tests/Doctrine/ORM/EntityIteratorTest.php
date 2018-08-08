@@ -24,7 +24,10 @@ class EntityIteratorTest extends TestCase
      */
     private $iterator;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
         $this->getEntityManager()->getMetadataFactory()->setMetadataFor(FooBar::class, $metadata = new ClassMetadata(FooBar::class));
 
@@ -58,7 +61,7 @@ class EntityIteratorTest extends TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage QueryBuilder must have exactly one root aliases for the iterator to work.
      */
-    public function testShouldThrowIfQueryBuilderHasMoreThanOneRootAlias()
+    public function testShouldThrowIfQueryBuilderHasMoreThanOneRootAlias(): void
     {
         $this->queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $this->queryBuilder->select('a')
@@ -69,17 +72,17 @@ class EntityIteratorTest extends TestCase
         new EntityIterator($this->queryBuilder);
     }
 
-    public function testShouldBeIterable()
+    public function testShouldBeIterable(): void
     {
         $this->assertTrue(is_iterable($this->iterator));
     }
 
-    public function testShouldBeAnIterator()
+    public function testShouldBeAnIterator(): void
     {
         $this->assertInstanceOf(\Iterator::class, $this->iterator);
     }
 
-    public function testCountShouldExecuteACountQuery()
+    public function testCountShouldExecuteACountQuery(): void
     {
         $this->_innerConnection->query('SELECT COUNT(f0_.id) AS sclr_0 FROM FooBar f0_')
             ->willReturn(new ArrayStatement([
@@ -89,7 +92,7 @@ class EntityIteratorTest extends TestCase
         $this->assertCount(42, $this->iterator);
     }
 
-    public function testShouldIterateAgainstAQueryResult()
+    public function testShouldIterateAgainstAQueryResult(): void
     {
         $obj1 = new FooBar();
         $obj1->id = 42;
@@ -101,7 +104,7 @@ class EntityIteratorTest extends TestCase
         $this->assertEquals([$obj1, $obj2, $obj3], iterator_to_array($this->iterator));
     }
 
-    public function testShouldCallCallableSpecifiedWithApply()
+    public function testShouldCallCallableSpecifiedWithApply(): void
     {
         $calledCount = 0;
         $this->iterator->apply(function (FooBar $bar) use (&$calledCount) {

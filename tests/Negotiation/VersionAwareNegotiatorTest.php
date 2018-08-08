@@ -16,7 +16,10 @@ class VersionAwareNegotiatorTest extends TestCase
      */
     private $negotiator;
 
-    public function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    public function setUp(): void
     {
         $this->negotiator = new VersionAwareNegotiator();
     }
@@ -24,7 +27,7 @@ class VersionAwareNegotiatorTest extends TestCase
     /**
      * @expectedException \Negotiation\Exception\InvalidHeader
      */
-    public function testPriorityFactoryRaiseExceptionIfContainsVersionParam()
+    public function testPriorityFactoryRaiseExceptionIfContainsVersionParam(): void
     {
         $this->negotiator->priorityFactory('text/html; version=12');
     }
@@ -32,7 +35,7 @@ class VersionAwareNegotiatorTest extends TestCase
     /**
      * @expectedException \Negotiation\Exception\InvalidMediaType
      */
-    public function testPriorityFactoryRaiseExceptionIfInvalidMediaType()
+    public function testPriorityFactoryRaiseExceptionIfInvalidMediaType(): void
     {
         $this->negotiator->priorityFactory('html');
     }
@@ -40,7 +43,7 @@ class VersionAwareNegotiatorTest extends TestCase
     /**
      * @dataProvider dataProviderForTestGetBest
      */
-    public function testGetBest($header, $priorities, $expected)
+    public function testGetBest($header, $priorities, $expected): void
     {
         try {
             $acceptHeader = $this->negotiator->getBest($header, $priorities);
@@ -62,7 +65,7 @@ class VersionAwareNegotiatorTest extends TestCase
         $this->assertSame($expected[1], $acceptHeader->getParameters());
     }
 
-    public static function dataProviderForTestGetBest()
+    public static function dataProviderForTestGetBest(): iterable
     {
         $pearAcceptHeader = 'text/html,application/xhtml+xml,application/xml;q=0.9,text/*;q=0.7,*/*,image/gif; q=0.8, image/jpeg; q=0.6, image/*';
         $rfcHeader = 'text/*;q=0.3, text/html;q=0.7, text/html;level=1, text/html;level=2;q=0.4, */*;q=0.5';

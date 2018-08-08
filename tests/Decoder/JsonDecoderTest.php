@@ -5,6 +5,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Decoder;
 use Fazland\ApiPlatformBundle\Decoder\JsonDecoder;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Decoder\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class JsonDecoderTest extends WebTestCase
 {
@@ -16,7 +17,7 @@ class JsonDecoderTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    protected static function createKernel(array $options = [])
+    protected static function createKernel(array $options = []): KernelInterface
     {
         return new AppKernel('test', true);
     }
@@ -29,7 +30,7 @@ class JsonDecoderTest extends WebTestCase
         $this->decoder = new JsonDecoder();
     }
 
-    public function dataProviderForDecode(): array
+    public function dataProviderForDecode(): iterable
     {
         return [
             [[], ''],
