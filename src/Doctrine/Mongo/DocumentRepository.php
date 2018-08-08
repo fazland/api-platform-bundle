@@ -90,7 +90,7 @@ class DocumentRepository extends BaseRepository implements ObjectRepository
     /**
      * {@inheritdoc}
      */
-    public function getOneByCached(array $criteria, array $orderBy = null, $ttl = 28800)
+    public function getOneByCached(array $criteria, array $orderBy = null, int $ttl = 28800)
     {
         $query = $this->buildQueryBuilderForCriteria($criteria, $orderBy);
         $query->limit(1);

@@ -23,7 +23,7 @@ Test
 ----
 Run 
 ```sh
-$ SYMFONY_PHPUNIT_REMOVE=symfony/yaml vendor/bin/simple-phpunit
+$ vendor/bin/phpunit
 ```
 
 Contributing

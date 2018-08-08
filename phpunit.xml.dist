@@ -9,7 +9,7 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="0" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
     </php>
 
     <listeners>

@@ -35,7 +35,7 @@ class EntityRepository extends BaseRepository implements ObjectRepository
     /**
      * {@inheritdoc}
      */
-    public function findOneByCached(array $criteria, array $orderBy = null, $ttl = 28800)
+    public function findOneByCached(array $criteria, array $orderBy = null, int $ttl = 28800)
     {
         $query = $this->buildQueryForFind($criteria, $orderBy);
         $query->setMaxResults(1);
