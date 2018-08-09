@@ -5,7 +5,10 @@ namespace Fazland\ApiPlatformBundle\JSONPointer\Helper;
 use Fazland\ApiPlatformBundle\JSONPointer\Accessor;
 use Symfony\Component\Inflector\Inflector;
 
-class AccessHelper
+/**
+ * @internal
+ */
+final class AccessHelper
 {
     /**
      * @var \ReflectionClass
@@ -57,15 +60,6 @@ class AccessHelper
     {
         $hasProperty = null !== $this->reflectionProperty;
 
-        if ($hasProperty && $this->reflectionProperty->isPublic()) {
-            return [
-                Accessor::ACCESS_HAS_PROPERTY => true,
-                Accessor::ACCESS_TYPE => Accessor::ACCESS_TYPE_PROPERTY,
-                Accessor::ACCESS_NAME => $this->reflectionProperty->name,
-                Accessor::ACCESS_REF => true,
-            ];
-        }
-
         $methods = ['get'.$this->camelized, $this->camelized, 'is'.$this->camelized, 'has'.$this->camelized];
         foreach ($methods as $method) {
             if (! $this->reflectionClass->hasMethod($method) || ! $this->reflectionClass->getMethod($method)->isPublic()) {
@@ -85,6 +79,15 @@ class AccessHelper
                 Accessor::ACCESS_TYPE => Accessor::ACCESS_TYPE_PROPERTY,
                 Accessor::ACCESS_NAME => $this->property,
                 Accessor::ACCESS_REF => false,
+            ];
+        }
+
+        if ($hasProperty && $this->reflectionProperty->isPublic()) {
+            return [
+                Accessor::ACCESS_HAS_PROPERTY => true,
+                Accessor::ACCESS_TYPE => Accessor::ACCESS_TYPE_PROPERTY,
+                Accessor::ACCESS_NAME => $this->reflectionProperty->name,
+                Accessor::ACCESS_REF => true,
             ];
         }
 
@@ -111,15 +114,6 @@ class AccessHelper
     public function getWriteAccessInfo($value): array
     {
         $hasProperty = null !== $this->reflectionProperty;
-
-        if ($hasProperty && $this->reflectionProperty->isPublic()) {
-            return [
-                Accessor::ACCESS_HAS_PROPERTY => true,
-                Accessor::ACCESS_TYPE => Accessor::ACCESS_TYPE_PROPERTY,
-                Accessor::ACCESS_NAME => $this->reflectionProperty->name,
-                Accessor::ACCESS_REF => true,
-            ];
-        }
 
         if (is_array($value) || $value instanceof \Traversable) {
             $methods = $this->findAdderAndRemover();
@@ -153,6 +147,15 @@ class AccessHelper
                Accessor::ACCESS_TYPE => Accessor::ACCESS_TYPE_PROPERTY,
                Accessor::ACCESS_NAME => $this->property,
            ];
+        }
+
+        if ($hasProperty && $this->reflectionProperty->isPublic()) {
+            return [
+                Accessor::ACCESS_HAS_PROPERTY => true,
+                Accessor::ACCESS_TYPE => Accessor::ACCESS_TYPE_PROPERTY,
+                Accessor::ACCESS_NAME => $this->reflectionProperty->name,
+                Accessor::ACCESS_REF => true,
+            ];
         }
 
         if (null !== $adderRemover = $this->findAdderAndRemover()) {
