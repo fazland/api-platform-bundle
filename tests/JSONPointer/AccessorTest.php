@@ -57,9 +57,6 @@ class AccessorTest extends TestCase
             [new TestClass('Bernhard'), '/privateAccessor'],
             [new TestClass('Bernhard'), '/privateIsAccessor'],
             [new TestClass('Bernhard'), '/privateHasAccessor'],
-
-            // Properties are not camelized
-            [new TestClass('Bernhard'), '/public_property'],
         ];
     }
 
@@ -386,6 +383,9 @@ class AccessorTest extends TestCase
             // Methods are camelized
             [new TestClass('Bernhard'), '/public_accessor', 'Bernhard'],
             [new TestClass('Bernhard'), '/_public_accessor', 'Bernhard'],
+
+            // Properties are camelized
+            [new TestClass('Bernhard'), '/public_property', 'Bernhard'],
 
             // Missing indices
             [['index' => []], '/index/firstName', null],
