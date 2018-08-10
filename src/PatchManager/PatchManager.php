@@ -89,6 +89,10 @@ class PatchManager implements PatchManagerInterface
         $factory = $this->getOperationsFactory();
 
         foreach ($object as $operation) {
+            if (isset($operation->value)) {
+                $operation->value = json_decode(json_encode($operation->value), true);
+            }
+
             $op = $factory->factory($operation->op);
 
             try {

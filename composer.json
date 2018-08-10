@@ -12,8 +12,10 @@
             "email": "dev@fazland.com"
         }
     ],
+    "description": "Build RESTful API within a Symfony project.",
     "require": {
         "php": "^7.1",
+        "ext-json": "*",
         "cakephp/chronos": "^1.1",
         "justinrainbow/json-schema": "^5.2",
         "kcs/metadata": "^2.1",
