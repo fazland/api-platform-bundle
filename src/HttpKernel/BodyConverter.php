@@ -40,8 +40,6 @@ class BodyConverter implements EventSubscriberInterface
         try {
             $decoder = $this->decoderProvider->get($format);
         } catch (UnsupportedFormatException $ex) {
-            $event->setResponse(new Response("Cannot decode $contentType", Response::HTTP_UNSUPPORTED_MEDIA_TYPE));
-
             return;
         }
 
