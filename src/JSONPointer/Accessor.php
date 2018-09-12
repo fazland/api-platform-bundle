@@ -513,11 +513,11 @@ class Accessor implements PropertyAccessorInterface
     /**
      * Adjusts a collection-valued property by calling add*() and remove*() methods.
      *
-     * @param array              $zval         The array containing the object to write to
-     * @param string             $property     The property to write
+     * @param array    $zval         The array containing the object to write to
+     * @param string   $property     The property to write
      * @param iterable $collection   The collection to write
-     * @param string             $addMethod    The add*() method
-     * @param string             $removeMethod The remove*() method
+     * @param string   $addMethod    The add*() method
+     * @param string   $removeMethod The remove*() method
      */
     private function writeCollection(array $zval, string $property, iterable $collection, string $addMethod, string $removeMethod): void
     {

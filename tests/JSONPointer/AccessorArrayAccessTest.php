@@ -4,7 +4,6 @@ namespace Fazland\ApiPlatformBundle\Tests\JSONPointer;
 
 use Fazland\ApiPlatformBundle\JSONPointer\Accessor;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 
 abstract class AccessorArrayAccessTest extends TestCase
 {

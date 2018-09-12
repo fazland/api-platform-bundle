@@ -24,9 +24,9 @@ class FooHandler implements SubscribingHandlerInterface
 
     /**
      * @param VisitorInterface $visitor
-     * @param array $data
-     * @param Type $type
-     * @param Context $context
+     * @param array            $data
+     * @param Type             $type
+     * @param Context          $context
      *
      * @return mixed
      */

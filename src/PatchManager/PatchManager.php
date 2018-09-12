@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyPath;
-use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PatchManager implements PatchManagerInterface
@@ -187,7 +186,7 @@ class PatchManager implements PatchManagerInterface
      * Calls the validator service and throws an InvalidJSONException
      * if the object is invalid.
      *
-     * @param array $operations
+     * @param array              $operations
      * @param PatchableInterface $patchable
      *
      * @throws InvalidJSONException

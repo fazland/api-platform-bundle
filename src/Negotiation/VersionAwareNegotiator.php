@@ -80,8 +80,8 @@ class VersionAwareNegotiator
     }
 
     /**
-     * @param Accept $accept
-     * @param Priority $priority
+     * @param Accept     $accept
+     * @param Priority   $priority
      * @param string|int $index
      * @param string|int $headerIndex
      *

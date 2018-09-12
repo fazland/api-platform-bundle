@@ -15,7 +15,8 @@ class RemoveOperation extends AbstractOperation
         $path = new Path($operation->path);
         $element = $path->getElement($path->getLength() - 1);
 
-        if ($path->getLength() > 1) {
+        $pathLength = $path->getLength();
+        if ($pathLength > 1) {
             $value = $this->accessor->getValue($subject, $path->getParent());
         } else {
             $value = &$subject;
@@ -29,12 +30,14 @@ class RemoveOperation extends AbstractOperation
             $value = iterator_to_array($value);
             unset($value[$element]);
         } elseif ($this->accessor->isWritable($subject, $path)) {
-            $value = null;
+            $this->accessor->setValue($subject, $path, null);
+
+            return;
         } else {
             throw new InvalidJSONException('Cannot remove "'.$element.'": path does not represents a collection.');
         }
 
-        if ($path->getLength() > 1) {
+        if ($pathLength > 1) {
             $this->accessor->setValue($subject, $path->getParent(), $value);
         }
     }

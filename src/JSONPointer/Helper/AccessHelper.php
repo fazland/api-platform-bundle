@@ -26,7 +26,7 @@ final class AccessHelper
     private $property;
 
     /**
-     * @var string 
+     * @var string
      */
     private $camelized;
 
@@ -128,7 +128,7 @@ final class AccessHelper
             }
         }
 
-        $methods = [ 'set'.$this->camelized, $this->camelized ];
+        $methods = ['set'.$this->camelized, $this->camelized];
         foreach ($methods as $method) {
             if (! $this->isMethodAccessible($method, 1)) {
                 continue;
@@ -142,7 +142,7 @@ final class AccessHelper
         }
 
         if ($this->isMethodAccessible('__set', 2)) {
-           return [
+            return [
                Accessor::ACCESS_HAS_PROPERTY => $hasProperty,
                Accessor::ACCESS_TYPE => Accessor::ACCESS_TYPE_PROPERTY,
                Accessor::ACCESS_NAME => $this->property,
@@ -214,8 +214,8 @@ final class AccessHelper
     /**
      * Returns whether a method is public and has the number of required parameters.
      *
-     * @param string           $methodName The method name
-     * @param int              $parameters The number of parameters
+     * @param string $methodName The method name
+     * @param int    $parameters The number of parameters
      *
      * @return bool Whether the method is public and has $parameters required parameters
      */

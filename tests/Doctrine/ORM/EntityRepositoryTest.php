@@ -52,7 +52,8 @@ class EntityRepositoryTest extends WebTestCase
 
         $this->getEntityManager()->getMetadataFactory()->setMetadataFor(TestEntity::class, $classMetadata);
 
-        $this->repository = new class($this->getEntityManager(), $classMetadata) extends EntityRepository { };
+        $this->repository = new class($this->getEntityManager(), $classMetadata) extends EntityRepository {
+        };
     }
 
     public function testAllShouldReturnAnEntityIterator(): void

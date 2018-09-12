@@ -45,7 +45,8 @@ class DocumentRepositoryTest extends WebTestCase
         ]);
         $class->setIdentifier('id');
 
-        $this->repository = new class($documentManager, $documentManager->getUnitOfWork(), $class) extends DocumentRepository { };
+        $this->repository = new class($documentManager, $documentManager->getUnitOfWork(), $class) extends DocumentRepository {
+        };
     }
 
     public function testAllShouldReturnAnEntityIterator(): void
