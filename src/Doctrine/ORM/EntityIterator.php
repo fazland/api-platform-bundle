@@ -53,6 +53,7 @@ class EntityIterator implements ObjectIterator
             $alias = $queryBuilder->getRootAliases()[0];
 
             $this->_totalCount = (int) $queryBuilder->select('COUNT('.$alias.')')
+                ->setFirstResult(null)
                 ->getQuery()
                 ->getSingleScalarResult();
         }

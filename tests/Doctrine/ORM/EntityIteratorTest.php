@@ -92,6 +92,29 @@ class EntityIteratorTest extends TestCase
         $this->assertCount(42, $this->iterator);
     }
 
+    public function testCountWithOffsetShouldExecuteACountQueryWithoutOffset(): void
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $queryBuilder->select('a')
+            ->from(FooBar::class, 'a')
+            ->setFirstResult(1)
+        ;
+
+        $this->_innerConnection->query('SELECT f0_.id AS id_0 FROM FooBar f0_ OFFSET 1')
+            ->willReturn(new ArrayStatement([
+                ['id_0' => '42'],
+                ['id_0' => '45'],
+                ['id_0' => '48'],
+            ]));
+
+        $this->_innerConnection->query('SELECT COUNT(f0_.id) AS sclr_0 FROM FooBar f0_')
+            ->willReturn(new ArrayStatement([
+                ['sclr_0' => '42'],
+            ]));
+
+        $this->assertCount(42, new EntityIterator($this->queryBuilder));
+    }
+
     public function testShouldIterateAgainstAQueryResult(): void
     {
         $obj1 = new FooBar();
