@@ -1,0 +1,3 @@
+[submodule "dep/kmyacc"]
+	path = dep/kmyacc
+	url = https://github.com/fazland/kmyacc.git

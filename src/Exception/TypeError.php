@@ -4,7 +4,17 @@ namespace Fazland\ApiPlatformBundle\Exception;
 
 class TypeError extends \TypeError
 {
-    public static function createArgumentInvalid(int $no, string $function, $expected, $given)
+    /**
+     * Creates and format an argument invalid error.
+     *
+     * @param int $no Argument number
+     * @param string $function Function generating the error
+     * @param string|string[] $expected Expected type(s)
+     * @param mixed $given Given value
+     *
+     * @return self
+     */
+    public static function createArgumentInvalid(int $no, string $function, $expected, $given): self
     {
         $message = sprintf(
             'Argument %u passed to %s must be of type %s, %s given',
@@ -16,7 +26,14 @@ class TypeError extends \TypeError
         return new self($message);
     }
 
-    private static function formatExpected($expected)
+    /**
+     * Formats "expected" value for exception message.
+     *
+     * @param string|string[] $expected
+     *
+     * @return string
+     */
+    private static function formatExpected($expected): string
     {
         if (! is_array($expected)) {
             return $expected;
