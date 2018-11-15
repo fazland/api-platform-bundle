@@ -188,6 +188,10 @@ class PagerIterator implements \Iterator
             $referenceTimestamp = $this->token->getTimestamp();
             $value = self::getAccessor()->getValue($entity, $order[0]);
 
+            if ($value instanceof \DateTimeInterface) {
+                $value = $value->getTimestamp();
+            }
+
             return Orderings::SORT_ASC === $order[1] ? $value >= $referenceTimestamp : $value <= $referenceTimestamp;
         });
     }
@@ -221,9 +225,8 @@ class PagerIterator implements \Iterator
     protected function timestampDiffers($objects): bool
     {
         $reference = reset($objects);
-        $referenceTimestamp = Chronos::instance($this->getTimestampForObject($reference));
 
-        return ! $referenceTimestamp->eq(Chronos::instance($this->token->getTimestamp()));
+        return $this->getTimestampForObject($reference) !== $this->token->getTimestamp();
     }
 
     /**
@@ -288,12 +291,12 @@ class PagerIterator implements \Iterator
     private function getLastObjectsWithCommonTimestamp(array $objects): iterable
     {
         $reference = array_pop($objects);
-        $referenceTimestamp = Chronos::instance($this->getTimestampForObject($reference));
+        $referenceTimestamp = $this->getTimestampForObject($reference);
 
         yield $reference;
 
         foreach (array_reverse($objects, false) as $object) {
-            if (! $referenceTimestamp->eq(Chronos::instance($this->getTimestampForObject($object)))) {
+            if ($this->getTimestampForObject($object) !== $referenceTimestamp) {
                 break;
             }
 
@@ -306,13 +309,17 @@ class PagerIterator implements \Iterator
      *
      * @param mixed $object
      *
-     * @return \DateTimeInterface
+     * @return int
      */
-    private function getTimestampForObject($object): \DateTimeInterface
+    private function getTimestampForObject($object): int
     {
         $order = $this->orderBy[0];
         $propertyAccessor = self::getAccessor();
         $datetime = $propertyAccessor->getValue($object, $order[0]);
+
+        if ($datetime instanceof \DateTimeInterface) {
+            $datetime = $datetime->getTimestamp();
+        }
 
         return $datetime;
     }

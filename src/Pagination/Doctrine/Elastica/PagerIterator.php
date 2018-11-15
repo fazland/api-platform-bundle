@@ -8,6 +8,7 @@ use Fazland\ApiPlatformBundle\Doctrine\Traits\IteratorTrait;
 use Fazland\ApiPlatformBundle\Pagination\Orderings;
 use Fazland\ApiPlatformBundle\Pagination\PagerIterator as BaseIterator;
 use Fazland\ODM\Elastica\Search\Search;
+use Fazland\ODM\Elastica\Type\AbstractDateTimeType;
 
 final class PagerIterator extends BaseIterator implements ObjectIterator
 {
@@ -85,13 +86,27 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
 
         $limit = $this->pageSize;
         if (null !== $this->token) {
+            $timestamp = $this->token->getTimestamp();
             $limit += $this->token->getOffset();
-
             $mainOrder = $this->orderBy[0];
+
+            $dm = $this->search->getDocumentManager();
+
+            $type = $dm->getTypeManager()
+                ->getType(
+                    $dm->getClassMetadata($this->search->getDocumentClass())
+                        ->getTypeOfField($mainOrder[0])
+                );
+
+            if ($type instanceof AbstractDateTimeType) {
+                $datetime = \DateTimeImmutable::createFromFormat('U', (string) $timestamp);
+                $timestamp = $datetime->format(\DateTime::ISO8601);
+            }
+
             $direction = Orderings::SORT_ASC === $mainOrder[1] ? 'gte' : 'lte';
 
             $query->addFilter(new Query\Range($mainOrder[0], [
-                $direction => $this->token->getTimestamp()->format(\DateTime::ISO8601),
+                $direction => $timestamp,
             ]));
         }
 

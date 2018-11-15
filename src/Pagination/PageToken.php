@@ -46,7 +46,7 @@ final class PageToken
      */
     private $checksum;
 
-    public function __construct(\DateTimeInterface $timestamp, int $offset, int $checksum)
+    public function __construct(int $timestamp, int $offset, int $checksum)
     {
         if ($offset < 1) {
             throw new InvalidArgumentException('Offset cannot be less than 1');
@@ -67,7 +67,7 @@ final class PageToken
          * - the third part represents the checksum as crc32($entitiesWithSameTimestampInThisPage->getIds());
          */
 
-        $timestamp = base_convert($this->timestamp->getTimestamp() * 1000 + (int) $this->timestamp->format('v'), 10, 36);
+        $timestamp = base_convert($this->timestamp, 10, 36);
 
         return implode(self::TOKEN_DELIMITER, [
             $timestamp,
@@ -93,10 +93,10 @@ final class PageToken
             throw new InvalidTokenException('Malformed token');
         }
 
-        $timestamp = (float) base_convert($tokenSplit[0], 36, 10);
+        $timestamp = (int) base_convert($tokenSplit[0], 36, 10);
 
         return new self(
-            \DateTimeImmutable::createFromFormat('U.u', number_format(($timestamp / 1000), 3, '.', '')),
+            $timestamp,
             (int) $tokenSplit[1],
             (int) base_convert($tokenSplit[2], 36, 10)
         );
@@ -121,9 +121,9 @@ final class PageToken
     /**
      * Gets the page timestamp (starting point).
      *
-     * @return \DateTimeInterface
+     * @return int
      */
-    public function getTimestamp(): \DateTimeInterface
+    public function getTimestamp(): int
     {
         return $this->timestamp;
     }

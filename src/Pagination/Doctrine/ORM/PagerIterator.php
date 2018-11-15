@@ -2,6 +2,9 @@
 
 namespace Fazland\ApiPlatformBundle\Pagination\Doctrine\ORM;
 
+use Doctrine\DBAL\Types\DateTimeType;
+use Doctrine\DBAL\Types\DateTimeTzType;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\Doctrine\Traits\IteratorTrait;
@@ -86,12 +89,25 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
 
         $limit = $this->pageSize;
         if (null !== $this->token) {
+            $timestamp = $this->token->getTimestamp();
             $limit += $this->token->getOffset();
-
             $mainOrder = $this->orderBy[0];
+
+            $type = $queryBuilder->getEntityManager()
+                ->getClassMetadata($queryBuilder->getRootEntities()[0])
+                ->getTypeOfField($mainOrder[0]);
+
+            if (is_string($type)) {
+                $type = Type::getType($type);
+            }
+
+            if ($type instanceof DateTimeType || $type instanceof DateTimeTzType) {
+                $timestamp = \DateTimeImmutable::createFromFormat('U', (string) $timestamp);
+            }
+
             $direction = Orderings::SORT_ASC === $mainOrder[1] ? '>=' : '<=';
             $queryBuilder->andWhere($alias.'.'.$mainOrder[0].' '.$direction.' :timeLimit');
-            $queryBuilder->setParameter('timeLimit', $this->token->getTimestamp());
+            $queryBuilder->setParameter('timeLimit', $timestamp);
         }
 
         $queryBuilder->setMaxResults($limit);

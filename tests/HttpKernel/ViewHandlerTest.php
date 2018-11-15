@@ -347,7 +347,7 @@ class ViewHandlerTest extends WebTestCase
         $request->attributes->set('_rest_view', new ViewAnnotation());
 
         $iterator = $this->prophesize(PagerIterator::class);
-        $iterator->getNextPageToken()->willReturn(new PageToken(new Chronos('1991-11-24 02:00:00'), 1, 1275024653));
+        $iterator->getNextPageToken()->willReturn(new PageToken((new Chronos('1991-11-24 02:00:00'))->getTimestamp(), 1, 1275024653));
         $iterator->rewind()->willReturn();
         $iterator->valid()->willReturn(false);
 
@@ -360,7 +360,7 @@ class ViewHandlerTest extends WebTestCase
             ->shouldBeCalled();
 
         $event->setResponse(Argument::that(function ($response) {
-            return $response instanceof Response && '8tf0lkw0_1_l347bh' === $response->headers->get('X-Continuation-Token');
+            return $response instanceof Response && 'bfdew0_1_l347bh' === $response->headers->get('X-Continuation-Token');
         }))->shouldBeCalled();
 
         $this->viewHandler->onView($event->reveal());

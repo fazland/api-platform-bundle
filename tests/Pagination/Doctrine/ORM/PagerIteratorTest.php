@@ -88,7 +88,7 @@ class PagerIteratorTest extends TestCase
             new TestObject('9c5f6ff7-b28f-48fb-ba47-8bcc3b235bed', new Chronos('1991-11-24 02:00:00')),
         ], iterator_to_array($this->iterator));
 
-        $this->assertEquals('8tf0lkw0_1_1jvdwz4', (string) $this->iterator->getNextPageToken());
+        $this->assertEquals('bfdew0_1_1jvdwz4', (string) $this->iterator->getNextPageToken());
     }
 
     public function testPagerShouldGenerateSecondPageWithTokenAndLastPage(): void
@@ -111,7 +111,7 @@ class PagerIteratorTest extends TestCase
             );
 
         $request = $this->prophesize(Request::class);
-        $request->query = new ParameterBag(['continue' => '8tf0lkw0_1_1jvdwz4']);
+        $request->query = new ParameterBag(['continue' => 'bfdew0_1_1jvdwz4']);
 
         $this->iterator->setToken(PageToken::fromRequest($request->reveal()));
 
@@ -121,7 +121,7 @@ class PagerIteratorTest extends TestCase
             new TestObject('eadd7470-95f5-47e8-8e74-083d45c307f6', new Chronos('1991-11-24 05:00:00')),
         ], iterator_to_array($this->iterator));
 
-        $this->assertEquals('8tf71280_1_cukvcs', (string) $this->iterator->getNextPageToken());
+        $this->assertEquals('bfdn80_1_cukvcs', (string) $this->iterator->getNextPageToken());
     }
 
     public function testOffsetShouldWork(): void
@@ -147,7 +147,7 @@ class PagerIteratorTest extends TestCase
         $this->assertEquals(2, $this->iterator->getNextPageToken()->getOffset());
 
         $request = $this->prophesize(Request::class);
-        $request->query = new ParameterBag(['continue' => '8teygf40_2_hzr9o9']);
+        $request->query = new ParameterBag(['continue' => 'bfdc40_2_hzr9o9']);
 
         $this->iterator->setToken(PageToken::fromRequest($request->reveal()));
 
@@ -196,7 +196,7 @@ class PagerIteratorTest extends TestCase
             );
 
         $request = $this->prophesize(Request::class);
-        $request->query = new ParameterBag(['continue' => '8tf0lkw0_1_1jvdwz4']); // This token represents a request with the 02:00:00 timestamp
+        $request->query = new ParameterBag(['continue' => 'bfdew0_1_1jvdwz4']); // This token represents a request with the 02:00:00 timestamp
 
         $this->iterator->setToken(PageToken::fromRequest($request->reveal()));
 
@@ -206,7 +206,7 @@ class PagerIteratorTest extends TestCase
             new TestObject('84810e2e-448f-4f58-acb8-4db1381f5de3', new Chronos('1991-11-24 04:00:00')),
         ], iterator_to_array($this->iterator));
 
-        $this->assertEquals('8tf4vwg0_1_1xirtcr', (string) $this->iterator->getNextPageToken());
+        $this->assertEquals('bfdkg0_1_1xirtcr', (string) $this->iterator->getNextPageToken());
     }
 
     public function testPagerShouldReturnFirstPageWithChecksumDifference(): void
@@ -229,7 +229,7 @@ class PagerIteratorTest extends TestCase
             );
 
         $request = $this->prophesize(Request::class);
-        $request->query = new ParameterBag(['continue' => '8tf0lkw0_1_1jvdwz4']); // This token represents a request with the 02:00:00 timestamp
+        $request->query = new ParameterBag(['continue' => 'bfdew0_1_1jvdwz4']); // This token represents a request with the 02:00:00 timestamp
 
         $this->iterator->setToken(PageToken::fromRequest($request->reveal()));
 
@@ -239,6 +239,6 @@ class PagerIteratorTest extends TestCase
             new TestObject('191a54d8-990c-4ea7-9a23-0aed29d1fffe', new Chronos('1991-11-24 04:00:00')),
         ], iterator_to_array($this->iterator));
 
-        $this->assertEquals('8tf4vwg0_1_7gqxdp', (string) $this->iterator->getNextPageToken());
+        $this->assertEquals('bfdkg0_1_7gqxdp', (string) $this->iterator->getNextPageToken());
     }
 }
