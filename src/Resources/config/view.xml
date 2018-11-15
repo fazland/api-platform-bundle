@@ -9,7 +9,7 @@
             <argument type="service" id="kcs_serializer.serializer" />
             <argument type="service" id="fazland_api.view_serialization_context.prototype" />
             <argument type="service" id="security.token_storage" on-invalid="null" />
-
+            <argument>%fazland_api.response_charset%</argument>
             <tag name="kernel.event_subscriber" />
         </service>
 

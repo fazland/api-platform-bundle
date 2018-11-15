@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ViewHandlerTest extends WebTestCase
@@ -55,13 +56,25 @@ class ViewHandlerTest extends WebTestCase
      */
     private $tokenStorage;
 
+    /**
+     * @var string
+     */
+    private $defaultResponseCharset;
+
     protected function setUp()
     {
         $this->serializer = $this->prophesize(Serializer::class);
         $this->serializationContext = SerializationContext::create();
         $this->httpKernel = $this->prophesize(HttpKernelInterface::class);
         $this->tokenStorage = $this->prophesize(TokenStorageInterface::class);
-        $this->viewHandler = new ViewHandler($this->serializer->reveal(), $this->serializationContext, $this->tokenStorage->reveal());
+        $this->defaultResponseCharset = 'UTF-8';
+
+        $this->viewHandler = new ViewHandler(
+            $this->serializer->reveal(),
+            $this->serializationContext,
+            $this->tokenStorage->reveal(),
+            $this->defaultResponseCharset
+        );
     }
 
     public function skipProvider()
@@ -92,7 +105,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testShouldSetStatusCode()
+    public function testShouldSetStatusCode(): void
     {
         $annot = new ViewAnnotation();
         $annot->statusCode = 201;
@@ -115,7 +128,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testShouldSerializeWithCorrectGroups()
+    public function testShouldSerializeWithCorrectGroups(): void
     {
         $annot = new ViewAnnotation();
         $annot->groups = ['group_foo', 'bar_bar'];
@@ -142,7 +155,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testShouldCallSerializationGroupProvider()
+    public function testShouldCallSerializationGroupProvider(): void
     {
         $annot = new ViewAnnotation();
         $annot->groupsProvider = 'testGroupProvider';
@@ -169,7 +182,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testShouldSetResponseCode405IfFormatIsNotSupported()
+    public function testShouldSetResponseCode405IfFormatIsNotSupported(): void
     {
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
@@ -189,7 +202,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testShouldSerializeInvalidFormAndSetBadRequestStatus()
+    public function testShouldSerializeInvalidFormAndSetBadRequestStatus(): void
     {
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
@@ -213,7 +226,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testShouldCallSubmitOnUnsubmittedForms()
+    public function testShouldCallSubmitOnUnsubmittedForms(): void
     {
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
@@ -233,11 +246,11 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function provideIterator()
+    public function provideIterator(): \Generator
     {
         yield [new \ArrayIterator(['foo' => 'bar'])];
         yield [new class() implements \IteratorAggregate {
-            public function getIterator()
+            public function getIterator(): \Generator
             {
                 yield from ['foo' => 'bar'];
             }
@@ -264,7 +277,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testShouldAddXTotalCountHeaderForEntityIterators()
+    public function testShouldAddXTotalCountHeaderForEntityIterators(): ObjectProphecy
     {
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
@@ -304,7 +317,7 @@ class ViewHandlerTest extends WebTestCase
                 $this->iterator = $iterator;
             }
 
-            public function getIterator()
+            public function getIterator(): \Iterator
             {
                 return $this->iterator;
             }
@@ -328,7 +341,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testShouldAddXContinuationTokenHeaderForPagerIterators()
+    public function testShouldAddXContinuationTokenHeaderForPagerIterators(): void
     {
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
@@ -353,7 +366,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testSerializationContextShouldBeReusable()
+    public function testSerializationContextShouldBeReusable(): void
     {
         $annot = new ViewAnnotation();
         $annot->groups = ['group_foo', 'bar_bar'];
@@ -381,7 +394,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testViewObjectShouldBeCorrectlyHandled()
+    public function testViewObjectShouldBeCorrectlyHandled(): void
     {
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
@@ -409,7 +422,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function testDeprecatedAnnotationShouldBeHandled()
+    public function testDeprecatedAnnotationShouldBeHandled(): void
     {
         $controller = new TestController();
 
@@ -425,7 +438,7 @@ class ViewHandlerTest extends WebTestCase
         $this->assertTrue($request->attributes->has('_deprecated'));
     }
 
-    public function testDeprecatedWithCommentAnnotationShouldBeHandled()
+    public function testDeprecatedWithCommentAnnotationShouldBeHandled(): void
     {
         $controller = new TestController();
 
@@ -441,7 +454,7 @@ class ViewHandlerTest extends WebTestCase
         $this->assertEquals('With Notice', $request->attributes->get('_deprecated'));
     }
 
-    public function testShouldSetCorrectSerializationType()
+    public function testShouldSetCorrectSerializationType(): void
     {
         $client = static::createClient();
         $client->request('GET', '/custom-serialization-type', [], [], ['HTTP_ACCEPT' => 'application/json']);
@@ -452,7 +465,7 @@ class ViewHandlerTest extends WebTestCase
         $this->assertJsonStringEqualsJsonString('[{"data":"foobar","additional":"foo"},{"test":"barbar","additional":"foo"}]', $response->getContent());
     }
 
-    public function testShouldSetCorrectSerializationTypeWhenProcessingAnIterator()
+    public function testShouldSetCorrectSerializationTypeWhenProcessingAnIterator(): void
     {
         $client = static::createClient();
         $client->request('GET', '/custom-serialization-type-iterator', [], [], ['HTTP_ACCEPT' => 'application/json']);
@@ -463,7 +476,7 @@ class ViewHandlerTest extends WebTestCase
         $this->assertJsonStringEqualsJsonString('[{"data":"foobar","additional":"foo"},{"test":"barbar","additional":"foo"}]', $response->getContent());
     }
 
-    public function testShouldSetEmitXDeprecatedHeader()
+    public function testShouldSetEmitXDeprecatedHeader(): void
     {
         $client = static::createClient();
         $client->request('GET', '/deprecated', [], [], ['HTTP_ACCEPT' => 'application/json']);
@@ -474,7 +487,20 @@ class ViewHandlerTest extends WebTestCase
         $this->assertEquals('This endpoint has been deprecated and will be discontinued in a future version. Please upgrade your application.', $response->headers->get('X-Deprecated'));
     }
 
-    protected static function createKernel(array $options = [])
+    public function testShouldSetResponseCharsetInContentType(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/');
+
+        $response = $client->getResponse();
+
+        $this->assertRegExp('/; charset=UTF-8/', $response->headers->get('Content-Type'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static function createKernel(array $options = []): KernelInterface
     {
         return new AppKernel('test', true);
     }

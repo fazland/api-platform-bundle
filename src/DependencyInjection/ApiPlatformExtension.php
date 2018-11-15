@@ -45,6 +45,8 @@ class ApiPlatformExtension extends Extension
         if (method_exists($container, 'registerForAutoconfiguration')) {
             $container->registerForAutoconfiguration(DecoderInterface::class)->addTag('fazland_api.decoder');
         }
+
+        $container->setParameter('fazland_api.response_charset', $config['response_charset']);
     }
 
     /**

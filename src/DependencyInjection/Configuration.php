@@ -39,6 +39,9 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->scalarNode('response_charset')
+                    ->defaultValue('UTF-8')
+                ->end()
             ->end()
         ;
 

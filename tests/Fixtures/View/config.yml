@@ -3,6 +3,9 @@ imports:
     - { resource: ../../../src/Resources/config/serializer.xml }
     - { resource: ../../../src/Resources/config/exception_listeners.xml }
 
+parameters:
+    fazland_api.response_charset: UTF-8
+
 framework:
     test: ~
     secret: secret

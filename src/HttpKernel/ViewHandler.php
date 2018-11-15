@@ -35,11 +35,21 @@ class ViewHandler implements EventSubscriberInterface
      */
     private $tokenStorage;
 
-    public function __construct(Serializer $serializer, SerializationContext $serializationContext, ?TokenStorageInterface $tokenStorage)
-    {
+    /**
+     * @var string
+     */
+    private $responseCharset;
+
+    public function __construct(
+        Serializer $serializer,
+        SerializationContext $serializationContext,
+        ?TokenStorageInterface $tokenStorage,
+        string $responseCharset
+    ) {
         $this->serializer = $serializer;
         $this->serializationContext = $serializationContext;
         $this->tokenStorage = $tokenStorage;
+        $this->responseCharset = $responseCharset;
     }
 
     /**
@@ -75,7 +85,7 @@ class ViewHandler implements EventSubscriberInterface
         }
 
         $headers = $result->headers;
-        $headers['Content-Type'] = $request->getMimeType($request->attributes->get('_format'));
+        $headers['Content-Type'] = $request->getMimeType($request->attributes->get('_format')).'; charset='.$this->responseCharset;
 
         if ($request->attributes->has('_deprecated')) {
             $notice = $request->attributes->get('_deprecated');
