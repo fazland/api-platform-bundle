@@ -46,7 +46,7 @@ class DqlWalker extends AbstractWalker
         }
 
         $params = $this->queryBuilder->getParameters();
-        $parameterName = $origParamName = str_replace('.', '_', Inflector::tableize($this->field));
+        $parameterName = $origParamName = preg_replace('/\W+/', '_', Inflector::tableize($this->field));
 
         $filter = function (Parameter $parameter) use (&$parameterName): bool {
             return $parameter->getName() === $parameterName;
