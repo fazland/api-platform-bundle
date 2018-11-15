@@ -257,7 +257,7 @@ class DoctrineProcessor
         }
 
         if (null !== $ordering) {
-            $this->queryBuilder->addOrderBy(
+            $this->queryBuilder->orderBy(
                 $this->rootAlias.'.'.$this->columns[$ordering->getField()]->fieldName,
                 $ordering->getDirection()
             );
