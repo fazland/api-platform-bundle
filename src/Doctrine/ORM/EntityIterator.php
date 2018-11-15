@@ -52,8 +52,11 @@ class EntityIterator implements ObjectIterator
             $queryBuilder = clone $this->queryBuilder;
             $alias = $queryBuilder->getRootAliases()[0];
 
+            $queryBuilder->resetDQLPart('orderBy');
+
             $this->_totalCount = (int) $queryBuilder->select('COUNT('.$alias.')')
                 ->setFirstResult(null)
+                ->setMaxResults(null)
                 ->getQuery()
                 ->getSingleScalarResult();
         }
