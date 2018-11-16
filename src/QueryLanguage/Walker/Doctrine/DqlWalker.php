@@ -2,7 +2,6 @@
 
 namespace Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine;
 
-use Doctrine\Common\Inflector\Inflector;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
@@ -46,7 +45,10 @@ class DqlWalker extends AbstractWalker
         }
 
         $params = $this->queryBuilder->getParameters();
-        $parameterName = $origParamName = preg_replace('/\W+/', '_', Inflector::tableize($this->field));
+        $underscoreField = mb_strtolower(
+            preg_replace('/(?|(?<=[a-z0-9])([A-Z])|(?<=[A-Z]{2})([a-z]))/', '_$1', $this->field)
+        );
+        $parameterName = $origParamName = preg_replace('/\W+/', '_', $underscoreField);
 
         $filter = function (Parameter $parameter) use (&$parameterName): bool {
             return $parameter->getName() === $parameterName;
