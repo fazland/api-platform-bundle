@@ -3,32 +3,11 @@
 namespace Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal;
 
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
+use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\TreeWalkerInterface;
 
-abstract class LiteralExpression implements ExpressionInterface
+abstract class LiteralExpression extends ValueExpression
 {
-    /**
-     * The value represented by the literal expression.
-     *
-     * @var mixed
-     */
-    protected $value;
-
-    protected function __construct($value)
-    {
-        $this->value = $value;
-    }
-
-    /**
-     * Gets the literal expression value.
-     *
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
     /**
      * @inheritDoc
      */
@@ -38,15 +17,17 @@ abstract class LiteralExpression implements ExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function __toString(): string
+    public static function create($value): ValueExpression
     {
-        return (string) $this->value;
-    }
+        if (! \is_string($value)) {
+            throw new \TypeError(sprintf(
+                'Argument 1 passed to '.__METHOD__.' must be a string. %s passed',
+                \is_object($value) ? get_class($value) : gettype($value)
+            ));
+        }
 
-    public static function create(string $value): self
-    {
         switch (true) {
             case 'true' === $value:
             case 'false' === $value:

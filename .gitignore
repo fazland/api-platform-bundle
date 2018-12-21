@@ -1,6 +1,7 @@
 composer.phar
 /vendor/
 composer.lock
+/var/
 
 /bin/*
 !bin/console

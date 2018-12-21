@@ -13,7 +13,7 @@ class FooHandler implements SubscribingHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function getSubscribingMethods(): iterable
+    public static function getSubscribingMethods(): iterable
     {
         yield [
             'type' => 'FooObject',

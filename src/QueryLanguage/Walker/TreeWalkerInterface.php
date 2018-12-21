@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Walker;
 
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\LiteralExpression;
+use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
 
 interface TreeWalkerInterface
 {
@@ -20,11 +21,11 @@ interface TreeWalkerInterface
      * Evaluates a comparison expression.
      *
      * @param string $operator
-     * @param LiteralExpression $expression
+     * @param ValueExpression $expression
      *
      * @return mixed
      */
-    public function walkComparison(string $operator, LiteralExpression $expression);
+    public function walkComparison(string $operator, ValueExpression $expression);
 
     /**
      * Evaluates a match all expression.

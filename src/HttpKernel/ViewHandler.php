@@ -142,7 +142,7 @@ class ViewHandler implements EventSubscriberInterface
      */
     private function handle(View $view, Request $request)
     {
-        $format = $request->attributes->get('_format');
+        $format = $request->attributes->get('_format') ?? 'json';
         $context = clone $this->serializationContext;
 
         $result = $view->result;

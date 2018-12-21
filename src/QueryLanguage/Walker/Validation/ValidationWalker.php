@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation;
 
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\LiteralExpression;
+use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
 
 class ValidationWalker implements ValidationWalkerInterface
 {
@@ -17,9 +18,11 @@ class ValidationWalker implements ValidationWalkerInterface
     /**
      * @inheritDoc
      */
-    public function walkComparison(string $operator, LiteralExpression $expression)
+    public function walkComparison(string $operator, ValueExpression $expression)
     {
-        $this->walkLiteral($expression);
+        if ($expression instanceof LiteralExpression) {
+            $this->walkLiteral($expression);
+        }
     }
 
     /**

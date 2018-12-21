@@ -8,6 +8,7 @@ use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\LiteralExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\StringExpression;
+use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\AbstractWalker;
 
 class DqlWalker extends AbstractWalker
@@ -36,7 +37,7 @@ class DqlWalker extends AbstractWalker
     /**
      * @inheritDoc
      */
-    public function walkComparison(string $operator, LiteralExpression $expression)
+    public function walkComparison(string $operator, ValueExpression $expression)
     {
         $field = $this->field;
         if ($operator === 'like') {
