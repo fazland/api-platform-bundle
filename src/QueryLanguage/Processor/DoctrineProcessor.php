@@ -199,10 +199,11 @@ class DoctrineProcessor
     {
         /** @var OrderExpression $ordering */
         [$filters, $ordering] = $queryData;
+        $this->queryBuilder->andWhere('1 = 1');
 
         foreach ($filters as $key => $expr) {
             $column = $this->columns[$key];
-            $alias = $column->getMappingFieldName();
+            $alias = $column->discriminator ? null : $column->getMappingFieldName();
             $walker = $column->customWalker;
 
             if ($column->isAssociation()) {
@@ -246,7 +247,7 @@ class DoctrineProcessor
                     ->setParameters($subQb->getParameters())
                 ;
             } else {
-                $fieldName = $this->rootAlias.'.'.$alias;
+                $fieldName = $column->discriminator ? $this->rootAlias : $this->rootAlias.'.'.$alias;
                 if (null !== $walker) {
                     $walker = is_string($walker) ? new $walker($this->queryBuilder, $fieldName) : $walker($this->queryBuilder, $fieldName);
                 } else {

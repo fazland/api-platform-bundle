@@ -42,9 +42,7 @@ class DiscriminatorWalker extends DqlWalker
             throw new \Exception();
         }
 
-        $parameterName = $this->generateParameterName();
-        $this->queryBuilder->setParameter($parameterName, $expression->dispatch($this));
-        return new Expr\Comparison($this->field, 'INSTANCE OF', ':'.$parameterName);
+        return new Expr\Comparison($this->field, 'INSTANCE OF', $expression->dispatch($this));
     }
 
 }
