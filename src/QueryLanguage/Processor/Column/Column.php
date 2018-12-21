@@ -4,7 +4,9 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Processor\Column;
 
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\EntityManagerInterface;
+use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine\DiscriminatorWalker;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\TreeWalkerInterface;
+use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\EnumWalker;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\ValidationWalkerInterface;
 
 /**
@@ -42,6 +44,11 @@ class Column
      */
     public $customWalker;
 
+    /**
+     * @var bool
+     */
+    public $discriminator;
+
     public function __construct(
         string $requestName,
         string $fieldName,
@@ -54,7 +61,13 @@ class Column
         [$rootField, $rest] = $this->getFieldMapping($rootEntity, $fieldName);
 
         if (null === $rootField) {
-            throw new \Exception();
+            if (isset($rootEntity->discriminatorColumn['name']) && $fieldName === $rootEntity->discriminatorColumn['name']) {
+                $this->discriminator = true;
+                $this->validationWalker = new EnumWalker(\array_keys($rootEntity->discriminatorMap));
+                $this->customWalker = DiscriminatorWalker::class;
+            } else {
+                throw new \Exception();
+            }
         }
 
         $associations = [];

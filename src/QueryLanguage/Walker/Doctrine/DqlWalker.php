@@ -6,7 +6,6 @@ use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
-use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\LiteralExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\StringExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\AbstractWalker;
@@ -45,21 +44,7 @@ class DqlWalker extends AbstractWalker
             $expression = StringExpression::create('%'.$expression.'%');
         }
 
-        $params = $this->queryBuilder->getParameters();
-        $underscoreField = mb_strtolower(
-            preg_replace('/(?|(?<=[a-z0-9])([A-Z])|(?<=[A-Z]{2})([a-z]))/', '_$1', $this->field)
-        );
-        $parameterName = $origParamName = preg_replace('/\W+/', '_', $underscoreField);
-
-        $filter = function (Parameter $parameter) use (&$parameterName): bool {
-            return $parameter->getName() === $parameterName;
-        };
-
-        $i = 1;
-        while (0 < $params->filter($filter)->count()) {
-            $parameterName = $origParamName . '_' . $i++;
-        }
-
+        $parameterName = $this->generateParameterName();
         $this->queryBuilder->setParameter($parameterName, $expression->dispatch($this));
         return new Expr\Comparison($field, self::COMPARISON_MAP[$operator], ':'.$parameterName);
     }
@@ -116,5 +101,30 @@ class DqlWalker extends AbstractWalker
         $walker = new DqlWalker($this->queryBuilder, $this->field.'.'.$key);
 
         return $expression->dispatch($walker);
+    }
+
+    /**
+     * Generates a unique parameter name for current field.
+     *
+     * @return string
+     */
+    protected function generateParameterName(): string
+    {
+        $params = $this->queryBuilder->getParameters();
+        $underscoreField = mb_strtolower(
+            preg_replace('/(?|(?<=[a-z0-9])([A-Z])|(?<=[A-Z]{2})([a-z]))/', '_$1', $this->field)
+        );
+        $parameterName = $origParamName = preg_replace('/\W+/', '_', $underscoreField);
+
+        $filter = function (Parameter $parameter) use (&$parameterName): bool {
+            return $parameter->getName() === $parameterName;
+        };
+
+        $i = 1;
+        while (0 < $params->filter($filter)->count()) {
+            $parameterName = $origParamName . '_' . $i++;
+        }
+
+        return $parameterName;
     }
 }
