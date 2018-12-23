@@ -7,22 +7,14 @@ cache:
 php:
   - 7.1
   - 7.2
+  - 7.3
 
 matrix:
   fast_finish: true
   include:
     - php: 7.1
       env:
-        - SYMFONY_VERSION='3.3.*'
-    - php: 7.1
-      env:
         - SYMFONY_VERSION='3.4.*'
-    - php: 7.1
-      env:
-        - SYMFONY_VERSION='2.8.*'
-
-before_install:
-  - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc
 
 before_install:
   - sh -c 'echo "extension = mongodb.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini'
