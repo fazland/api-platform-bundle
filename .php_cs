@@ -2,9 +2,10 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->in([__DIR__])
-    ->notName('*.template.php')
+    ->notName('template.parser.php')
     ->notPath('/tests\/Fixtures\/.*\/cache/')
     ->notPath('vendor')
+    ->notPath('var')
 ;
 
 return PhpCsFixer\Config::create()
