@@ -9,3 +9,5 @@ composer.lock
 # PHPUnit
 /app/phpunit.xml
 /phpunit.xml
+
+.php_cs.cache

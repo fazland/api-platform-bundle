@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation;
 
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\LiteralExpression;
+use MyCLabs\Enum\Enum;
 
 class EnumWalker extends ValidationWalker
 {
@@ -12,8 +13,21 @@ class EnumWalker extends ValidationWalker
      */
     private $values;
 
-    public function __construct(array $values)
+    public function __construct($values)
     {
+        if (\is_string($values) && \class_exists($values) && \is_subclass_of($values, Enum::class, true)) {
+            $values = $values::values();
+        }
+
+        if (! \is_array($values)) {
+            throw new \TypeError(\sprintf(
+                'Argument 1 passed to %s must be an array or an %s class name. %s given',
+                __METHOD__,
+                Enum::class,
+                \is_object($values) ? \get_class($values) : \gettype($values)
+            ));
+        }
+
         $this->values = $values;
     }
 
@@ -26,7 +40,10 @@ class EnumWalker extends ValidationWalker
             return;
         }
 
-        throw new \InvalidArgumentException('Value not allowed');
+        $this->addViolation('Value "{{ value }}" is not allowed. Must be one of "{{ allowed_values }}".', [
+            '{{ value }}' => (string) $expression->getValue(),
+            '{{ allowed_values }}' => \implode('", "', $this->values),
+        ]);
     }
 
     /**
@@ -34,7 +51,7 @@ class EnumWalker extends ValidationWalker
      */
     public function walkOrder(string $field, string $direction)
     {
-        throw new \InvalidArgumentException('Operation unavailable');
+        $this->addViolation('Invalid operation');
     }
 
     /**
@@ -42,6 +59,6 @@ class EnumWalker extends ValidationWalker
      */
     public function walkEntry(string $key, ExpressionInterface $expression)
     {
-        throw new \InvalidArgumentException('Operation unavailable');
+        $this->addViolation('Invalid operation');
     }
 }

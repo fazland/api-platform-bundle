@@ -39,6 +39,7 @@
         "doctrine/mongodb-odm-bundle": "^3.4",
         "doctrine/orm": "^2.5",
         "fazland/elastica-odm": "dev-master",
+        "myclabs/php-enum": "^1.0",
         "phpunit/phpunit": "^6.0|^7.0",
         "symfony/browser-kit": "^3.4|^4.0",
         "symfony/phpunit-bridge": "^3.4|^4.0",

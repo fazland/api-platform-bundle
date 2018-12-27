@@ -28,6 +28,7 @@ class ApiPlatformExtension extends Extension
 
         $loader->load('patch_manager.xml');
         $loader->load('serializer.xml');
+        $loader->load('form.xml');
 
         if ($config['view']['enabled']) {
             $loader->load('view.xml');
