@@ -6,6 +6,8 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\Doctrine\ORM\EntityIterator;
+use Fazland\ApiPlatformBundle\Pagination\Doctrine\ORM\PagerIterator;
+use Fazland\ApiPlatformBundle\Pagination\Orderings;
 use Fazland\ApiPlatformBundle\QueryLanguage\Exception\SyntaxError;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\OrderExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Grammar\Grammar;
@@ -107,8 +109,13 @@ class DoctrineProcessor
             return $result;
         }
 
-        $this->attachToQueryBuilder($result);
-        return new EntityIterator($this->queryBuilder);
+        $this->attachToQueryBuilder($result['filters']);
+
+        if (null === $result['ordering']) {
+            return new EntityIterator($this->queryBuilder);
+        }
+
+        return new PagerIterator($this->queryBuilder, $this->parseOrderings($result['ordering']));
     }
 
     private function handleRequest(Request $request)
@@ -192,13 +199,11 @@ class DoctrineProcessor
             return $form;
         }
 
-        return [ $filters, $ordering ];
+        return [ 'filters' => $filters, 'ordering' => $ordering ];
     }
 
-    private function attachToQueryBuilder(array $queryData)
+    private function attachToQueryBuilder(array $filters)
     {
-        /** @var OrderExpression $ordering */
-        [$filters, $ordering] = $queryData;
         $this->queryBuilder->andWhere('1 = 1');
 
         foreach ($filters as $key => $expr) {
@@ -257,12 +262,16 @@ class DoctrineProcessor
                 $this->queryBuilder->andWhere($expr->dispatch($walker));
             }
         }
+    }
 
-        if (null !== $ordering) {
-            $this->queryBuilder->orderBy(
-                $this->rootAlias.'.'.$this->columns[$ordering->getField()]->fieldName,
-                $ordering->getDirection()
-            );
-        }
+    private function parseOrderings(OrderExpression $ordering): array
+    {
+        $fieldName = $this->columns[$ordering->getField()]->fieldName;
+        $direction = $ordering->getDirection();
+
+        return [
+            $fieldName => $direction,
+            $this->rootEntity->getIdentifierColumnNames()[0] => 'ASC',
+        ];
     }
 }
