@@ -5,17 +5,23 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Processor;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\Doctrine\ORM\EntityIterator;
+use Fazland\ApiPlatformBundle\Form\PageTokenType;
 use Fazland\ApiPlatformBundle\Pagination\Doctrine\ORM\PagerIterator;
+use Fazland\ApiPlatformBundle\Pagination\Exception\InvalidTokenException;
 use Fazland\ApiPlatformBundle\Pagination\Orderings;
+use Fazland\ApiPlatformBundle\Pagination\PageToken;
 use Fazland\ApiPlatformBundle\QueryLanguage\Exception\SyntaxError;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\OrderExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Grammar\Grammar;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Column\Column;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine\DiscriminatorWalker;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine\DqlWalker;
+use Fazland\ApiPlatformBundle\QueryLanguage\Walker\TreeWalkerInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\ValidationWalkerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -45,6 +51,26 @@ class DoctrineProcessor
     private $orderField;
 
     /**
+     * @var null|string
+     */
+    private $skipField;
+
+    /**
+     * @var null|string
+     */
+    private $limitField;
+
+    /**
+     * @var null|string
+     */
+    private $continuationTokenField;
+
+    /**
+     * @var null|string
+     */
+    private $checksumColumn;
+
+    /**
      * @var string
      */
     private $rootAlias;
@@ -70,13 +96,66 @@ class DoctrineProcessor
         $this->formFactory = $formFactory;
     }
 
-    public function setOrderField(string $name)
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function enableOrderField(string $name = 'order'): self
     {
         $this->orderField = $name;
 
         return $this;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function enableSkipField(string $name = 'skip'): self
+    {
+        $this->skipField = $name;
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function enableLimitField(string $name = 'limit'): self
+    {
+        $this->limitField = $name;
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @param string|null $checksumColumn
+     *
+     * @return $this
+     */
+    public function enableContinuationToken(string $name = 'continue', ?string $checksumColumn = null): self
+    {
+        $this->continuationTokenField = $name;
+        $this->checksumColumn = $this->rootEntity->getIdentifierColumnNames()[0];
+
+        if (null !== $checksumColumn) {
+            $this->checksumColumn = $this->columns[$checksumColumn]->fieldName;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @param string|null $fieldName
+     *
+     * @return $this
+     */
     public function addColumn(string $name, ?string $fieldName = null): self
     {
         $this->columns[$name] = new Column($name, $fieldName ?? $name, $this->rootEntity, $this->entityManager);
@@ -84,6 +163,12 @@ class DoctrineProcessor
         return $this;
     }
 
+    /**
+     * @param string $column
+     * @param ValidationWalkerInterface|null $validationWalker
+     *
+     * @return $this
+     */
     public function setValidationWalker(string $column, ?ValidationWalkerInterface $validationWalker): self
     {
         $this->columns[$column]->validationWalker = $validationWalker;
@@ -91,9 +176,15 @@ class DoctrineProcessor
         return $this;
     }
 
+    /**
+     * @param string $column
+     * @param TreeWalkerInterface|callable|string|null $customWalker
+     *
+     * @return $this
+     */
     public function setCustomWalker(string $column, $customWalker = null): self
     {
-        if (null !== $customWalker && ! is_string($customWalker) && ! is_callable($customWalker)) {
+        if (null !== $customWalker && ! \is_string($customWalker) && ! \is_callable($customWalker)) {
             throw new \InvalidArgumentException('Custom walker must be either a class name, a callable or null.');
         }
 
@@ -102,6 +193,11 @@ class DoctrineProcessor
         return $this;
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return ObjectIterator|FormInterface
+     */
     public function processRequest(Request $request)
     {
         $result = $this->handleRequest($request);
@@ -111,29 +207,24 @@ class DoctrineProcessor
 
         $this->attachToQueryBuilder($result['filters']);
 
-        if (null === $result['ordering']) {
-            return new EntityIterator($this->queryBuilder);
+        if (null !== $this->continuationTokenField && null !== $result['ordering']) {
+            $iterator = new PagerIterator($this->queryBuilder, $this->parseOrderings($result['ordering']));
+            $iterator->setToken($result['page_token']);
+
+            return $iterator;
         }
 
-        return new PagerIterator($this->queryBuilder, $this->parseOrderings($result['ordering']));
+        return new EntityIterator($this->queryBuilder);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return array|FormInterface
+     */
     private function handleRequest(Request $request)
     {
-        $builder = $this->formFactory->createNamedBuilder(null, FormType::class, [], [
-            'allow_extra_fields' => true,
-            'method' => Request::METHOD_GET,
-        ]);
-
-        foreach ($this->columns as $key => $column) {
-            $builder->add($key, TextType::class);
-        }
-
-        if (null !== $this->orderField) {
-            $builder->add($this->orderField, TextType::class);
-        }
-
-        $form = $builder->getForm()->handleRequest($request);
+        $form = $this->createForm()->handleRequest($request);
         if ($form->isSubmitted() && ! $form->isValid()) {
             return $form;
         }
@@ -147,41 +238,45 @@ class DoctrineProcessor
             $ordering = $formData[$this->orderField] ?? null;
             unset($formData[$this->orderField]);
 
-            if (null !== $ordering && ! is_string($ordering)) {
-                $form[$this->orderField]->addError(new FormError('This value is not valid', null, [], null, null));
+            if (null !== $ordering && ! \is_string($ordering)) {
+                $form[$this->orderField]->addError(new FormError('This value is not valid'));
             } elseif (null !== $ordering) {
                 try {
                     $ordering = $grammar->parse($ordering);
                 } catch (SyntaxError $e) {
-                    $form[$this->orderField]->addError(new FormError('This value is not valid', null, [], null, null));
+                    $form[$this->orderField]->addError(new FormError('This value is not valid'));
                 }
             }
         }
-
 
         foreach ($formData as $key => $filter) {
             if (null === $filter || '' === $filter) {
                 continue;
             }
 
-            if (! is_string($filter)) {
-                $form[$key]->addError(new FormError('This value is not valid', null, [], null, null));
+            if (! \is_string($filter)) {
+                $form[$key]->addError(new FormError('This value is not valid'));
                 continue;
             }
 
             try {
                 $expression = $grammar->parse($filter);
             } catch (SyntaxError $exception) {
-                $form[$key]->addError(new FormError($exception->getMessage(), null, [], null, null));
+                $form[$key]->addError(new FormError($exception->getMessage()));
+                continue;
+            }
+
+            if (!isset($this->columns[$key])) {
                 continue;
             }
 
             $column = $this->columns[$key];
+
             if (null !== $column->validationWalker) {
                 try {
                     $expression->dispatch($column->validationWalker);
                 } catch (\Throwable $e) {
-                    $form[$key]->addError(new FormError($e->getMessage(), null, [], null, null));
+                    $form[$key]->addError(new FormError($e->getMessage()));
                     continue;
                 }
             }
@@ -190,16 +285,16 @@ class DoctrineProcessor
         }
 
         if (null !== $ordering &&
-            (! $ordering instanceof OrderExpression || ! in_array($ordering->getField(), array_keys($this->columns)))
+            (! $ordering instanceof OrderExpression || ! \array_key_exists($ordering->getField(), $this->columns))
         ) {
-            $form[$this->orderField]->addError(new FormError('This value is not valid', null, [], null, null));
+            $form[$this->orderField]->addError(new FormError('This value is not valid'));
         }
 
         if ($form->isSubmitted() && ! $form->isValid()) {
             return $form;
         }
 
-        return [ 'filters' => $filters, 'ordering' => $ordering ];
+        return [ 'filters' => $filters, 'ordering' => $ordering, 'page_token' => $form[$this->continuationTokenField]->getData() ];
     }
 
     private function attachToQueryBuilder(array $filters)
@@ -231,7 +326,7 @@ class DoctrineProcessor
                 }
 
                 if (null !== $walker) {
-                    $walker = is_string($walker) ? new $walker($subQb, $currentFieldName) : $walker($subQb, $currentFieldName);
+                    $walker = \is_string($walker) ? new $walker($subQb, $currentFieldName) : $walker($subQb, $currentFieldName);
                 } else {
                     $walker = new DqlWalker($subQb, $currentFieldName);
                 }
@@ -254,7 +349,7 @@ class DoctrineProcessor
             } else {
                 $fieldName = $column->discriminator ? $this->rootAlias : $this->rootAlias.'.'.$alias;
                 if (null !== $walker) {
-                    $walker = is_string($walker) ? new $walker($this->queryBuilder, $fieldName) : $walker($this->queryBuilder, $fieldName);
+                    $walker = \is_string($walker) ? new $walker($this->queryBuilder, $fieldName) : $walker($this->queryBuilder, $fieldName);
                 } else {
                     $walker = new DqlWalker($this->queryBuilder, $fieldName);
                 }
@@ -271,7 +366,37 @@ class DoctrineProcessor
 
         return [
             $fieldName => $direction,
-            $this->rootEntity->getIdentifierColumnNames()[0] => 'ASC',
+            $this->checksumColumn => 'ASC',
         ];
+    }
+
+    private function createForm(): FormInterface
+    {
+        $builder = $this->formFactory->createNamedBuilder(null, FormType::class, [], [
+            'allow_extra_fields' => true,
+            'method' => Request::METHOD_GET,
+        ]);
+
+        foreach ($this->columns as $key => $column) {
+            $builder->add($key, TextType::class);
+        }
+
+        if (null !== $this->orderField) {
+            $builder->add($this->orderField, TextType::class);
+        }
+
+        if (null !== $this->skipField) {
+            $builder->add($this->skipField, IntegerType::class);
+        }
+
+        if (null !== $this->limitField) {
+            $builder->add($this->limitField, IntegerType::class);
+        }
+
+        if (null !== $this->continuationTokenField) {
+            $builder->add($this->continuationTokenField, PageTokenType::class);
+        }
+
+        return $builder->getForm();
     }
 }

@@ -37,7 +37,6 @@ class EntityIterator implements ObjectIterator
 
         $this->queryBuilder = clone $queryBuilder;
         $this->internalIterator = $this->queryBuilder->getQuery()->iterate();
-        $this->_totalCount = null;
 
         $this->apply(null);
         $this->_currentElement = $this->internalIterator->current()[0];
