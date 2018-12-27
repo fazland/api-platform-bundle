@@ -45,11 +45,11 @@ class ExceptionControllerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $status = ob_get_status(true);
+        $status = \ob_get_status(true);
 
         $this->request = Request::create('/');
         $this->request->setRequestFormat('json');
-        $this->request->headers->set('X-Php-Ob-Level', count($status));
+        $this->request->headers->set('X-Php-Ob-Level', \count($status));
 
         $this->serializer = $this->prophesize(Serializer::class);
         $this->serializationContext = SerializationContext::create();
@@ -68,7 +68,7 @@ class ExceptionControllerTest extends TestCase
             ->serialize(Argument::type(DebugSerializableException::class), 'json', $this->serializationContext)
             ->shouldHaveBeenCalled();
 
-        $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        self::assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
     public function testShouldSerializeException(): void
@@ -80,7 +80,7 @@ class ExceptionControllerTest extends TestCase
             ->serialize(Argument::type(SerializableException::class), 'json', $this->serializationContext)
             ->shouldHaveBeenCalled();
 
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
     public function testShouldReturnATextResponseIfFormatIsNotSerializable(): void
@@ -94,7 +94,7 @@ class ExceptionControllerTest extends TestCase
             ->serialize(Argument::type(SerializableException::class), 'md', $this->serializationContext)
             ->shouldHaveBeenCalled();
 
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        $this->assertEquals('An error has occurred: Bad Request', $response->getContent());
+        self::assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertEquals('An error has occurred: Bad Request', $response->getContent());
     }
 }

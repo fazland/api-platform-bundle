@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class PageTokenType extends AbstractType
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -20,7 +20,7 @@ class PageTokenType extends AbstractType
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -28,7 +28,7 @@ class PageTokenType extends AbstractType
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getParent(): ?string
     {

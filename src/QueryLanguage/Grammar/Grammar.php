@@ -15,7 +15,7 @@ final class Grammar extends AbstractGrammar
     /**
      * Parses an expression into an AST.
      *
-     * @param string $input
+     * @param string          $input
      * @param string|string[] $accept
      *
      * @return ExpressionInterface
@@ -30,11 +30,11 @@ final class Grammar extends AbstractGrammar
             }
         }
 
-        throw new InvalidArgumentException(get_class($expr) . ' is not acceptable');
+        throw new InvalidArgumentException(\get_class($expr).' is not acceptable');
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function unaryExpression(string $type, $value)
     {
@@ -72,13 +72,13 @@ final class Grammar extends AbstractGrammar
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function binaryExpression(string $type, $left, $right)
     {
         switch ($type) {
             case 'range':
-                return Logical\AndExpression::create([ new Comparison\GreaterThanOrEqualExpression($left), new Comparison\LessThanOrEqualExpression($right) ]);
+                return Logical\AndExpression::create([new Comparison\GreaterThanOrEqualExpression($left), new Comparison\LessThanOrEqualExpression($right)]);
 
             case 'entry':
                 return EntryExpression::create($left, $right);
@@ -89,7 +89,7 @@ final class Grammar extends AbstractGrammar
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function orderExpression(string $field, string $direction)
     {
@@ -97,7 +97,7 @@ final class Grammar extends AbstractGrammar
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function variadicExpression(string $type, array $arguments)
     {

@@ -29,10 +29,10 @@ class FunctionalTest extends WebTestCase
         $client->request('GET', '/non-existent', [], [], ['HTTP_ACCEPT' => 'application/json']);
         $response = $client->getResponse();
 
-        $this->assertEquals(404, $response->getStatusCode());
+        self::assertEquals(404, $response->getStatusCode());
 
         $array = '{"error_message":"Not Found","error_code":0}';
-        $this->assertEquals($array, $response->getContent());
+        self::assertEquals($array, $response->getContent());
     }
 
     public function testShouldCatchExceptionsAndExposeTracesInDebugMode(): void
@@ -42,16 +42,16 @@ class FunctionalTest extends WebTestCase
         $client->request('GET', '/non-existent', [], [], ['HTTP_ACCEPT' => 'application/json']);
         $response = $client->getResponse();
 
-        $this->assertEquals(404, $response->getStatusCode());
+        self::assertEquals(404, $response->getStatusCode());
 
         $content = $response->getContent();
-        $this->assertJson($content);
+        self::assertJson($content);
 
-        $res = json_decode($content, true);
-        $this->assertArrayHasKey('error_message', $res);
-        $this->assertEquals('No route found for "GET /non-existent"', $res['error_message']);
-        $this->assertArrayHasKey('error_code', $res);
-        $this->assertArrayHasKey('exception', $res);
-        $this->assertInternalType('array', $res['exception']);
+        $res = \json_decode($content, true);
+        self::assertArrayHasKey('error_message', $res);
+        self::assertEquals('No route found for "GET /non-existent"', $res['error_message']);
+        self::assertArrayHasKey('error_code', $res);
+        self::assertArrayHasKey('exception', $res);
+        self::assertInternalType('array', $res['exception']);
     }
 }

@@ -84,7 +84,7 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
 
         foreach ($this->orderBy as $key => list($field, $direction)) {
             $method = 0 == $key ? 'orderBy' : 'addOrderBy';
-            $queryBuilder->{$method}($alias.'.'.$field, strtoupper($direction));
+            $queryBuilder->{$method}($alias.'.'.$field, \strtoupper($direction));
         }
 
         $limit = $this->pageSize;
@@ -97,7 +97,7 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
                 ->getClassMetadata($queryBuilder->getRootEntities()[0])
                 ->getTypeOfField($mainOrder[0]);
 
-            if (is_string($type)) {
+            if (\is_string($type)) {
                 $type = Type::getType($type);
             }
 

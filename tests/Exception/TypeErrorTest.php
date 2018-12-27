@@ -35,6 +35,6 @@ class TypeErrorTest extends TestCase
      */
     public function testCreateArgumentInvalidShouldFormatMessageCorrectly(string $message, int $no, string $function, $expected, $given): void
     {
-        $this->assertEquals($message, TypeError::createArgumentInvalid($no, $function, $expected, $given)->getMessage());
+        self::assertEquals($message, TypeError::createArgumentInvalid($no, $function, $expected, $given)->getMessage());
     }
 }

@@ -20,7 +20,7 @@ interface TreeWalkerInterface
     /**
      * Evaluates a comparison expression.
      *
-     * @param string $operator
+     * @param string          $operator
      * @param ValueExpression $expression
      *
      * @return mixed
@@ -74,7 +74,7 @@ interface TreeWalkerInterface
     /**
      * Evaluates an ENTRY expression.
      *
-     * @param string $key
+     * @param string              $key
      * @param ExpressionInterface $expression
      *
      * @return mixed

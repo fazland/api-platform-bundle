@@ -10,7 +10,7 @@ final class GreaterThanExpression extends ComparisonExpression
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function __toString(): string
     {

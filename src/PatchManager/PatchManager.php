@@ -56,18 +56,18 @@ class PatchManager implements PatchManagerInterface
             throw TypeError::createArgumentInvalid(1, __METHOD__, PatchableInterface::class, $patchable);
         }
 
-        if (method_exists($patchable, 'getTypeClass') && ! $patchable instanceof MergeablePatchableInterface) {
-            trigger_error(sprintf(
+        if (\method_exists($patchable, 'getTypeClass') && ! $patchable instanceof MergeablePatchableInterface) {
+            \trigger_error(\sprintf(
                 '%s does not implement %s. %s::getTypeClass() is deprecated and will be removed in the first stable release.',
-                get_class($patchable),
+                \get_class($patchable),
                 MergeablePatchableInterface::class,
                 PatchableInterface::class
             ), E_USER_DEPRECATED);
         }
 
-        if (preg_match('#application/merge-patch\\+json#i', $request->headers->get('Content-Type', ''))) {
+        if (\preg_match('#application/merge-patch\\+json#i', $request->headers->get('Content-Type', ''))) {
             // TODO: this should be if (! $patchable instanceof MergeablePatchableInterface).
-            if (! method_exists($patchable, 'getTypeClass')) {
+            if (! \method_exists($patchable, 'getTypeClass')) {
                 throw new UnmergeablePatchException('Resource cannot be merge patched.');
             }
 
@@ -89,7 +89,7 @@ class PatchManager implements PatchManagerInterface
 
         foreach ($object as $operation) {
             if (isset($operation->value)) {
-                $operation->value = json_decode(json_encode($operation->value), true);
+                $operation->value = \json_decode(\json_encode($operation->value), true);
             }
 
             $op = $factory->factory($operation->op);
@@ -132,7 +132,7 @@ class PatchManager implements PatchManagerInterface
             }
         }
 
-        $schema = json_decode(file_get_contents(realpath(__DIR__.'/data/schema.json')));
+        $schema = \json_decode(\file_get_contents(\realpath(__DIR__.'/data/schema.json')));
 
         if (isset($item)) {
             $item->set($schema);
@@ -194,7 +194,7 @@ class PatchManager implements PatchManagerInterface
     protected function validate(array $operations, PatchableInterface $patchable): void
     {
         $violations = $this->validator->validate($patchable);
-        if (0 === count($violations)) {
+        if (0 === \count($violations)) {
             return;
         }
 
@@ -204,7 +204,7 @@ class PatchManager implements PatchManagerInterface
             $paths[] = $path->getElement(0);
         }
 
-        $paths = array_unique($paths);
+        $paths = \array_unique($paths);
         foreach ($violations as $i => $violation) {
             $path = $violation->getPropertyPath();
             if (! $path) {
@@ -212,12 +212,12 @@ class PatchManager implements PatchManagerInterface
             }
 
             $path = new PropertyPath($path);
-            if (! in_array($path->getElement(0), $paths)) {
+            if (! \in_array($path->getElement(0), $paths)) {
                 $violations->remove($i);
             }
         }
 
-        if (0 === count($violations)) {
+        if (0 === \count($violations)) {
             return;
         }
 

@@ -35,7 +35,7 @@ abstract class AccessorArrayAccessTest extends TestCase
      */
     public function testGetValue($collection, string $path, string $value): void
     {
-        $this->assertSame($value, $this->propertyAccessor->getValue($collection, $path));
+        self::assertSame($value, $this->propertyAccessor->getValue($collection, $path));
     }
 
     /**
@@ -45,7 +45,7 @@ abstract class AccessorArrayAccessTest extends TestCase
     {
         $this->propertyAccessor->setValue($collection, $path, 'Updated');
 
-        $this->assertSame('Updated', $this->propertyAccessor->getValue($collection, $path));
+        self::assertSame('Updated', $this->propertyAccessor->getValue($collection, $path));
     }
 
     /**
@@ -53,7 +53,7 @@ abstract class AccessorArrayAccessTest extends TestCase
      */
     public function testIsReadable($collection, string $path): void
     {
-        $this->assertTrue($this->propertyAccessor->isReadable($collection, $path));
+        self::assertTrue($this->propertyAccessor->isReadable($collection, $path));
     }
 
     /**
@@ -61,6 +61,6 @@ abstract class AccessorArrayAccessTest extends TestCase
      */
     public function testIsWritable($collection, string $path): void
     {
-        $this->assertTrue($this->propertyAccessor->isWritable($collection, $path));
+        self::assertTrue($this->propertyAccessor->isWritable($collection, $path));
     }
 }

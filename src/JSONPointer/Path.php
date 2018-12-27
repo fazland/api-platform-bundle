@@ -31,7 +31,7 @@ class Path implements \IteratorAggregate, PropertyPathInterface
      */
     public function getPath(): string
     {
-        return '/'.implode('/', array_map([$this, 'escape'], $this->parts));
+        return '/'.\implode('/', \array_map([$this, 'escape'], $this->parts));
     }
 
     /**
@@ -61,7 +61,7 @@ class Path implements \IteratorAggregate, PropertyPathInterface
 
         $parent = clone $this;
         --$parent->length;
-        array_pop($parent->parts);
+        \array_pop($parent->parts);
 
         return $parent;
     }
@@ -80,7 +80,7 @@ class Path implements \IteratorAggregate, PropertyPathInterface
     public function getElement($index)
     {
         if (! isset($this->parts[$index])) {
-            throw new OutOfBoundsException(sprintf('The index %s is not within the property path', $index));
+            throw new OutOfBoundsException(\sprintf('The index %s is not within the property path', $index));
         }
 
         return $this->parts[$index];
@@ -117,34 +117,34 @@ class Path implements \IteratorAggregate, PropertyPathInterface
      */
     private function decode(string $path): void
     {
-        if ('#' === substr($path, 0, 1)) {
-            $path = urldecode(substr($path, 1));
+        if ('#' === \substr($path, 0, 1)) {
+            $path = \urldecode(\substr($path, 1));
         }
 
         if (! empty($path) && '/' !== $path[0]) {
             throw new InvalidPropertyPathException('Invalid path syntax');
         }
 
-        $this->parts = array_map([$this, 'unescape'], explode('/', substr($path, 1)));
-        $this->length = count($this->parts);
+        $this->parts = \array_map([$this, 'unescape'], \explode('/', \substr($path, 1)));
+        $this->length = \count($this->parts);
     }
 
     private function unescape(string $token): string
     {
-        if (preg_match('/~[^01]/', $token)) {
+        if (\preg_match('/~[^01]/', $token)) {
             throw new InvalidPropertyPathException('Invalid path syntax');
         }
 
-        $token = str_replace('~1', '/', $token);
-        $token = str_replace('~0', '~', $token);
+        $token = \str_replace('~1', '/', $token);
+        $token = \str_replace('~0', '~', $token);
 
         return $token;
     }
 
     private function escape(string $token): string
     {
-        $token = str_replace('~', '~0', $token);
-        $token = str_replace('/', '~1', $token);
+        $token = \str_replace('~', '~0', $token);
+        $token = \str_replace('/', '~1', $token);
 
         return $token;
     }

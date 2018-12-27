@@ -67,12 +67,12 @@ final class PageToken
          * - the third part represents the checksum as crc32($entitiesWithSameTimestampInThisPage->getIds());
          */
 
-        $timestamp = base_convert($this->timestamp, 10, 36);
+        $timestamp = \base_convert($this->timestamp, 10, 36);
 
-        return implode(self::TOKEN_DELIMITER, [
+        return \implode(self::TOKEN_DELIMITER, [
             $timestamp,
             $this->offset,
-            base_convert($this->checksum, 10, 36),
+            \base_convert($this->checksum, 10, 36),
         ]);
     }
 
@@ -88,17 +88,17 @@ final class PageToken
      */
     public static function parse(string $token): self
     {
-        $tokenSplit = explode(self::TOKEN_DELIMITER, $token);
-        if (3 !== count($tokenSplit)) {
+        $tokenSplit = \explode(self::TOKEN_DELIMITER, $token);
+        if (3 !== \count($tokenSplit)) {
             throw new InvalidTokenException('Malformed token');
         }
 
-        $timestamp = (int) base_convert($tokenSplit[0], 36, 10);
+        $timestamp = (int) \base_convert($tokenSplit[0], 36, 10);
 
         return new self(
             $timestamp,
             (int) $tokenSplit[1],
-            (int) base_convert($tokenSplit[2], 36, 10)
+            (int) \base_convert($tokenSplit[2], 36, 10)
         );
     }
 

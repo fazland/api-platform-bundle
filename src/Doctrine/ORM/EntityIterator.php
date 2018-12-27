@@ -31,7 +31,7 @@ class EntityIterator implements ObjectIterator
 
     public function __construct(QueryBuilder $queryBuilder)
     {
-        if (1 !== count($queryBuilder->getRootAliases())) {
+        if (1 !== \count($queryBuilder->getRootAliases())) {
             throw new \InvalidArgumentException('QueryBuilder must have exactly one root aliases for the iterator to work.');
         }
 

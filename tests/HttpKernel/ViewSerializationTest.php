@@ -25,7 +25,7 @@ class ViewSerializationTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals('{"test_foo":"foo.test"}', $response->getContent());
+        self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        self::assertEquals('{"test_foo":"foo.test"}', $response->getContent());
     }
 }

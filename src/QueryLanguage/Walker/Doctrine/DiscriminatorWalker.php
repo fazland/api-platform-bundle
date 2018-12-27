@@ -2,8 +2,8 @@
 
 namespace Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine;
 
-use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\LiteralExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
@@ -24,7 +24,7 @@ class DiscriminatorWalker extends DqlWalker
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkLiteral(LiteralExpression $expression)
     {
@@ -34,7 +34,7 @@ class DiscriminatorWalker extends DqlWalker
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkComparison(string $operator, ValueExpression $expression)
     {
@@ -44,5 +44,4 @@ class DiscriminatorWalker extends DqlWalker
 
         return new Expr\Comparison($this->field, 'INSTANCE OF', $expression->dispatch($this));
     }
-
 }

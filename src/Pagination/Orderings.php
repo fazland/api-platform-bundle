@@ -42,7 +42,7 @@ final class Orderings implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function count(): int
     {
-        return count($this->orderings);
+        return \count($this->orderings);
     }
 
     /**
@@ -88,8 +88,8 @@ final class Orderings implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         $normalized = [];
         foreach ($orderings as $field => $direction) {
-            if (is_int($field)) {
-                if (is_array($direction)) {
+            if (\is_int($field)) {
+                if (\is_array($direction)) {
                     $normalized[] = [$direction[0], self::normalizeDirection($direction[1])];
                 } else {
                     $normalized[] = [$direction, self::SORT_ASC];
@@ -111,10 +111,10 @@ final class Orderings implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     private static function normalizeDirection(string $direction): string
     {
-        if (! preg_match('/'.self::SORT_ASC.'|'.self::SORT_DESC.'/i', $direction)) {
+        if (! \preg_match('/'.self::SORT_ASC.'|'.self::SORT_DESC.'/i', $direction)) {
             throw new Exception\InvalidArgumentException('Invalid ordering direction "'.$direction.'"');
         }
 
-        return strtolower($direction);
+        return \strtolower($direction);
     }
 }

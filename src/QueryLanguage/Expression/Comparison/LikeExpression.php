@@ -10,7 +10,7 @@ final class LikeExpression extends ComparisonExpression
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function __toString(): string
     {

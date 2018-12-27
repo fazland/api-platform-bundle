@@ -61,7 +61,7 @@ class EntityRepositoryTest extends WebTestCase
         $this->_innerConnection->query('SELECT t0_.id AS id_0 FROM TestEntity t0_')
             ->willReturn(new ArrayStatement([]));
 
-        $this->assertInstanceOf(EntityIterator::class, $this->repository->all());
+        self::assertInstanceOf(EntityIterator::class, $this->repository->all());
     }
 
     public function testCountWillReturnRowCount(): void
@@ -71,7 +71,7 @@ class EntityRepositoryTest extends WebTestCase
                 ['sclr_0' => '42'],
             ]));
 
-        $this->assertSame(42, $this->repository->count());
+        self::assertSame(42, $this->repository->count());
     }
 
     public function testFindOneByCachedShouldCheckCache(): void
@@ -92,10 +92,10 @@ class EntityRepositoryTest extends WebTestCase
         $this->repository->findOneByCached([]);
 
         $cache = $this->_configuration->getResultCacheImpl();
-        $this->assertNotFalse($cache->fetch('__'.get_class($this->repository).'::findOneByCachedf6e6f43434391be8b061460900c36046255187c8'));
+        self::assertNotFalse($cache->fetch('__'.\get_class($this->repository).'::findOneByCachedf6e6f43434391be8b061460900c36046255187c8'));
 
-        $this->assertInstanceOf(TestEntity::class, $obj1);
-        $this->assertEquals(1, $obj1->id);
+        self::assertInstanceOf(TestEntity::class, $obj1);
+        self::assertEquals(1, $obj1->id);
     }
 
     /**
@@ -139,12 +139,12 @@ class EntityRepositoryTest extends WebTestCase
         $this->repository->findByCached([]);
 
         $cache = $this->_configuration->getResultCacheImpl();
-        $this->assertNotFalse($cache->fetch('__'.get_class($this->repository).'::findByCachedf6e6f43434391be8b061460900c36046255187c8'));
+        self::assertNotFalse($cache->fetch('__'.\get_class($this->repository).'::findByCachedf6e6f43434391be8b061460900c36046255187c8'));
 
-        $this->assertCount(3, $objs);
-        $this->assertEquals(1, $objs[0]->id);
-        $this->assertEquals(2, $objs[1]->id);
-        $this->assertEquals(3, $objs[2]->id);
+        self::assertCount(3, $objs);
+        self::assertEquals(1, $objs[0]->id);
+        self::assertEquals(2, $objs[1]->id);
+        self::assertEquals(3, $objs[2]->id);
     }
 
     public function testFindByCachedShouldFireTheCorrectQuery(): void
@@ -169,9 +169,9 @@ class EntityRepositoryTest extends WebTestCase
             'id' => [2, 3],
         ], ['id' => 'asc'], 2, 1);
 
-        $this->assertCount(2, $objs);
-        $this->assertEquals(2, $objs[0]->id);
-        $this->assertEquals(3, $objs[1]->id);
+        self::assertCount(2, $objs);
+        self::assertEquals(2, $objs[0]->id);
+        self::assertEquals(3, $objs[1]->id);
     }
 
     public function testGetShouldReturnAnEntity(): void
@@ -193,8 +193,8 @@ class EntityRepositoryTest extends WebTestCase
 
         $obj1 = $this->repository->get(1);
 
-        $this->assertInstanceOf(TestEntity::class, $obj1);
-        $this->assertEquals(1, $obj1->id);
+        self::assertInstanceOf(TestEntity::class, $obj1);
+        self::assertEquals(1, $obj1->id);
     }
 
     /**
@@ -238,8 +238,8 @@ class EntityRepositoryTest extends WebTestCase
 
         $obj1 = $this->repository->getOneBy(['id' => 12]);
 
-        $this->assertInstanceOf(TestEntity::class, $obj1);
-        $this->assertEquals(12, $obj1->id);
+        self::assertInstanceOf(TestEntity::class, $obj1);
+        self::assertEquals(12, $obj1->id);
     }
 
     /**
@@ -285,10 +285,10 @@ class EntityRepositoryTest extends WebTestCase
         $this->repository->getOneByCached(['id' => 12]);
 
         $cache = $this->_configuration->getResultCacheImpl();
-        $this->assertNotFalse($cache->fetch('__'.get_class($this->repository).'::getOneByCached48b7e8dc8f3d4c52abba542ba5f3d423da65cf5e'));
+        self::assertNotFalse($cache->fetch('__'.\get_class($this->repository).'::getOneByCached48b7e8dc8f3d4c52abba542ba5f3d423da65cf5e'));
 
-        $this->assertInstanceOf(TestEntity::class, $obj1);
-        $this->assertEquals(12, $obj1->id);
+        self::assertInstanceOf(TestEntity::class, $obj1);
+        self::assertEquals(12, $obj1->id);
     }
 
     /**
@@ -296,7 +296,7 @@ class EntityRepositoryTest extends WebTestCase
      */
     public function testRepositoryIsInstanceOfEntityRepository(string $class): void
     {
-        $this->assertTrue(EntityRepository::class === $class || is_subclass_of($class, EntityRepository::class));
+        self::assertTrue(EntityRepository::class === $class || \is_subclass_of($class, EntityRepository::class));
     }
 
     public function getEntityClasses(): iterable
@@ -310,7 +310,7 @@ class EntityRepositoryTest extends WebTestCase
 
         /** @var ClassMetadata $metadata */
         foreach ($em->getMetadataFactory()->getAllMetadata() as $metadata) {
-            yield [get_class($em->getRepository($metadata->name))];
+            yield [\get_class($em->getRepository($metadata->name))];
         }
 
         $kernel->shutdown();

@@ -7,7 +7,7 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Walker\TreeWalkerInterface;
 final class AllExpression implements ExpressionInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function __toString(): string
     {
@@ -15,7 +15,7 @@ final class AllExpression implements ExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function dispatch(TreeWalkerInterface $treeWalker)
     {

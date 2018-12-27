@@ -19,7 +19,7 @@ abstract class AbstractWalker implements TreeWalkerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function walkLiteral(LiteralExpression $expression)
     {

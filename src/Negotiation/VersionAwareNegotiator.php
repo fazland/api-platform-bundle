@@ -58,15 +58,15 @@ class VersionAwareNegotiator
         }
 
         $headers = $this->parseHeader($header);
-        $headers = array_map([$this, 'acceptFactory'], $headers);
-        $priorities = array_map([$this, 'priorityFactory'], $priorities);
+        $headers = \array_map([$this, 'acceptFactory'], $headers);
+        $priorities = \array_map([$this, 'priorityFactory'], $priorities);
 
         $matches = $this->findMatches($headers, $priorities);
-        $specificMatches = array_reduce($matches, 'Negotiation\Match::reduce', []);
+        $specificMatches = \array_reduce($matches, 'Negotiation\Match::reduce', []);
 
-        usort($specificMatches, 'Negotiation\Match::compare');
+        \usort($specificMatches, 'Negotiation\Match::compare');
 
-        $match = array_shift($specificMatches);
+        $match = \array_shift($specificMatches);
 
         if (null === $match) {
             return null;
@@ -98,13 +98,13 @@ class VersionAwareNegotiator
         $accept_params = $accept->getParameters();
         unset($accept_params['version']);
 
-        $intersection = array_intersect_assoc($accept_params, $priority->getParameters());
+        $intersection = \array_intersect_assoc($accept_params, $priority->getParameters());
 
-        $baseEqual = ! strcasecmp($ab, $pb);
-        $subEqual = ! strcasecmp($as, $ps);
+        $baseEqual = ! \strcasecmp($ab, $pb);
+        $subEqual = ! \strcasecmp($as, $ps);
 
-        if (('*' === $ab || $baseEqual) && ('*' === $as || $subEqual) && count($intersection) === count($accept_params)) {
-            $score = 100 * $baseEqual + 10 * $subEqual + count($intersection);
+        if (('*' === $ab || $baseEqual) && ('*' === $as || $subEqual) && \count($intersection) === \count($accept_params)) {
+            $score = 100 * $baseEqual + 10 * $subEqual + \count($intersection);
 
             $match = new Match($accept->getQuality(), $score, $index);
             $match->headerIndex = $headerIndex;
@@ -122,13 +122,13 @@ class VersionAwareNegotiator
      */
     private function parseHeader(string $header): array
     {
-        $res = preg_match_all('/(?:[^,"]++(?:"[^"]*+")?)+[^,"]*+/', $header, $matches);
+        $res = \preg_match_all('/(?:[^,"]++(?:"[^"]*+")?)+[^,"]*+/', $header, $matches);
 
         if (! $res) {
-            throw new InvalidHeader(sprintf('Failed to parse accept header: "%s"', $header));
+            throw new InvalidHeader(\sprintf('Failed to parse accept header: "%s"', $header));
         }
 
-        return array_values(array_filter(array_map('trim', $matches[0])));
+        return \array_values(\array_filter(\array_map('trim', $matches[0])));
     }
 
     /**

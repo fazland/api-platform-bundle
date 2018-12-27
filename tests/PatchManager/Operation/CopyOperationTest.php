@@ -25,8 +25,8 @@ class CopyOperationTest extends TestCase
         $obj = ['one' => 'foo'];
         $this->operation->execute($obj, (object) ['path' => '/two', 'from' => '/one']);
 
-        $this->assertEquals('foo', $obj['two']);
-        $this->assertEquals('foo', $obj['one']);
+        self::assertEquals('foo', $obj['two']);
+        self::assertEquals('foo', $obj['one']);
     }
 
     /**
@@ -37,7 +37,7 @@ class CopyOperationTest extends TestCase
         $obj = (object) ['bar' => 'foo'];
         $this->operation->execute($obj, (object) ['path' => '/two', 'from' => '/one']);
 
-        $this->assertEquals('foo', $obj['two']);
-        $this->assertEquals('foo', $obj['one']);
+        self::assertEquals('foo', $obj['two']);
+        self::assertEquals('foo', $obj['one']);
     }
 }

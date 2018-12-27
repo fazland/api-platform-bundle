@@ -19,14 +19,14 @@ class DecoderProviderTest extends TestCase
     {
         $provider = new DecoderProvider($this->getProviders());
 
-        $this->assertFalse($provider->supports('xml'));
+        self::assertFalse($provider->supports('xml'));
     }
 
     public function testSupportShouldReturnTrueIfFormatIsSupported(): void
     {
         $provider = new DecoderProvider($this->getProviders());
 
-        $this->assertTrue($provider->supports('json'));
+        self::assertTrue($provider->supports('json'));
     }
 
     /**
@@ -43,6 +43,6 @@ class DecoderProviderTest extends TestCase
     {
         $provider = new DecoderProvider($this->getProviders());
 
-        $this->assertNotNull($provider->get('json'));
+        self::assertNotNull($provider->get('json'));
     }
 }

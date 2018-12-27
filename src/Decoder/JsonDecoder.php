@@ -21,11 +21,11 @@ class JsonDecoder implements DecoderInterface
             throw new BadRequestHttpException('Invalid request body', $e);
         }
 
-        array_walk_recursive($content, function (&$value) {
+        \array_walk_recursive($content, function (&$value) {
             if (false === $value) {
                 $value = '0';
-            } elseif (! is_string($value)) {
-                $value = strval($value);
+            } elseif (! \is_string($value)) {
+                $value = \strval($value);
             }
         });
 

@@ -45,7 +45,7 @@ trait EntityManagerMockTrait
             $this->_configuration->setResultCacheImpl(new ArrayCache());
             $this->_configuration->setClassMetadataFactoryName(FakeMetadataFactory::class);
             $this->_configuration->setMetadataDriverImpl($this->prophesize(MappingDriver::class)->reveal());
-            $this->_configuration->setProxyDir(sys_get_temp_dir());
+            $this->_configuration->setProxyDir(\sys_get_temp_dir());
             $this->_configuration->setProxyNamespace('__TMP__\\ProxyNamespace\\');
             $this->_configuration->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_ALWAYS);
 

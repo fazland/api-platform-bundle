@@ -46,7 +46,7 @@ class JsonDecoderTest extends WebTestCase
      */
     public function testDecode(array $expected, string $input): void
     {
-        $this->assertEquals($expected, $this->decoder->decode($input));
+        self::assertEquals($expected, $this->decoder->decode($input));
     }
 
     public function testShouldDecodeContentCorrectly(): void
@@ -64,6 +64,6 @@ array:1 [
 ]
 EOF;
 
-        $this->assertEquals($array, $response->getContent());
+        self::assertEquals($array, $response->getContent());
     }
 }

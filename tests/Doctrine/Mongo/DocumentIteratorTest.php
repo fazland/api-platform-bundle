@@ -46,12 +46,12 @@ class DocumentIteratorTest extends TestCase
 
     public function testShouldBeIterable(): void
     {
-        $this->assertTrue(is_iterable($this->iterator));
+        self::assertTrue(\is_iterable($this->iterator));
     }
 
     public function testShouldBeAnIterator(): void
     {
-        $this->assertInstanceOf(\Iterator::class, $this->iterator);
+        self::assertInstanceOf(\Iterator::class, $this->iterator);
     }
 
     public function testCountShouldExecuteACountQuery(): void
@@ -70,7 +70,7 @@ class DocumentIteratorTest extends TestCase
                 ],
             ]));
 
-        $this->assertCount(42, $this->iterator);
+        self::assertCount(42, $this->iterator);
     }
 
     public function testShouldIterateAgainstAQueryResult(): void
@@ -98,7 +98,7 @@ class DocumentIteratorTest extends TestCase
         $obj3 = new FooBar();
         $obj3->id = 48;
 
-        $this->assertEquals([$obj1, $obj2, $obj3], iterator_to_array($this->iterator));
+        self::assertEquals([$obj1, $obj2, $obj3], \iterator_to_array($this->iterator));
     }
 
     public function testShouldCallCallableSpecifiedWithApply(): void
@@ -126,7 +126,7 @@ class DocumentIteratorTest extends TestCase
             return $bar->id;
         });
 
-        $this->assertEquals([42, 45, 48], iterator_to_array($this->iterator));
-        $this->assertEquals(3, $calledCount);
+        self::assertEquals([42, 45, 48], \iterator_to_array($this->iterator));
+        self::assertEquals(3, $calledCount);
     }
 }

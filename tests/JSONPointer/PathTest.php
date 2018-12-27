@@ -14,7 +14,7 @@ class PathTest extends TestCase
     {
         $path = new Path($path);
 
-        $this->assertEquals($expected, $path->getPath());
+        self::assertEquals($expected, $path->getPath());
     }
 
     public function providePath(): iterable
@@ -64,44 +64,44 @@ class PathTest extends TestCase
     {
         $path = new Path('/foo/0/a~1b/c%d/m~0n');
 
-        $this->assertEquals([
+        self::assertEquals([
             'foo',
             '0',
             'a/b',
             'c%d',
             'm~n',
-        ], iterator_to_array($path));
+        ], \iterator_to_array($path));
     }
 
     public function testParentOfRootShouldReturnNull(): void
     {
         $path = new Path('/root_prop');
 
-        $this->assertNull($path->getParent());
+        self::assertNull($path->getParent());
     }
 
     public function testParentShouldWork(): void
     {
         $path = new Path('/foo/0/a~1b/c%d/m~0n');
 
-        $this->assertEquals('/foo/0/a~1b/c%d', (string) ($path = $path->getParent()));
-        $this->assertEquals('/foo/0/a~1b', (string) ($path = $path->getParent()));
-        $this->assertEquals('/foo/0', (string) ($path = $path->getParent()));
-        $this->assertEquals('/foo', (string) ($path = $path->getParent()));
+        self::assertEquals('/foo/0/a~1b/c%d', (string) ($path = $path->getParent()));
+        self::assertEquals('/foo/0/a~1b', (string) ($path = $path->getParent()));
+        self::assertEquals('/foo/0', (string) ($path = $path->getParent()));
+        self::assertEquals('/foo', (string) ($path = $path->getParent()));
     }
 
     public function testIsPropertyIsAlwaysTrue(): void
     {
         $path = new Path('/foo');
 
-        $this->assertTrue($path->isProperty(null));
+        self::assertTrue($path->isProperty(null));
     }
 
     public function testIsIndexIsAlwaysFalse(): void
     {
         $path = new Path('/foo');
 
-        $this->assertFalse($path->isIndex(null));
+        self::assertFalse($path->isIndex(null));
     }
 
     /**
@@ -117,10 +117,10 @@ class PathTest extends TestCase
     {
         $path = new Path('/foo/0/a~1b/c%d/m~0n');
 
-        $this->assertEquals('foo', $path->getElement(0));
-        $this->assertEquals('0', $path->getElement(1));
-        $this->assertEquals('a/b', $path->getElement(2));
-        $this->assertEquals('c%d', $path->getElement(3));
-        $this->assertEquals('m~n', $path->getElement(4));
+        self::assertEquals('foo', $path->getElement(0));
+        self::assertEquals('0', $path->getElement(1));
+        self::assertEquals('a/b', $path->getElement(2));
+        self::assertEquals('c%d', $path->getElement(3));
+        self::assertEquals('m~n', $path->getElement(4));
     }
 }

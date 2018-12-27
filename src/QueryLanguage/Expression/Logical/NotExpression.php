@@ -20,7 +20,7 @@ final class NotExpression implements LogicalExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function __toString(): string
     {
@@ -38,14 +38,14 @@ final class NotExpression implements LogicalExpressionInterface
         }
 
         if (! $expression instanceof ComparisonExpressionInterface && ! $expression instanceof LogicalExpressionInterface) {
-            throw new \Exception(sprintf('Cannot negate %s expression', get_class($expression)));
+            throw new \Exception(\sprintf('Cannot negate %s expression', \get_class($expression)));
         }
 
         return new self($expression);
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function dispatch(TreeWalkerInterface $treeWalker)
     {

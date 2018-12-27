@@ -52,7 +52,7 @@ class DocumentRepositoryTest extends WebTestCase
     public function testAllShouldReturnAnEntityIterator(): void
     {
         $this->_collection->find([], Argument::any())->willReturn(new \ArrayIterator([]));
-        $this->assertInstanceOf(DocumentIterator::class, $this->repository->all());
+        self::assertInstanceOf(DocumentIterator::class, $this->repository->all());
     }
 
     public function testCountWillReturnRowCount(): void
@@ -71,12 +71,12 @@ class DocumentRepositoryTest extends WebTestCase
                 ],
             ]));
 
-        $this->assertSame(42, $this->repository->count());
+        self::assertSame(42, $this->repository->count());
     }
 
     public function testFindOneByCachedShouldCheckCache(): void
     {
-        $this->markTestSkipped('Mongo ODM does not support result cache');
+        self::markTestSkipped('Mongo ODM does not support result cache');
     }
 
     /**
@@ -84,17 +84,17 @@ class DocumentRepositoryTest extends WebTestCase
      */
     public function testFindOneByCachedShouldThrowIdNonUniqueResultHasBeenReturned(): void
     {
-        $this->markTestSkipped('Mongo ODM does not support result cache');
+        self::markTestSkipped('Mongo ODM does not support result cache');
     }
 
     public function testFindByCachedShouldCheckCache(): void
     {
-        $this->markTestSkipped('Mongo ODM does not support result cache');
+        self::markTestSkipped('Mongo ODM does not support result cache');
     }
 
     public function testFindByCachedShouldFireTheCorrectQuery(): void
     {
-        $this->markTestSkipped('Mongo ODM does not support result cache');
+        self::markTestSkipped('Mongo ODM does not support result cache');
     }
 
     public function testGetShouldReturnADocument(): void
@@ -112,8 +112,8 @@ class DocumentRepositoryTest extends WebTestCase
 
         $obj1 = $this->repository->get('5a3d346ab7f26e18ba119308');
 
-        $this->assertInstanceOf(FooBar::class, $obj1);
-        $this->assertEquals('5a3d346ab7f26e18ba119308', $obj1->id);
+        self::assertInstanceOf(FooBar::class, $obj1);
+        self::assertEquals('5a3d346ab7f26e18ba119308', $obj1->id);
     }
 
     /**
@@ -145,8 +145,8 @@ class DocumentRepositoryTest extends WebTestCase
 
         $obj1 = $this->repository->getOneBy(['id' => '5a3d346ab7f26e18ba119308']);
 
-        $this->assertInstanceOf(FooBar::class, $obj1);
-        $this->assertEquals('5a3d346ab7f26e18ba119308', $obj1->id);
+        self::assertInstanceOf(FooBar::class, $obj1);
+        self::assertEquals('5a3d346ab7f26e18ba119308', $obj1->id);
     }
 
     /**
@@ -165,7 +165,7 @@ class DocumentRepositoryTest extends WebTestCase
 
     public function testGetOneByCachedShouldCheckTheCache(): void
     {
-        $this->markTestSkipped('Mongo ODM does not support result cache');
+        self::markTestSkipped('Mongo ODM does not support result cache');
     }
 
     /**
@@ -173,7 +173,7 @@ class DocumentRepositoryTest extends WebTestCase
      */
     public function testRepositoryIsInstanceOfDocumentRepository(string $class): void
     {
-        $this->assertTrue(DocumentRepository::class === $class || is_subclass_of($class, DocumentRepository::class));
+        self::assertTrue(DocumentRepository::class === $class || \is_subclass_of($class, DocumentRepository::class));
     }
 
     public function getDocumentClasses(): iterable
@@ -187,7 +187,7 @@ class DocumentRepositoryTest extends WebTestCase
 
         /** @var ClassMetadata $metadata */
         foreach ($dm->getMetadataFactory()->getAllMetadata() as $metadata) {
-            yield [get_class($dm->getRepository($metadata->name))];
+            yield [\get_class($dm->getRepository($metadata->name))];
         }
 
         $kernel->shutdown();

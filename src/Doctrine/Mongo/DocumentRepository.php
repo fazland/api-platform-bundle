@@ -53,7 +53,7 @@ class DocumentRepository extends BaseRepository implements ObjectRepository
         $query = $this->buildQueryBuilderForCriteria($criteria, $orderBy);
 //        $query->getQuery()->useResultCache(true, $ttl, '__'.get_called_class().'::'.__FUNCTION__.sha1(serialize(func_get_args())));
 
-        return iterator_to_array($query->getQuery()->getIterator());
+        return \iterator_to_array($query->getQuery()->getIterator());
     }
 
     /**
@@ -118,7 +118,7 @@ class DocumentRepository extends BaseRepository implements ObjectRepository
         $qb = $this->createQueryBuilder();
 
         foreach ($criteria as $key => $value) {
-            $method = is_array($value) ? 'in' : 'equals';
+            $method = \is_array($value) ? 'in' : 'equals';
             $qb->field($key)->{$method}($value);
         }
 

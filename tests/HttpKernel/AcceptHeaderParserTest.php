@@ -68,17 +68,17 @@ class AcceptHeaderParserTest extends TestCase
 
         $this->parser->onKernelRequest($event->reveal());
 
-        $this->assertEquals(20160228, $request->attributes->get('_version'));
+        self::assertEquals(20160228, $request->attributes->get('_version'));
     }
 
     public function testPriorityMustBeHigherThenRoutersOne(): void
     {
         $events = $this->parser->getSubscribedEvents();
-        $this->assertArrayHasKey(KernelEvents::REQUEST, $events);
+        self::assertArrayHasKey(KernelEvents::REQUEST, $events);
 
         $routerEvents = RouterListener::getSubscribedEvents();
-        $this->assertArrayHasKey(KernelEvents::REQUEST, $routerEvents);
+        self::assertArrayHasKey(KernelEvents::REQUEST, $routerEvents);
 
-        $this->assertTrue($events[KernelEvents::REQUEST][1] > $routerEvents[KernelEvents::REQUEST][0][1]);
+        self::assertTrue($events[KernelEvents::REQUEST][1] > $routerEvents[KernelEvents::REQUEST][0][1]);
     }
 }

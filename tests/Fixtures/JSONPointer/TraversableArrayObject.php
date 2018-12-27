@@ -23,7 +23,7 @@ class TraversableArrayObject implements \ArrayAccess, \IteratorAggregate, \Count
      */
     public function offsetExists($offset): bool
     {
-        return array_key_exists($offset, $this->array);
+        return \array_key_exists($offset, $this->array);
     }
 
     /**
@@ -67,7 +67,7 @@ class TraversableArrayObject implements \ArrayAccess, \IteratorAggregate, \Count
      */
     public function count(): int
     {
-        return count($this->array);
+        return \count($this->array);
     }
 
     /**
@@ -75,7 +75,7 @@ class TraversableArrayObject implements \ArrayAccess, \IteratorAggregate, \Count
      */
     public function serialize(): string
     {
-        return serialize($this->array);
+        return \serialize($this->array);
     }
 
     /**
@@ -83,6 +83,6 @@ class TraversableArrayObject implements \ArrayAccess, \IteratorAggregate, \Count
      */
     public function unserialize($serialized): void
     {
-        $this->array = (array) unserialize((string) $serialized);
+        $this->array = (array) \unserialize((string) $serialized);
     }
 }

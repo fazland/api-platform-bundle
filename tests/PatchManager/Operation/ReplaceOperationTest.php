@@ -25,7 +25,7 @@ class ReplaceOperationTest extends TestCase
         $obj = (object) ['one' => 'bar'];
         $this->operation->execute($obj, (object) ['path' => '/one', 'value' => 'foo']);
 
-        $this->assertEquals('foo', $obj->one);
+        self::assertEquals('foo', $obj->one);
     }
 
     /**

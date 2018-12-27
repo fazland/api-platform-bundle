@@ -24,8 +24,8 @@ class ApiPlatformBundleTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals('{"test_foo":"foo.test"}', $response->getContent());
+        self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        self::assertEquals('{"test_foo":"foo.test"}', $response->getContent());
     }
 
     public function testBodyConvertersAreEnabled(): void
@@ -38,8 +38,8 @@ class ApiPlatformBundleTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals(
+        self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        self::assertEquals(
 'array:1 [
   "foo" => "bar"
 ]
@@ -56,8 +56,8 @@ class ApiPlatformBundleTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals(
+        self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        self::assertEquals(
 '[]
 "{"foo":"bar"}"', $response->getContent());
     }
@@ -77,7 +77,7 @@ class ApiPlatformBundleTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
-        $this->assertEquals('An error has occurred: Internal Server Error', $response->getContent());
+        self::assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        self::assertEquals('An error has occurred: Internal Server Error', $response->getContent());
     }
 }

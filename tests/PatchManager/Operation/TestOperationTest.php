@@ -90,7 +90,7 @@ class TestOperationTest extends TestCase
         $testObj = $this->getTestObject();
 
         $this->operation->execute($testObj, (object) ['path' => $path, 'value' => $value]);
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 
     public function getUnequalValues(): iterable
@@ -137,6 +137,6 @@ class TestOperationTest extends TestCase
         $testObj = $this->getTestObject();
 
         $this->operation->execute($testObj, (object) ['path' => $path, 'value' => $value]);
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 }

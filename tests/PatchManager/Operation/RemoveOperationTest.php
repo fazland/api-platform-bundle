@@ -26,7 +26,7 @@ class RemoveOperationTest extends TestCase
         $obj = ['one' => 'bar'];
         $this->operation->execute($obj, (object) ['path' => '/one']);
 
-        $this->assertArrayNotHasKey('one', $obj);
+        self::assertArrayNotHasKey('one', $obj);
     }
 
     public function testShouldRemoveValueNested(): void
@@ -34,7 +34,7 @@ class RemoveOperationTest extends TestCase
         $obj = ['one' => ['bar' => ['baz', 'two']]];
         $this->operation->execute($obj, (object) ['path' => '/one/bar/1']);
 
-        $this->assertCount(1, $obj['one']['bar']);
+        self::assertCount(1, $obj['one']['bar']);
     }
 
     public function testShouldRemoveValueNestedCollection(): void
@@ -42,7 +42,7 @@ class RemoveOperationTest extends TestCase
         $obj = ['one' => new ArrayCollection(['bar' => ['baz', 'two']])];
         $this->operation->execute($obj, (object) ['path' => '/one/bar/1']);
 
-        $this->assertCount(1, $obj['one']['bar']);
+        self::assertCount(1, $obj['one']['bar']);
     }
 
     public function testShouldRemoveValueNestedIterable(): void
@@ -57,7 +57,7 @@ class RemoveOperationTest extends TestCase
         $obj = ['one' => ['bar' => $iterable]];
         $this->operation->execute($obj, (object) ['path' => '/one/bar/1']);
 
-        $this->assertCount(1, $obj['one']['bar']);
+        self::assertCount(1, $obj['one']['bar']);
     }
 
     public function testShouldRemoveValueNull(): void
@@ -65,7 +65,7 @@ class RemoveOperationTest extends TestCase
         $obj = ['one' => ['bar' => null]];
         $this->operation->execute($obj, (object) ['path' => '/one/bar/1']);
 
-        $this->assertNull($obj['one']['bar']);
+        self::assertNull($obj['one']['bar']);
     }
 
     public function testShouldRemoveValueFromObject(): void
@@ -73,7 +73,7 @@ class RemoveOperationTest extends TestCase
         $obj = (object) ['one' => 'bar'];
         $this->operation->execute($obj, (object) ['path' => '/one']);
 
-        $this->assertFalse(isset($obj->one));
+        self::assertFalse(isset($obj->one));
     }
 
     public function testShouldRemoveWhenNullShouldNotThrow(): void
@@ -81,7 +81,7 @@ class RemoveOperationTest extends TestCase
         $obj = (object) ['one' => null];
         $this->operation->execute($obj, (object) ['path' => '/one']);
 
-        $this->assertFalse(isset($obj->one));
+        self::assertFalse(isset($obj->one));
     }
 
     public function testShouldRemoveShouldUnsetIfObjectHasArrayAccess(): void
@@ -89,7 +89,7 @@ class RemoveOperationTest extends TestCase
         $obj = new \ArrayObject(['one' => 'bar']);
         $this->operation->execute($obj, (object) ['path' => '/one']);
 
-        $this->assertFalse(isset($obj['one']));
+        self::assertFalse(isset($obj['one']));
     }
 
     /**

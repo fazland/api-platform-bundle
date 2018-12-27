@@ -96,7 +96,7 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
         $axesBefore = $this->getContainer([1 => 'second', 3 => 'fourth', 4 => 'fifth']);
         $axesMerged = $this->getContainer([1 => 'first', 2 => 'second', 3 => 'third']);
         $axesAfter = $this->getContainer([1 => 'second', 5 => 'first', 6 => 'third']);
-        $axesMergedCopy = is_object($axesMerged) ? clone $axesMerged : $axesMerged;
+        $axesMergedCopy = \is_object($axesMerged) ? clone $axesMerged : $axesMerged;
 
         // Don't use a mock in order to test whether the collections are
         // modified while iterating them
@@ -104,10 +104,10 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
 
         $this->propertyAccessor->setValue($car, '/axes', $axesMerged);
 
-        $this->assertEquals($axesAfter, $car->getAxes());
+        self::assertEquals($axesAfter, $car->getAxes());
 
         // The passed collection was not modified
-        $this->assertEquals($axesMergedCopy, $axesMerged);
+        self::assertEquals($axesMergedCopy, $axesMerged);
     }
 
     public function testSetValueCallsAdderAndRemoverForNestedCollections(): void
@@ -117,20 +117,20 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
         $axesBefore = $this->getContainer([1 => 'second', 3 => 'fourth']);
         $axesAfter = $this->getContainer([0 => 'first', 1 => 'second', 2 => 'third']);
 
-        $car->expects($this->any())
+        $car->expects(self::any())
             ->method('getStructure')
-            ->will($this->returnValue($structure));
+            ->will(self::returnValue($structure));
 
-        $structure->expects($this->at(0))
+        $structure->expects(self::at(0))
             ->method('getAxes')
-            ->will($this->returnValue($axesBefore));
-        $structure->expects($this->at(1))
+            ->will(self::returnValue($axesBefore));
+        $structure->expects(self::at(1))
             ->method('removeAxis')
             ->with('fourth');
-        $structure->expects($this->at(2))
+        $structure->expects(self::at(2))
             ->method('addAxis')
             ->with('first');
-        $structure->expects($this->at(3))
+        $structure->expects(self::at(3))
             ->method('addAxis')
             ->with('third');
 
@@ -147,9 +147,9 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
         $axesBefore = $this->getContainer([1 => 'second', 3 => 'fourth']);
         $axesAfter = $this->getContainer([0 => 'first', 1 => 'second', 2 => 'third']);
 
-        $car->expects($this->any())
+        $car->expects(self::any())
             ->method('getAxes')
-            ->will($this->returnValue($axesBefore));
+            ->will(self::returnValue($axesBefore));
 
         $this->propertyAccessor->setValue($car, '/axes', $axesAfter);
     }
@@ -157,25 +157,25 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
     public function testIsWritableReturnsTrueIfAdderAndRemoverExists(): void
     {
         $car = $this->getMockBuilder(__CLASS__.'_Car')->getMock();
-        $this->assertTrue($this->propertyAccessor->isWritable($car, '/axes'));
+        self::assertTrue($this->propertyAccessor->isWritable($car, '/axes'));
     }
 
     public function testIsWritableReturnsFalseIfOnlyAdderExists(): void
     {
         $car = $this->getMockBuilder(__CLASS__.'_CarOnlyAdder')->getMock();
-        $this->assertFalse($this->propertyAccessor->isWritable($car, '/axes'));
+        self::assertFalse($this->propertyAccessor->isWritable($car, '/axes'));
     }
 
     public function testIsWritableReturnsFalseIfOnlyRemoverExists(): void
     {
         $car = $this->getMockBuilder(__CLASS__.'_CarOnlyRemover')->getMock();
-        $this->assertFalse($this->propertyAccessor->isWritable($car, '/axes'));
+        self::assertFalse($this->propertyAccessor->isWritable($car, '/axes'));
     }
 
     public function testIsWritableReturnsFalseIfNoAdderNorRemoverExists(): void
     {
         $car = $this->getMockBuilder(__CLASS__.'_CarNoAdderAndRemover')->getMock();
-        $this->assertFalse($this->propertyAccessor->isWritable($car, '/axes'));
+        self::assertFalse($this->propertyAccessor->isWritable($car, '/axes'));
     }
 
     /**

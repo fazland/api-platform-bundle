@@ -42,7 +42,7 @@ class ApiPlatformExtension extends Extension
             $this->loadCors($loader, $container, $config['cors']);
         }
 
-        if (method_exists($container, 'registerForAutoconfiguration')) {
+        if (\method_exists($container, 'registerForAutoconfiguration')) {
             $container->registerForAutoconfiguration(DecoderInterface::class)->addTag('fazland_api.decoder');
         }
 
@@ -63,7 +63,7 @@ class ApiPlatformExtension extends Extension
 
         $definition = $container->findDefinition(CorsListener::class);
         $definition->setArguments([
-            0 < count($config['origins']) ? $config['origins'] : null,
+            0 < \count($config['origins']) ? $config['origins'] : null,
             $config['exposed_headers'],
         ]);
     }

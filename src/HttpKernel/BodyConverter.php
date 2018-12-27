@@ -27,7 +27,7 @@ class BodyConverter implements EventSubscriberInterface
         $request = $event->getRequest();
         $contentType = $request->headers->get('Content-Type', 'application/x-www-form-urlencoded');
 
-        if (in_array($request->getMethod(), [Request::METHOD_GET, Request::METHOD_HEAD])) {
+        if (\in_array($request->getMethod(), [Request::METHOD_GET, Request::METHOD_HEAD])) {
             return;
         }
 

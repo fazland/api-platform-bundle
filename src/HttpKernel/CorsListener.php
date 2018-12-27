@@ -41,19 +41,19 @@ class CorsListener implements EventSubscriberInterface
                 return $origins;
             })(...$allowedOrigins);
 
-            $allowedOrigins = '#^\w+:\/\/(?:.+@)?(?:'.implode('|', array_map([$this, 'toRegex'], $allowedOrigins)).')$#';
+            $allowedOrigins = '#^\w+:\/\/(?:.+@)?(?:'.\implode('|', \array_map([$this, 'toRegex'], $allowedOrigins)).')$#';
         }
 
         $this->allowedOrigins = $allowedOrigins;
 
         $headers = [];
-        $exposedHeaders = array_merge(array_values($exposedHeaders), ['Authorization', 'Content-Length', 'X-Total-Count', 'X-Continuation-Token']);
+        $exposedHeaders = \array_merge(\array_values($exposedHeaders), ['Authorization', 'Content-Length', 'X-Total-Count', 'X-Continuation-Token']);
 
         foreach ($exposedHeaders as $header) {
-            $headers[strtolower($header)] = $header;
+            $headers[\strtolower($header)] = $header;
         }
 
-        $this->exposedHeaders = implode(', ', $headers);
+        $this->exposedHeaders = \implode(', ', $headers);
     }
 
     /**
@@ -90,7 +90,7 @@ class CorsListener implements EventSubscriberInterface
 
         $event->setResponse($response);
 
-        if (method_exists($event, 'allowCustomResponseCode')) {
+        if (\method_exists($event, 'allowCustomResponseCode')) {
             $event->allowCustomResponseCode();
         }
     }
@@ -114,7 +114,7 @@ class CorsListener implements EventSubscriberInterface
         $response->headers->set('Access-Control-Expose-Headers', $this->exposedHeaders);
 
         $vary = $response->getVary();
-        if ('*' !== $origin && ! in_array('Origin', $vary)) {
+        if ('*' !== $origin && ! \in_array('Origin', $vary)) {
             $vary[] = 'Origin';
             $response->setVary($vary);
         }
@@ -131,13 +131,13 @@ class CorsListener implements EventSubscriberInterface
     {
         $regex = '';
         $escaping = false;
-        $size = strlen($domain);
+        $size = \strlen($domain);
         for ($i = 0; $i < $size; ++$i) {
             $char = $domain[$i];
 
             if ($escaping) {
                 $escaping = false;
-                $char = preg_quote($char, '#');
+                $char = \preg_quote($char, '#');
             } elseif ('*' === $char) {
                 $char = '.*';
             } elseif ('?' === $char) {
@@ -145,7 +145,7 @@ class CorsListener implements EventSubscriberInterface
             } elseif ('\\' === $char) {
                 $escaping = true;
             } else {
-                $char = preg_quote($char, '#');
+                $char = \preg_quote($char, '#');
             }
 
             $regex .= $char;
@@ -167,7 +167,7 @@ class CorsListener implements EventSubscriberInterface
             return true;
         }
 
-        if (preg_match($this->allowedOrigins, $origin)) {
+        if (\preg_match($this->allowedOrigins, $origin)) {
             return true;
         }
 

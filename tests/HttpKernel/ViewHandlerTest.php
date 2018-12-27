@@ -384,7 +384,7 @@ class ViewHandlerTest extends WebTestCase
             ->will(function ($args) use ($self) {
                 /** @var SerializationContext $context */
                 list(, , $context) = $args;
-                Assert::assertNotEquals(spl_object_hash($self->serializationContext), spl_object_hash($context));
+                Assert::assertNotEquals(\spl_object_hash($self->serializationContext), \spl_object_hash($context));
 
                 return '';
             })
@@ -409,7 +409,7 @@ class ViewHandlerTest extends WebTestCase
             ->will(function ($args) use ($self) {
                 /** @var SerializationContext $context */
                 list(, , $context) = $args;
-                Assert::assertNotEquals(spl_object_hash($self->serializationContext), spl_object_hash($context));
+                Assert::assertNotEquals(\spl_object_hash($self->serializationContext), \spl_object_hash($context));
 
                 return '{"foobar": "no no no"}';
             })
@@ -435,7 +435,7 @@ class ViewHandlerTest extends WebTestCase
 
         $this->viewHandler->onController($event->reveal());
 
-        $this->assertTrue($request->attributes->has('_deprecated'));
+        self::assertTrue($request->attributes->has('_deprecated'));
     }
 
     public function testDeprecatedWithCommentAnnotationShouldBeHandled(): void
@@ -451,7 +451,7 @@ class ViewHandlerTest extends WebTestCase
 
         $this->viewHandler->onController($event->reveal());
 
-        $this->assertEquals('With Notice', $request->attributes->get('_deprecated'));
+        self::assertEquals('With Notice', $request->attributes->get('_deprecated'));
     }
 
     public function testShouldSetCorrectSerializationType(): void
@@ -461,8 +461,8 @@ class ViewHandlerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertJsonStringEqualsJsonString('[{"data":"foobar","additional":"foo"},{"test":"barbar","additional":"foo"}]', $response->getContent());
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertJsonStringEqualsJsonString('[{"data":"foobar","additional":"foo"},{"test":"barbar","additional":"foo"}]', $response->getContent());
     }
 
     public function testShouldSetCorrectSerializationTypeWhenProcessingAnIterator(): void
@@ -472,8 +472,8 @@ class ViewHandlerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertJsonStringEqualsJsonString('[{"data":"foobar","additional":"foo"},{"test":"barbar","additional":"foo"}]', $response->getContent());
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertJsonStringEqualsJsonString('[{"data":"foobar","additional":"foo"},{"test":"barbar","additional":"foo"}]', $response->getContent());
     }
 
     public function testShouldSetEmitXDeprecatedHeader(): void
@@ -483,8 +483,8 @@ class ViewHandlerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('This endpoint has been deprecated and will be discontinued in a future version. Please upgrade your application.', $response->headers->get('X-Deprecated'));
+        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals('This endpoint has been deprecated and will be discontinued in a future version. Please upgrade your application.', $response->headers->get('X-Deprecated'));
     }
 
     public function testShouldSetResponseCharsetInContentType(): void
@@ -494,7 +494,7 @@ class ViewHandlerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertRegExp('/; charset=UTF-8/', $response->headers->get('Content-Type'));
+        self::assertRegExp('/; charset=UTF-8/', $response->headers->get('Content-Type'));
     }
 
     /**

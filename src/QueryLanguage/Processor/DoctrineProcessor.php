@@ -9,14 +9,10 @@ use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\Doctrine\ORM\EntityIterator;
 use Fazland\ApiPlatformBundle\Form\PageTokenType;
 use Fazland\ApiPlatformBundle\Pagination\Doctrine\ORM\PagerIterator;
-use Fazland\ApiPlatformBundle\Pagination\Exception\InvalidTokenException;
-use Fazland\ApiPlatformBundle\Pagination\Orderings;
-use Fazland\ApiPlatformBundle\Pagination\PageToken;
 use Fazland\ApiPlatformBundle\QueryLanguage\Exception\SyntaxError;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\OrderExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Grammar\Grammar;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Column\Column;
-use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine\DiscriminatorWalker;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine\DqlWalker;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\TreeWalkerInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\ValidationWalkerInterface;
@@ -133,7 +129,7 @@ class DoctrineProcessor
     }
 
     /**
-     * @param string $name
+     * @param string      $name
      * @param string|null $checksumColumn
      *
      * @return $this
@@ -151,7 +147,7 @@ class DoctrineProcessor
     }
 
     /**
-     * @param string $name
+     * @param string      $name
      * @param string|null $fieldName
      *
      * @return $this
@@ -164,7 +160,7 @@ class DoctrineProcessor
     }
 
     /**
-     * @param string $column
+     * @param string                         $column
      * @param ValidationWalkerInterface|null $validationWalker
      *
      * @return $this
@@ -177,7 +173,7 @@ class DoctrineProcessor
     }
 
     /**
-     * @param string $column
+     * @param string                                   $column
      * @param TreeWalkerInterface|callable|string|null $customWalker
      *
      * @return $this
@@ -266,7 +262,7 @@ class DoctrineProcessor
                 continue;
             }
 
-            if (!isset($this->columns[$key])) {
+            if (! isset($this->columns[$key])) {
                 continue;
             }
 
@@ -294,7 +290,7 @@ class DoctrineProcessor
             return $form;
         }
 
-        return [ 'filters' => $filters, 'ordering' => $ordering, 'page_token' => $form[$this->continuationTokenField]->getData() ];
+        return ['filters' => $filters, 'ordering' => $ordering, 'page_token' => $form[$this->continuationTokenField]->getData()];
     }
 
     private function attachToQueryBuilder(array $filters)
@@ -321,7 +317,7 @@ class DoctrineProcessor
                         $currentFieldName = $association['fieldName'];
                         $subQb->join($currentFieldName.'.'.$association['fieldName'], $association['fieldName']);
                     } else {
-                        $currentFieldName = $currentAlias . '.' . $association['fieldName'];
+                        $currentFieldName = $currentAlias.'.'.$association['fieldName'];
                     }
                 }
 

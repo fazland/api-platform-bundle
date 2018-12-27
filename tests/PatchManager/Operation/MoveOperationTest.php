@@ -25,7 +25,7 @@ class MoveOperationTest extends TestCase
         $obj = ['one' => 'foo'];
         $this->operation->execute($obj, (object) ['path' => '/two', 'from' => '/one']);
 
-        $this->assertArrayNotHasKey('one', $obj);
-        $this->assertEquals('foo', $obj['two']);
+        self::assertArrayNotHasKey('one', $obj);
+        self::assertEquals('foo', $obj['two']);
     }
 }

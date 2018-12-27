@@ -112,22 +112,22 @@ class ViewHandler implements EventSubscriberInterface
     public function onController(FilterControllerEvent $event): void
     {
         $controller = $event->getController();
-        if (! is_array($controller) && method_exists($controller, '__invoke')) {
+        if (! \is_array($controller) && \method_exists($controller, '__invoke')) {
             $controller = [$controller, '__invoke'];
         }
 
-        if (! is_array($controller)) {
+        if (! \is_array($controller)) {
             return;
         }
 
-        $className = class_exists(ClassUtils::class) ? ClassUtils::getClass($controller[0]) : get_class($controller[0]);
+        $className = \class_exists(ClassUtils::class) ? ClassUtils::getClass($controller[0]) : \get_class($controller[0]);
         $object = new \ReflectionClass($className);
         $method = $object->getMethod($controller[1]);
 
         $doc = $method->getDocComment();
-        if (false !== $doc && false !== stripos($doc, '@deprecated') && preg_match('#^(?:/\*\*|\s*+\*)\s*+@deprecated(.*)$#mi', $doc, $matches)) {
+        if (false !== $doc && false !== \stripos($doc, '@deprecated') && \preg_match('#^(?:/\*\*|\s*+\*)\s*+@deprecated(.*)$#mi', $doc, $matches)) {
             $request = $event->getRequest();
-            $request->attributes->set('_deprecated', isset($matches[1]) && $matches[1] ? trim($matches[1]) : true);
+            $request->attributes->set('_deprecated', isset($matches[1]) && $matches[1] ? \trim($matches[1]) : true);
         }
     }
 

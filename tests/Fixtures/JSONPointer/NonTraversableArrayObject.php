@@ -23,7 +23,7 @@ class NonTraversableArrayObject implements \ArrayAccess, \Countable, \Serializab
      */
     public function offsetExists($offset): bool
     {
-        return array_key_exists($offset, $this->array);
+        return \array_key_exists($offset, $this->array);
     }
 
     /**
@@ -59,7 +59,7 @@ class NonTraversableArrayObject implements \ArrayAccess, \Countable, \Serializab
      */
     public function count(): int
     {
-        return count($this->array);
+        return \count($this->array);
     }
 
     /**
@@ -67,7 +67,7 @@ class NonTraversableArrayObject implements \ArrayAccess, \Countable, \Serializab
      */
     public function serialize(): string
     {
-        return serialize($this->array);
+        return \serialize($this->array);
     }
 
     /**
@@ -75,6 +75,6 @@ class NonTraversableArrayObject implements \ArrayAccess, \Countable, \Serializab
      */
     public function unserialize($serialized): void
     {
-        $this->array = (array) unserialize((string) $serialized);
+        $this->array = (array) \unserialize((string) $serialized);
     }
 }

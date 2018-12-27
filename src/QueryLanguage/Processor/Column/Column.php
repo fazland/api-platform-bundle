@@ -5,7 +5,6 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Processor\Column;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\EntityManagerInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine\DiscriminatorWalker;
-use Fazland\ApiPlatformBundle\QueryLanguage\Walker\TreeWalkerInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\EnumWalker;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\ValidationWalkerInterface;
 
@@ -100,7 +99,7 @@ class Column
 
     public function isAssociation(): bool
     {
-        return isset($this->mapping['targetEntity']) || 0 < count($this->associations);
+        return isset($this->mapping['targetEntity']) || 0 < \count($this->associations);
     }
 
     public function isManyToMany(): bool
@@ -115,18 +114,18 @@ class Column
 
     private function getFieldMapping(ClassMetadata $classMetadata, string $fieldName): array
     {
-        $dots = substr_count($fieldName, '.');
-        $revFieldName = strrev($fieldName);
+        $dots = \substr_count($fieldName, '.');
+        $revFieldName = \strrev($fieldName);
 
         $rootField = $classMetadata->fieldMappings[$fieldName] ??
             $classMetadata->associationMappings[$fieldName] ?? null;
         $rest = null;
 
-        for($i = 1; $i <= $dots + 1; $i++) {
-            $field = explode('.', $revFieldName, $i);
-            $field = strrev(end($field));
+        for ($i = 1; $i <= $dots + 1; ++$i) {
+            $field = \explode('.', $revFieldName, $i);
+            $field = \strrev(\end($field));
 
-            $rest = strlen($field) !== strlen($fieldName) ? substr($fieldName, strlen($field) + 1) : null;
+            $rest = \strlen($field) !== \strlen($fieldName) ? \substr($fieldName, \strlen($field) + 1) : null;
 
             $rootField = $classMetadata->fieldMappings[$field] ??
                 $classMetadata->associationMappings[$field] ?? null;

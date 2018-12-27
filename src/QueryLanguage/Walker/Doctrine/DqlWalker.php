@@ -34,23 +34,24 @@ class DqlWalker extends AbstractWalker
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkComparison(string $operator, ValueExpression $expression)
     {
         $field = $this->field;
-        if ($operator === 'like') {
+        if ('like' === $operator) {
             $field = 'LOWER('.$field.')';
             $expression = StringExpression::create('%'.$expression.'%');
         }
 
         $parameterName = $this->generateParameterName();
         $this->queryBuilder->setParameter($parameterName, $expression->dispatch($this));
+
         return new Expr\Comparison($field, self::COMPARISON_MAP[$operator], ':'.$parameterName);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function walkAll()
     {
@@ -58,7 +59,7 @@ class DqlWalker extends AbstractWalker
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkOrder(string $field, string $direction)
     {
@@ -66,7 +67,7 @@ class DqlWalker extends AbstractWalker
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkNot(ExpressionInterface $expression)
     {
@@ -74,27 +75,27 @@ class DqlWalker extends AbstractWalker
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkAnd(array $arguments)
     {
-        return new Expr\Andx(array_map(function (ExpressionInterface $expression) {
+        return new Expr\Andx(\array_map(function (ExpressionInterface $expression) {
             return $expression->dispatch($this);
         }, $arguments));
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkOr(array $arguments)
     {
-        return new Expr\Orx(array_map(function (ExpressionInterface $expression) {
+        return new Expr\Orx(\array_map(function (ExpressionInterface $expression) {
             return $expression->dispatch($this);
         }, $arguments));
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function walkEntry(string $key, ExpressionInterface $expression)
     {
@@ -111,10 +112,10 @@ class DqlWalker extends AbstractWalker
     protected function generateParameterName(): string
     {
         $params = $this->queryBuilder->getParameters();
-        $underscoreField = mb_strtolower(
-            preg_replace('/(?|(?<=[a-z0-9])([A-Z])|(?<=[A-Z]{2})([a-z]))/', '_$1', $this->field)
+        $underscoreField = \mb_strtolower(
+            \preg_replace('/(?|(?<=[a-z0-9])([A-Z])|(?<=[A-Z]{2})([a-z]))/', '_$1', $this->field)
         );
-        $parameterName = $origParamName = preg_replace('/\W+/', '_', $underscoreField);
+        $parameterName = $origParamName = \preg_replace('/\W+/', '_', $underscoreField);
 
         $filter = function (Parameter $parameter) use (&$parameterName): bool {
             return $parameter->getName() === $parameterName;
@@ -122,7 +123,7 @@ class DqlWalker extends AbstractWalker
 
         $i = 1;
         while (0 < $params->filter($filter)->count()) {
-            $parameterName = $origParamName . '_' . $i++;
+            $parameterName = $origParamName.'_'.$i++;
         }
 
         return $parameterName;

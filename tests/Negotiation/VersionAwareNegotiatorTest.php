@@ -48,21 +48,21 @@ class VersionAwareNegotiatorTest extends TestCase
         try {
             $acceptHeader = $this->negotiator->getBest($header, $priorities);
         } catch (\Exception $e) {
-            $this->assertEquals($expected, $e);
+            self::assertEquals($expected, $e);
 
             return;
         }
 
         if (null === $acceptHeader) {
-            $this->assertNull($expected);
+            self::assertNull($expected);
 
             return;
         }
 
-        $this->assertInstanceOf(Priority::class, $acceptHeader);
+        self::assertInstanceOf(Priority::class, $acceptHeader);
 
-        $this->assertSame($expected[0], $acceptHeader->getType());
-        $this->assertSame($expected[1], $acceptHeader->getParameters());
+        self::assertSame($expected[0], $acceptHeader->getType());
+        self::assertSame($expected[1], $acceptHeader->getParameters());
     }
 
     public static function dataProviderForTestGetBest(): iterable

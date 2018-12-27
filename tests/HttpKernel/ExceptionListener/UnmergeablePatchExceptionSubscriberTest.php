@@ -28,7 +28,7 @@ class UnmergeablePatchExceptionSubscriberTest extends WebTestCase
 
     public function testShouldSubscribeExceptionEvent(): void
     {
-        $this->assertArrayHasKey('kernel.exception', UnmergeablePatchExceptionSubscriber::getSubscribedEvents());
+        self::assertArrayHasKey('kernel.exception', UnmergeablePatchExceptionSubscriber::getSubscribedEvents());
     }
 
     public function testShouldSkipIncorrectExceptions(): void
@@ -64,7 +64,7 @@ class UnmergeablePatchExceptionSubscriberTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
-        $this->assertJsonStringEqualsJsonString('{"error":"Invalid."}', $response->getContent());
+        self::assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+        self::assertJsonStringEqualsJsonString('{"error":"Invalid."}', $response->getContent());
     }
 }

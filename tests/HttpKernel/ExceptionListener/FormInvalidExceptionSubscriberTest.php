@@ -31,7 +31,7 @@ class FormInvalidExceptionSubscriberTest extends WebTestCase
 
     public function testShouldSubscribeExceptionEvent(): void
     {
-        $this->assertArrayHasKey('kernel.exception', FormInvalidExceptionSubscriber::getSubscribedEvents());
+        self::assertArrayHasKey('kernel.exception', FormInvalidExceptionSubscriber::getSubscribedEvents());
     }
 
     public function testShouldSkipIncorrectExceptions(): void
@@ -78,7 +78,7 @@ class FormInvalidExceptionSubscriberTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        $this->assertJsonStringEqualsJsonString('{"errors":[],"children":[{"errors":["Foo error."],"children":[],"name":"first"},{"errors":[],"children":[],"name":"second"}],"name":"form"}', $response->getContent());
+        self::assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertJsonStringEqualsJsonString('{"errors":[],"children":[{"errors":["Foo error."],"children":[],"name":"first"},{"errors":[],"children":[],"name":"second"}],"name":"form"}', $response->getContent());
     }
 }

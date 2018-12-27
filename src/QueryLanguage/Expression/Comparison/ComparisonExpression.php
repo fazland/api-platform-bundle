@@ -16,7 +16,7 @@ abstract class ComparisonExpression implements ComparisonExpressionInterface
     private $value;
 
     /**
-     * Can be <, <=, >, >=, =
+     * Can be <, <=, >, >=, =.
      *
      * @var string
      */
@@ -51,7 +51,7 @@ abstract class ComparisonExpression implements ComparisonExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function dispatch(TreeWalkerInterface $treeWalker)
     {

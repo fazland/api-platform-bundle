@@ -25,6 +25,6 @@ class AddOperationTest extends TestCase
         $obj = [];
         $this->operation->execute($obj, (object) ['path' => '/one', 'value' => 'foo']);
 
-        $this->assertEquals('foo', $obj['one']);
+        self::assertEquals('foo', $obj['one']);
     }
 }

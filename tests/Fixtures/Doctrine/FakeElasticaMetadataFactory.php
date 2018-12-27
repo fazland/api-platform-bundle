@@ -25,7 +25,7 @@ class FakeElasticaMetadataFactory extends MetadataFactory
      */
     public function getAllMetadata(): array
     {
-        return array_values($this->_metadata);
+        return \array_values($this->_metadata);
     }
 
     /**

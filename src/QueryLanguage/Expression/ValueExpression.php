@@ -29,7 +29,7 @@ class ValueExpression implements ExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function dispatch(TreeWalkerInterface $treeWalker)
     {
@@ -37,7 +37,7 @@ class ValueExpression implements ExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function __toString(): string
     {

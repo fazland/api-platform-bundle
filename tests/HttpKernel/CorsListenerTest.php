@@ -70,7 +70,7 @@ class CorsListenerTest extends WebTestCase
         );
 
         $this->listener->onException($event);
-        $this->assertFalse($event->hasResponse());
+        self::assertFalse($event->hasResponse());
     }
 
     public function testOnExceptionShouldSetAResponse(): void
@@ -91,26 +91,26 @@ class CorsListenerTest extends WebTestCase
 
         $this->listener->onException($event);
 
-        $this->assertTrue($event->hasResponse());
+        self::assertTrue($event->hasResponse());
 
-        if (method_exists($event, 'isAllowingCustomResponseCode')) {
-            $this->assertTrue($event->isAllowingCustomResponseCode());
+        if (\method_exists($event, 'isAllowingCustomResponseCode')) {
+            self::assertTrue($event->isAllowingCustomResponseCode());
         }
 
         $response = $event->getResponse();
-        $this->assertEquals(200, $response->getStatusCode());
+        self::assertEquals(200, $response->getStatusCode());
 
         $headers = $response->headers->all();
-        $this->assertArrayHasKey('access-control-allow-credentials', $headers);
-        $this->assertEquals(['true'], $headers['access-control-allow-credentials']);
-        $this->assertArrayHasKey('access-control-allow-methods', $headers);
-        $this->assertEquals(['GET, POST'], $headers['access-control-allow-methods']);
-        $this->assertArrayHasKey('allow', $headers);
-        $this->assertEquals(['GET, POST'], $headers['allow']);
-        $this->assertArrayHasKey('access-control-allow-headers', $headers);
-        $this->assertEquals(['Authorization'], $headers['access-control-allow-headers']);
-        $this->assertArrayHasKey('access-control-expose-headers', $headers);
-        $this->assertEquals(['Authorization, Content-Length, X-Total-Count, X-Continuation-Token'], $headers['access-control-expose-headers']);
+        self::assertArrayHasKey('access-control-allow-credentials', $headers);
+        self::assertEquals(['true'], $headers['access-control-allow-credentials']);
+        self::assertArrayHasKey('access-control-allow-methods', $headers);
+        self::assertEquals(['GET, POST'], $headers['access-control-allow-methods']);
+        self::assertArrayHasKey('allow', $headers);
+        self::assertEquals(['GET, POST'], $headers['allow']);
+        self::assertArrayHasKey('access-control-allow-headers', $headers);
+        self::assertEquals(['Authorization'], $headers['access-control-allow-headers']);
+        self::assertArrayHasKey('access-control-expose-headers', $headers);
+        self::assertEquals(['Authorization, Content-Length, X-Total-Count, X-Continuation-Token'], $headers['access-control-expose-headers']);
     }
 
     public function testOnResponseShouldNotSetHeaderIfNoOriginIsSpecified(): void
@@ -127,7 +127,7 @@ class CorsListenerTest extends WebTestCase
 
         $this->listener->onResponse($event);
 
-        $this->assertFalse($response->headers->has('Access-Control-Allow-Origin'));
+        self::assertFalse($response->headers->has('Access-Control-Allow-Origin'));
     }
 
     public function testOnResponseShouldNotSetHeaderIfOriginIsStar(): void
@@ -144,7 +144,7 @@ class CorsListenerTest extends WebTestCase
 
         $this->listener->onResponse($event);
 
-        $this->assertFalse($response->headers->has('Access-Control-Allow-Origin'));
+        self::assertFalse($response->headers->has('Access-Control-Allow-Origin'));
     }
 
     public function testOnResponseShouldSetHeaderAsStar(): void
@@ -161,8 +161,8 @@ class CorsListenerTest extends WebTestCase
 
         $this->listener->onResponse($event);
 
-        $this->assertTrue($response->headers->has('Access-Control-Allow-Origin'));
-        $this->assertEquals('*', $response->headers->get('Access-Control-Allow-Origin'));
+        self::assertTrue($response->headers->has('Access-Control-Allow-Origin'));
+        self::assertEquals('*', $response->headers->get('Access-Control-Allow-Origin'));
     }
 
     public function testOnResponseShouldNotSetHeaderIfOriginIsNotAllowed(): void
@@ -180,7 +180,7 @@ class CorsListenerTest extends WebTestCase
         $listener = new CorsListener(['www.foobar.com']);
         $listener->onResponse($event);
 
-        $this->assertFalse($response->headers->has('Access-Control-Allow-Origin'));
+        self::assertFalse($response->headers->has('Access-Control-Allow-Origin'));
     }
 
     public function testOnResponseShouldSetHeaderIfOriginIsAllowed(): void
@@ -198,8 +198,8 @@ class CorsListenerTest extends WebTestCase
         $listener = new CorsListener(['*.foobar.com']);
         $listener->onResponse($event);
 
-        $this->assertTrue($response->headers->has('Access-Control-Allow-Origin'));
-        $this->assertEquals('https://www.foobar.com', $response->headers->get('Access-Control-Allow-Origin'));
+        self::assertTrue($response->headers->has('Access-Control-Allow-Origin'));
+        self::assertEquals('https://www.foobar.com', $response->headers->get('Access-Control-Allow-Origin'));
     }
 
     public function testListenerShouldWork(): void
@@ -209,7 +209,7 @@ class CorsListenerTest extends WebTestCase
         $client->request('OPTIONS', '/', [], [], ['HTTP_ORIGIN' => 'https://localhost']);
         $response = $client->getResponse();
 
-        $this->assertEquals('*', $response->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals(Kernel::VERSION_ID < 30000 ? 'GET, HEAD' : 'GET', $response->headers->get('Access-Control-Allow-Methods'));
+        self::assertEquals('*', $response->headers->get('Access-Control-Allow-Origin'));
+        self::assertEquals(Kernel::VERSION_ID < 30000 ? 'GET, HEAD' : 'GET', $response->headers->get('Access-Control-Allow-Methods'));
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Fazland\ApiPlatformBundle\Pagination;
 
-use Cake\Chronos\Chronos;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -56,14 +55,14 @@ class PagerIterator implements \Iterator
             $this->orderBy = new Orderings($orderBy);
         }
 
-        if (count($this->orderBy) < 2) {
+        if (\count($this->orderBy) < 2) {
             throw new \RuntimeException('orderBy must have at least 2 "field"=>"direction(ASC|DESC)". The first is the reference timestamp, the second is the checksum field.');
         }
 
-        $objects = is_array($objects) ? $objects : iterator_to_array($objects);
-        uasort($objects, [$this, 'sort']);
+        $objects = \is_array($objects) ? $objects : \iterator_to_array($objects);
+        \uasort($objects, [$this, 'sort']);
 
-        $this->objects = array_values($objects);
+        $this->objects = \array_values($objects);
     }
 
     /**
@@ -71,7 +70,7 @@ class PagerIterator implements \Iterator
      */
     public function current()
     {
-        return current($this->page);
+        return \current($this->page);
     }
 
     /**
@@ -79,8 +78,8 @@ class PagerIterator implements \Iterator
      */
     public function next()
     {
-        $check = next($this->page);
-        $this->valid = false !== $check || null !== key($this->page);
+        $check = \next($this->page);
+        $this->valid = false !== $check || null !== \key($this->page);
     }
 
     /**
@@ -88,7 +87,7 @@ class PagerIterator implements \Iterator
      */
     public function key()
     {
-        return key($this->page);
+        return \key($this->page);
     }
 
     /**
@@ -108,8 +107,8 @@ class PagerIterator implements \Iterator
             $this->page = $this->getPage();
         }
 
-        reset($this->page);
-        $this->valid = count($this->page) > 0;
+        \reset($this->page);
+        $this->valid = \count($this->page) > 0;
     }
 
     /**
@@ -157,9 +156,9 @@ class PagerIterator implements \Iterator
             return null;
         }
 
-        $refObjects = iterator_to_array($this->getLastObjectsWithCommonTimestamp($this->page), false);
+        $refObjects = \iterator_to_array($this->getLastObjectsWithCommonTimestamp($this->page), false);
 
-        return new PageToken($this->getTimestampForObject($refObjects[0]), count($refObjects), $this->getChecksumForObjects($refObjects));
+        return new PageToken($this->getTimestampForObject($refObjects[0]), \count($refObjects), $this->getChecksumForObjects($refObjects));
     }
 
     /**
@@ -184,7 +183,7 @@ class PagerIterator implements \Iterator
     {
         $order = $this->orderBy[0];
 
-        return array_filter($objects, function ($entity) use ($order) {
+        return \array_filter($objects, function ($entity) use ($order) {
             $referenceTimestamp = $this->token->getTimestamp();
             $value = self::getAccessor()->getValue($entity, $order[0]);
 
@@ -206,7 +205,7 @@ class PagerIterator implements \Iterator
      */
     protected function checksumDiffers($objects): bool
     {
-        $head = array_slice($objects, 0, $this->token->getOffset());
+        $head = \array_slice($objects, 0, $this->token->getOffset());
 
         $referenceObjects = $this->getLastObjectsWithCommonTimestamp($head);
         $referenceChecksum = $this->getChecksumForObjects($referenceObjects);
@@ -224,7 +223,7 @@ class PagerIterator implements \Iterator
      */
     protected function timestampDiffers($objects): bool
     {
-        $reference = reset($objects);
+        $reference = \reset($objects);
 
         return $this->getTimestampForObject($reference) !== $this->token->getTimestamp();
     }
@@ -252,23 +251,23 @@ class PagerIterator implements \Iterator
     private function getPage(): array
     {
         $objects = $this->getObjects();
-        if (0 === count($objects) || 0 === $this->pageSize) {
+        if (0 === \count($objects) || 0 === $this->pageSize) {
             return [];
         }
 
         if (null === $this->token) {
             //First call: continuous token is not present, so we return the first page of objects
-            return array_slice($objects, 0, $this->pageSize);
+            return \array_slice($objects, 0, $this->pageSize);
         }
 
         $objects = $this->filterObjects($objects);
-        if (0 === count($objects)) {
+        if (0 === \count($objects)) {
             return [];
         }
 
         if ($this->timestampDiffers($objects) || $this->checksumDiffers($objects)) {
             // Fallback: deliver all the first-page of the filtered elements involved (the elements >= timestamp requested)
-            return array_slice($objects, 0, $this->pageSize);
+            return \array_slice($objects, 0, $this->pageSize);
         }
 
         /*
@@ -276,7 +275,7 @@ class PagerIterator implements \Iterator
          *  This means multiple objects have the same timestamp and different offset, so this value
          *  must be taken into account
          */
-        return array_slice($objects, $this->token->getOffset(), $this->pageSize);
+        return \array_slice($objects, $this->token->getOffset(), $this->pageSize);
     }
 
     /**
@@ -290,12 +289,12 @@ class PagerIterator implements \Iterator
      */
     private function getLastObjectsWithCommonTimestamp(array $objects): iterable
     {
-        $reference = array_pop($objects);
+        $reference = \array_pop($objects);
         $referenceTimestamp = $this->getTimestampForObject($reference);
 
         yield $reference;
 
-        foreach (array_reverse($objects, false) as $object) {
+        foreach (\array_reverse($objects, false) as $object) {
             if ($this->getTimestampForObject($object) !== $referenceTimestamp) {
                 break;
             }
@@ -343,7 +342,7 @@ class PagerIterator implements \Iterator
             $idArray[] = $propertyAccessor->getValue($object, $order[0]);
         }
 
-        return crc32(implode(',', $idArray));
+        return \crc32(\implode(',', $idArray));
     }
 
     /**

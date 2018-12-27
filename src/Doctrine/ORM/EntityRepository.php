@@ -39,7 +39,7 @@ class EntityRepository extends BaseRepository implements ObjectRepository
     {
         $query = $this->buildQueryForFind($criteria, $orderBy);
         $query->setMaxResults(1);
-        $query->useResultCache(true, $ttl, '__'.get_called_class().'::'.__FUNCTION__.sha1(serialize(func_get_args())));
+        $query->useResultCache(true, $ttl, '__'.\get_called_class().'::'.__FUNCTION__.\sha1(\serialize(\func_get_args())));
 
         try {
             return $query->getOneOrNullResult();
@@ -67,7 +67,7 @@ class EntityRepository extends BaseRepository implements ObjectRepository
             $query->setFirstResult($offset);
         }
 
-        $query->useResultCache(true, $ttl, '__'.get_called_class().'::'.__FUNCTION__.sha1(serialize(func_get_args())));
+        $query->useResultCache(true, $ttl, '__'.\get_called_class().'::'.__FUNCTION__.\sha1(\serialize(\func_get_args())));
 
         return $query->getResult();
     }
@@ -107,7 +107,7 @@ class EntityRepository extends BaseRepository implements ObjectRepository
     {
         $query = $this->buildQueryForFind($criteria, $orderBy);
         $query->setMaxResults(1);
-        $query->useResultCache(true, $ttl, '__'.get_called_class().'::'.__FUNCTION__.sha1(serialize(func_get_args())));
+        $query->useResultCache(true, $ttl, '__'.\get_called_class().'::'.__FUNCTION__.\sha1(\serialize(\func_get_args())));
 
         try {
             return $query->getSingleResult();
@@ -144,7 +144,7 @@ class EntityRepository extends BaseRepository implements ObjectRepository
         $qb = $this->createQueryBuilder('a');
         $and = $qb->expr()->andX();
         foreach ($criteria as $key => $value) {
-            $condition = is_array($value) ?
+            $condition = \is_array($value) ?
                 $qb->expr()->in("a.$key", ":$key") :
                 $qb->expr()->eq("a.$key", ":$key");
             $and->add($condition);

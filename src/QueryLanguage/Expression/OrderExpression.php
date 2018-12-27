@@ -43,7 +43,7 @@ final class OrderExpression implements ExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function __toString(): string
     {
@@ -51,7 +51,7 @@ final class OrderExpression implements ExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function dispatch(TreeWalkerInterface $treeWalker)
     {

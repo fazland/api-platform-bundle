@@ -18,7 +18,7 @@ class EnumWalker extends ValidationWalker
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkLiteral(LiteralExpression $expression)
     {
@@ -30,7 +30,7 @@ class EnumWalker extends ValidationWalker
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function walkOrder(string $field, string $direction)
     {
@@ -38,7 +38,7 @@ class EnumWalker extends ValidationWalker
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function walkEntry(string $key, ExpressionInterface $expression)
     {

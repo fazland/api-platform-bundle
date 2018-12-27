@@ -36,7 +36,7 @@ class OperationFactoryTest extends TestCase
      */
     public function testFactoryShouldReturnAnOperationObject(string $op): void
     {
-        $this->assertInstanceOf(OperationInterface::class, $this->factory->factory($op));
+        self::assertInstanceOf(OperationInterface::class, $this->factory->factory($op));
     }
 
     /**

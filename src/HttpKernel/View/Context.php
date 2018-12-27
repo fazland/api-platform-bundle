@@ -23,7 +23,7 @@ class Context
         $this->request = $request;
 
         if (null === $tokenStorage ||
-            null === ($token = $tokenStorage->getToken()) || ! is_object($token->getUser())) {
+            null === ($token = $tokenStorage->getToken()) || ! \is_object($token->getUser())) {
             $this->user = null;
         } else {
             $this->user = $token->getUser();

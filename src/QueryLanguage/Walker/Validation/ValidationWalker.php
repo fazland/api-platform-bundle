@@ -9,14 +9,14 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
 class ValidationWalker implements ValidationWalkerInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function walkLiteral(LiteralExpression $expression)
     {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkComparison(string $operator, ValueExpression $expression)
     {
@@ -26,21 +26,21 @@ class ValidationWalker implements ValidationWalkerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkAll()
     {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkOrder(string $field, string $direction)
     {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkNot(ExpressionInterface $expression)
     {
@@ -48,7 +48,7 @@ class ValidationWalker implements ValidationWalkerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkAnd(array $arguments)
     {
@@ -58,7 +58,7 @@ class ValidationWalker implements ValidationWalkerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkOr(array $arguments)
     {
@@ -68,7 +68,7 @@ class ValidationWalker implements ValidationWalkerInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkEntry(string $key, ExpressionInterface $expression)
     {

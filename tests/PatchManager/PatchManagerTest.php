@@ -236,7 +236,7 @@ class PatchManagerTest extends TestCase
 
         $this->patchManager->patch($object->reveal(), $request->reveal());
 
-        $this->assertSame([
+        self::assertSame([
             'b' => [
                 'b' => ['fooz', 'barz'],
                 'd' => 42,

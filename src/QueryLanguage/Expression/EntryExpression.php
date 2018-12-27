@@ -49,15 +49,15 @@ final class EntryExpression implements ExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function __toString(): string
     {
-        return '$entry('.(string)$this->key.', '.(string)$this->value.')';
+        return '$entry('.(string) $this->key.', '.(string) $this->value.')';
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function dispatch(TreeWalkerInterface $treeWalker)
     {

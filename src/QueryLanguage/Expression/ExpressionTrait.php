@@ -14,8 +14,8 @@ trait ExpressionTrait
         }
 
         throw new InvalidArgumentException(
-            self::getShortName() . ' accepts only literal expressions as argument' .
-            (null !== $argNo ? ' #'.$argNo : '').'. Passed '.(string)$value
+            self::getShortName().' accepts only literal expressions as argument'.
+            (null !== $argNo ? ' #'.$argNo : '').'. Passed '.(string) $value
         );
     }
 
@@ -23,6 +23,6 @@ trait ExpressionTrait
     {
         $reflClass = new \ReflectionClass(self::class);
 
-        return preg_replace('/Expression$/', '', $reflClass->getShortName());
+        return \preg_replace('/Expression$/', '', $reflClass->getShortName());
     }
 }

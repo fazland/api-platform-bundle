@@ -79,9 +79,9 @@ trait MongoDocumentManagerMockTrait
             $this->_connection = new Connection($server->reveal());
 
             $this->_configuration = new Configuration();
-            $this->_configuration->setHydratorDir(sys_get_temp_dir());
+            $this->_configuration->setHydratorDir(\sys_get_temp_dir());
             $this->_configuration->setHydratorNamespace('__TMP__\\HydratorNamespace');
-            $this->_configuration->setProxyDir(sys_get_temp_dir());
+            $this->_configuration->setProxyDir(\sys_get_temp_dir());
             $this->_configuration->setProxyNamespace('__TMP__\\ProxyNamespace');
 
             $this->_documentManager = DocumentManager::create($this->_connection, $this->_configuration);

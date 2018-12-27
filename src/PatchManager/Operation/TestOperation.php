@@ -28,8 +28,8 @@ class TestOperation extends AbstractOperation
             $value = false;
         }
 
-        if (is_bool($value)) {
-            return is_bool($objectValue) && $objectValue === $value;
+        if (\is_bool($value)) {
+            return \is_bool($objectValue) && $objectValue === $value;
         }
 
         if ($objectValue == $value) {
@@ -37,13 +37,13 @@ class TestOperation extends AbstractOperation
             return true;
         }
 
-        if (is_object($value)) {
-            $value = json_decode(json_encode($value), true);
+        if (\is_object($value)) {
+            $value = \json_decode(\json_encode($value), true);
         }
 
-        if (is_array($value)) {
-            if (is_object($objectValue)) {
-                $objectValue = json_decode(json_encode($objectValue), true);
+        if (\is_array($value)) {
+            if (\is_object($objectValue)) {
+                $objectValue = \json_decode(\json_encode($objectValue), true);
             }
 
             $this->sort($value);
@@ -62,10 +62,10 @@ class TestOperation extends AbstractOperation
      */
     private function sort(array &$json): void
     {
-        ksort($json);
+        \ksort($json);
 
         foreach ($json as &$value) {
-            if (! is_array($value)) {
+            if (! \is_array($value)) {
                 continue;
             }
 

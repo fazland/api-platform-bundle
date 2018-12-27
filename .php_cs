@@ -2,6 +2,7 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->in([__DIR__])
+    ->notName('*.template.php')
     ->notPath('/tests\/Fixtures\/.*\/cache/')
     ->notPath('vendor')
 ;
@@ -22,6 +23,8 @@ return PhpCsFixer\Config::create()
         'no_unused_imports' => true,
         'not_operator_with_successor_space' => true,
         'ordered_imports' => true,
-        'declare_strict_types' => true
+        'declare_strict_types' => true,
+        'native_function_invocation' => true,
+        'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
     ])
 ;

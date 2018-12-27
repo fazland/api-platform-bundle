@@ -2,7 +2,6 @@
 
 namespace Fazland\ApiPlatformBundle\PatchManager\Operation;
 
-use Fazland\ApiPlatformBundle\JSONPointer\Path;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 

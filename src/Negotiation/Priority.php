@@ -26,9 +26,9 @@ class Priority extends BaseAccept implements AcceptHeader
     public function __construct($value)
     {
         parent::__construct($value);
-        $parts = explode('/', $this->type);
+        $parts = \explode('/', $this->type);
 
-        if (2 !== count($parts) || ! $parts[0] || ! $parts[1]) {
+        if (2 !== \count($parts) || ! $parts[0] || ! $parts[1]) {
             throw new InvalidMediaType();
         }
 

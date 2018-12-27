@@ -7,20 +7,20 @@ class TypeError extends \TypeError
     /**
      * Creates and format an argument invalid error.
      *
-     * @param int $no Argument number
-     * @param string $function Function generating the error
+     * @param int             $no       Argument number
+     * @param string          $function Function generating the error
      * @param string|string[] $expected Expected type(s)
-     * @param mixed $given Given value
+     * @param mixed           $given    Given value
      *
      * @return self
      */
     public static function createArgumentInvalid(int $no, string $function, $expected, $given): self
     {
-        $message = sprintf(
+        $message = \sprintf(
             'Argument %u passed to %s must be of type %s, %s given',
             $no, $function,
             self::formatExpected($expected),
-            is_object($given) ? get_class($given) : gettype($given)
+            \is_object($given) ? \get_class($given) : \gettype($given)
         );
 
         return new self($message);
@@ -35,12 +35,12 @@ class TypeError extends \TypeError
      */
     private static function formatExpected($expected): string
     {
-        if (! is_array($expected)) {
+        if (! \is_array($expected)) {
             return $expected;
         }
 
-        $last = array_pop($expected);
+        $last = \array_pop($expected);
 
-        return implode(', ', $expected).' or '.$last;
+        return \implode(', ', $expected).' or '.$last;
     }
 }

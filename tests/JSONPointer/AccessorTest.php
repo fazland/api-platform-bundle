@@ -82,7 +82,7 @@ class AccessorTest extends TestCase
      */
     public function testGetValue($objectOrArray, string $path, $value): void
     {
-        $this->assertSame($value, $this->propertyAccessor->getValue($objectOrArray, $path));
+        self::assertSame($value, $this->propertyAccessor->getValue($objectOrArray, $path));
     }
 
     /**
@@ -99,7 +99,7 @@ class AccessorTest extends TestCase
      */
     public function testGetValueThrowsNoExceptionIfIndexNotFound($objectOrArray, string $path): void
     {
-        $this->assertNull($this->propertyAccessor->getValue($objectOrArray, $path));
+        self::assertNull($this->propertyAccessor->getValue($objectOrArray, $path));
     }
 
     /**
@@ -112,7 +112,7 @@ class AccessorTest extends TestCase
 
     public function testGetValueReadsMagicGet(): void
     {
-        $this->assertSame('Bernhard', $this->propertyAccessor->getValue(new TestClassMagicGet('Bernhard'), '/magicProperty'));
+        self::assertSame('Bernhard', $this->propertyAccessor->getValue(new TestClassMagicGet('Bernhard'), '/magicProperty'));
     }
 
     /**
@@ -128,14 +128,14 @@ class AccessorTest extends TestCase
         $object = new \ArrayObject();
         $array = ['child' => ['index' => $object]];
 
-        $this->assertNull($this->propertyAccessor->getValue($array, '/child/index/foo/bar'));
-        $this->assertSame([], $object->getArrayCopy());
+        self::assertNull($this->propertyAccessor->getValue($array, '/child/index/foo/bar'));
+        self::assertSame([], $object->getArrayCopy());
     }
 
     // https://github.com/symfony/symfony/pull/4450
     public function testGetValueReadsMagicGetThatReturnsConstant(): void
     {
-        $this->assertSame('constant value', $this->propertyAccessor->getValue(new TestClassMagicGet('Bernhard'), '/constantMagicProperty'));
+        self::assertSame('constant value', $this->propertyAccessor->getValue(new TestClassMagicGet('Bernhard'), '/constantMagicProperty'));
     }
 
     public function testGetValueNotModifyObject(): void
@@ -143,8 +143,8 @@ class AccessorTest extends TestCase
         $object = new \stdClass();
         $object->firstName = ['Bernhard'];
 
-        $this->assertNull($this->propertyAccessor->getValue($object, '/firstName/1'));
-        $this->assertSame(['Bernhard'], $object->firstName);
+        self::assertNull($this->propertyAccessor->getValue($object, '/firstName/1'));
+        self::assertSame(['Bernhard'], $object->firstName);
     }
 
     public function testGetValueNotModifyObjectException(): void
@@ -158,7 +158,7 @@ class AccessorTest extends TestCase
         } catch (NoSuchIndexException $e) {
         }
 
-        $this->assertSame(['Bernhard'], $object->firstName);
+        self::assertSame(['Bernhard'], $object->firstName);
     }
 
     /**
@@ -178,7 +178,7 @@ class AccessorTest extends TestCase
     {
         $this->propertyAccessor->setValue($objectOrArray, $path, 'Updated');
 
-        $this->assertSame('Updated', $this->propertyAccessor->getValue($objectOrArray, $path));
+        self::assertSame('Updated', $this->propertyAccessor->getValue($objectOrArray, $path));
     }
 
     /**
@@ -188,7 +188,7 @@ class AccessorTest extends TestCase
     {
         $this->propertyAccessor->setValue($objectOrArray, $path = new Path($path), 'Updated');
 
-        $this->assertSame('Updated', $this->propertyAccessor->getValue($objectOrArray, $path));
+        self::assertSame('Updated', $this->propertyAccessor->getValue($objectOrArray, $path));
     }
 
     /**
@@ -207,7 +207,7 @@ class AccessorTest extends TestCase
     {
         $this->propertyAccessor->setValue($objectOrArray, $path, 'Updated');
 
-        $this->assertSame('Updated', $this->propertyAccessor->getValue($objectOrArray, $path));
+        self::assertSame('Updated', $this->propertyAccessor->getValue($objectOrArray, $path));
     }
 
     /**
@@ -218,7 +218,7 @@ class AccessorTest extends TestCase
         $this->propertyAccessor = new Accessor();
         $this->propertyAccessor->setValue($objectOrArray, $path, 'Updated');
 
-        $this->assertSame('Updated', $this->propertyAccessor->getValue($objectOrArray, $path));
+        self::assertSame('Updated', $this->propertyAccessor->getValue($objectOrArray, $path));
     }
 
     /**
@@ -237,7 +237,7 @@ class AccessorTest extends TestCase
 
         $this->propertyAccessor->setValue($author, '/magicProperty', 'Updated');
 
-        $this->assertEquals('Updated', $author->__get('magicProperty'));
+        self::assertEquals('Updated', $author->__get('magicProperty'));
     }
 
     /**
@@ -263,7 +263,7 @@ class AccessorTest extends TestCase
     public function testGetValueWhenArrayValueIsNull(): void
     {
         $this->propertyAccessor = new Accessor();
-        $this->assertNull($this->propertyAccessor->getValue(['index' => ['nullable' => null]], '/index/nullable'));
+        self::assertNull($this->propertyAccessor->getValue(['index' => ['nullable' => null]], '/index/nullable'));
     }
 
     /**
@@ -271,7 +271,7 @@ class AccessorTest extends TestCase
      */
     public function testIsReadable($objectOrArray, string $path): void
     {
-        $this->assertTrue($this->propertyAccessor->isReadable($objectOrArray, $path));
+        self::assertTrue($this->propertyAccessor->isReadable($objectOrArray, $path));
     }
 
     /**
@@ -279,7 +279,7 @@ class AccessorTest extends TestCase
      */
     public function testIsReadableReturnsFalseIfPropertyNotFound($objectOrArray, string $path): void
     {
-        $this->assertFalse($this->propertyAccessor->isReadable($objectOrArray, $path));
+        self::assertFalse($this->propertyAccessor->isReadable($objectOrArray, $path));
     }
 
     /**
@@ -288,17 +288,17 @@ class AccessorTest extends TestCase
     public function testIsReadableReturnsTrueIfIndexNotFound($objectOrArray, string $path): void
     {
         // Non-existing indices can be read. In this case, null is returned
-        $this->assertTrue($this->propertyAccessor->isReadable($objectOrArray, $path));
+        self::assertTrue($this->propertyAccessor->isReadable($objectOrArray, $path));
     }
 
     public function testIsReadableRecognizesMagicGet(): void
     {
-        $this->assertTrue($this->propertyAccessor->isReadable(new TestClassMagicGet('Bernhard'), '/magicProperty'));
+        self::assertTrue($this->propertyAccessor->isReadable(new TestClassMagicGet('Bernhard'), '/magicProperty'));
     }
 
     public function testIsReadableCatchesMagicGetExceptions(): void
     {
-        $this->assertFalse($this->propertyAccessor->isReadable(new TestClassMagicGet('Bernhard'), '/throwing'));
+        self::assertFalse($this->propertyAccessor->isReadable(new TestClassMagicGet('Bernhard'), '/throwing'));
     }
 
     /**
@@ -306,7 +306,7 @@ class AccessorTest extends TestCase
      */
     public function testIsReadableReturnsFalseIfNotObjectOrArray($objectOrArray, string $path): void
     {
-        $this->assertFalse($this->propertyAccessor->isReadable($objectOrArray, $path));
+        self::assertFalse($this->propertyAccessor->isReadable($objectOrArray, $path));
     }
 
     /**
@@ -314,7 +314,7 @@ class AccessorTest extends TestCase
      */
     public function testIsWritable($objectOrArray, string $path): void
     {
-        $this->assertTrue($this->propertyAccessor->isWritable($objectOrArray, $path));
+        self::assertTrue($this->propertyAccessor->isWritable($objectOrArray, $path));
     }
 
     /**
@@ -322,7 +322,7 @@ class AccessorTest extends TestCase
      */
     public function testIsWritableReturnsFalseIfPropertyNotFound($objectOrArray, string $path): void
     {
-        $this->assertFalse($this->propertyAccessor->isWritable($objectOrArray, $path));
+        self::assertFalse($this->propertyAccessor->isWritable($objectOrArray, $path));
     }
 
     /**
@@ -331,7 +331,7 @@ class AccessorTest extends TestCase
     public function testIsWritableReturnsTrueIfIndexNotFound($objectOrArray, string $path): void
     {
         // Non-existing indices can be written. Arrays are created on-demand.
-        $this->assertTrue($this->propertyAccessor->isWritable($objectOrArray, $path));
+        self::assertTrue($this->propertyAccessor->isWritable($objectOrArray, $path));
     }
 
     /**
@@ -342,12 +342,12 @@ class AccessorTest extends TestCase
         $this->propertyAccessor = new Accessor();
 
         // Non-existing indices can be written even if exceptions are enabled
-        $this->assertTrue($this->propertyAccessor->isWritable($objectOrArray, $path));
+        self::assertTrue($this->propertyAccessor->isWritable($objectOrArray, $path));
     }
 
     public function testIsWritableRecognizesMagicSet(): void
     {
-        $this->assertTrue($this->propertyAccessor->isWritable(new TestClassMagicGet('Bernhard'), '/magicProperty'));
+        self::assertTrue($this->propertyAccessor->isWritable(new TestClassMagicGet('Bernhard'), '/magicProperty'));
     }
 
     /**
@@ -355,7 +355,7 @@ class AccessorTest extends TestCase
      */
     public function testIsWritableReturnsFalseIfNotObjectOrArray($objectOrArray, string $path): void
     {
-        $this->assertFalse($this->propertyAccessor->isWritable($objectOrArray, $path));
+        self::assertFalse($this->propertyAccessor->isWritable($objectOrArray, $path));
     }
 
     public function getValidPropertyPaths(): iterable
@@ -413,7 +413,7 @@ class AccessorTest extends TestCase
 
         $this->propertyAccessor->setValue($object, '/property', 'foobar');
 
-        $this->assertEquals('foobar', $object->getProperty());
+        self::assertEquals('foobar', $object->getProperty());
     }
 
     public function testSetValueDeepWithMagicGetter(): void
@@ -421,7 +421,7 @@ class AccessorTest extends TestCase
         $obj = new TestClassMagicGet('foo');
         $obj->publicProperty = ['foo' => ['bar' => 'some_value']];
         $this->propertyAccessor->setValue($obj, '/publicProperty/foo/bar', 'Updated');
-        $this->assertSame('Updated', $obj->publicProperty['foo']['bar']);
+        self::assertSame('Updated', $obj->publicProperty['foo']['bar']);
     }
 
     public function getReferenceChainObjectsForSetValue(): iterable
@@ -442,7 +442,7 @@ class AccessorTest extends TestCase
     {
         $this->propertyAccessor->setValue($object, $path, $value);
 
-        $this->assertEquals($value, $this->propertyAccessor->getValue($object, $path));
+        self::assertEquals($value, $this->propertyAccessor->getValue($object, $path));
     }
 
     public function getReferenceChainObjectsForIsWritable(): iterable
@@ -459,7 +459,7 @@ class AccessorTest extends TestCase
      */
     public function testIsWritableForReferenceChainIssue($object, string $path, $value): void
     {
-        $this->assertEquals($value, $this->propertyAccessor->isWritable($object, $path));
+        self::assertEquals($value, $this->propertyAccessor->isWritable($object, $path));
     }
 
     /**
@@ -478,7 +478,7 @@ class AccessorTest extends TestCase
         $object = new TypeHinted();
 
         $this->propertyAccessor->setValue($object, '/date', $date);
-        $this->assertSame($date, $object->getDate());
+        self::assertSame($date, $object->getDate());
     }
 
     public function testArrayNotBeingOverwritten(): void
@@ -487,8 +487,8 @@ class AccessorTest extends TestCase
         $object = new TestClass($value);
 
         $this->propertyAccessor->setValue($object, '/publicAccessor/value2', 'baz');
-        $this->assertSame('baz', $this->propertyAccessor->getValue($object, '/publicAccessor/value2'));
-        $this->assertSame(['value1' => 'foo', 'value2' => 'baz'], $object->getPublicAccessor());
+        self::assertSame('baz', $this->propertyAccessor->getValue($object, '/publicAccessor/value2'));
+        self::assertSame(['value1' => 'foo', 'value2' => 'baz'], $object->getPublicAccessor());
     }
 
     public function testCacheReadAccess(): void
@@ -496,14 +496,14 @@ class AccessorTest extends TestCase
         $obj = new TestClass('foo');
 
         $propertyAccessor = new Accessor($cacheAdapter = new ArrayAdapter());
-        $this->assertEquals('foo', $propertyAccessor->getValue($obj, '/publicGetSetter'));
+        self::assertEquals('foo', $propertyAccessor->getValue($obj, '/publicGetSetter'));
         $propertyAccessor->setValue($obj, '/publicGetSetter', 'bar');
 
-        $this->assertCount(3, $cacheAdapter->getValues());
+        self::assertCount(3, $cacheAdapter->getValues());
 
         $propertyAccessor = new Accessor($cacheAdapter);
         $propertyAccessor->setValue($obj, '/publicGetSetter', 'baz');
-        $this->assertEquals('baz', $propertyAccessor->getValue($obj, '/publicGetSetter'));
+        self::assertEquals('baz', $propertyAccessor->getValue($obj, '/publicGetSetter'));
     }
 
     public function testArrayAppendOnWrite(): void
@@ -511,8 +511,8 @@ class AccessorTest extends TestCase
         $array = ['value' => ['foo' => ['bar']]];
 
         $this->propertyAccessor->setValue($array, '/value/foo/-', 'foofoo');
-        $this->assertCount(2, $array['value']['foo']);
-        $this->assertEquals('foofoo', $array['value']['foo'][1]);
+        self::assertCount(2, $array['value']['foo']);
+        self::assertEquals('foofoo', $array['value']['foo'][1]);
     }
 
     public function testArrayDashIsNotAppendOnWrite(): void
@@ -520,7 +520,7 @@ class AccessorTest extends TestCase
         $array = ['value' => ['foo' => ['bar']]];
 
         $this->propertyAccessor->setValue($array, '/value/-/foo', 'foofoo');
-        $this->assertEquals('foofoo', $array['value']['-']['foo']);
+        self::assertEquals('foofoo', $array['value']['-']['foo']);
     }
 
     public function testArrayAppendOnArrayAccessObject(): void
@@ -528,8 +528,8 @@ class AccessorTest extends TestCase
         $array = ['value' => ['foo' => new \ArrayObject(['bar'])]];
 
         $this->propertyAccessor->setValue($array, '/value/foo/-', 'foofoo');
-        $this->assertCount(2, $array['value']['foo']);
-        $this->assertEquals(['bar', 'foofoo'], $array['value']['foo']->getArrayCopy());
+        self::assertCount(2, $array['value']['foo']);
+        self::assertEquals(['bar', 'foofoo'], $array['value']['foo']->getArrayCopy());
     }
 
     public function getUnappendableObjects(): iterable
@@ -566,20 +566,20 @@ class AccessorTest extends TestCase
         $axesBefore = (object) [0 => 'first', 1 => 'second'];
         $axesAfterOne = (object) [0 => 'first', 1 => 'second', 2 => 'third'];
 
-        $car->expects($this->any())
+        $car->expects(self::any())
             ->method('getStructure')
-            ->will($this->returnValue($structure));
+            ->will(self::returnValue($structure));
 
-        $structure->expects($this->at(0))
+        $structure->expects(self::at(0))
             ->method('getAxes')
-            ->will($this->returnValue($axesBefore));
-        $structure->expects($this->at(1))
+            ->will(self::returnValue($axesBefore));
+        $structure->expects(self::at(1))
             ->method('addAxis')
             ->with('third');
-        $structure->expects($this->at(2))
+        $structure->expects(self::at(2))
             ->method('getAxes')
-            ->will($this->returnValue($axesAfterOne));
-        $structure->expects($this->at(3))
+            ->will(self::returnValue($axesAfterOne));
+        $structure->expects(self::at(3))
             ->method('addAxis')
             ->with('fourth');
 

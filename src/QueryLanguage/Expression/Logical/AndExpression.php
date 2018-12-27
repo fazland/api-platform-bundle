@@ -18,22 +18,22 @@ final class AndExpression implements LogicalExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function __toString(): string
     {
-        return '$and('.implode(', ', $this->arguments).')';
+        return '$and('.\implode(', ', $this->arguments).')';
     }
 
     public static function create(array $arguments)
     {
-        $arguments = array_values(
-            array_filter($arguments, function ($argument): bool {
+        $arguments = \array_values(
+            \array_filter($arguments, function ($argument): bool {
                 return ! $argument instanceof AllExpression;
             })
         );
 
-        switch (count($arguments)) {
+        switch (\count($arguments)) {
             case 0:
                 return new AllExpression();
 
@@ -46,7 +46,7 @@ final class AndExpression implements LogicalExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function dispatch(TreeWalkerInterface $treeWalker)
     {

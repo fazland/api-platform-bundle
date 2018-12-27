@@ -10,7 +10,7 @@ final class BooleanExpression extends LiteralExpression
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function __toString(): string
     {

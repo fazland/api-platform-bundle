@@ -25,8 +25,8 @@ class AcceptHeaderParser implements EventSubscriberInterface
             throw new NotAcceptableHttpException();
         }
 
-        $version = str_replace('-', '', null !== $header->getVersion() ? $header->getVersion() : Chronos::now()->format('Ymd'));
-        if (! preg_match('/\d{8}/', $version)) {
+        $version = \str_replace('-', '', null !== $header->getVersion() ? $header->getVersion() : Chronos::now()->format('Ymd'));
+        if (! \preg_match('/\d{8}/', $version)) {
             throw new NotAcceptableHttpException();
         }
 

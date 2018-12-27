@@ -49,7 +49,7 @@ final class View
         }
 
         if ($result instanceof \Iterator) {
-            $this->result = iterator_to_array($result);
+            $this->result = \iterator_to_array($result);
         }
     }
 }

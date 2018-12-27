@@ -18,11 +18,11 @@ final class OrExpression implements LogicalExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function __toString(): string
     {
-        return '$or('.implode(', ', $this->arguments).')';
+        return '$or('.\implode(', ', $this->arguments).')';
     }
 
     public static function create(array $arguments)
@@ -33,8 +33,8 @@ final class OrExpression implements LogicalExpressionInterface
             }
         }
 
-        $arguments = array_values($arguments);
-        switch (count($arguments)) {
+        $arguments = \array_values($arguments);
+        switch (\count($arguments)) {
             case 0:
                 return new AllExpression();
 
@@ -47,7 +47,7 @@ final class OrExpression implements LogicalExpressionInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function dispatch(TreeWalkerInterface $treeWalker)
     {

@@ -94,11 +94,11 @@ final class AccessHelper
         return [
             Accessor::ACCESS_HAS_PROPERTY => $hasProperty,
             Accessor::ACCESS_TYPE => Accessor::ACCESS_TYPE_NOT_FOUND,
-            Accessor::ACCESS_NAME => sprintf(
+            Accessor::ACCESS_NAME => \sprintf(
                 'Neither the property "%s" nor one of the methods "%s()" '.
                 'exist and have public access in class "%s".',
                 $this->property,
-                implode('()", "', $methods),
+                \implode('()", "', $methods),
                 $this->reflectionClass->name
             ),
         ];
@@ -115,7 +115,7 @@ final class AccessHelper
     {
         $hasProperty = null !== $this->reflectionProperty;
 
-        if (is_array($value) || $value instanceof \Traversable) {
+        if (\is_array($value) || $value instanceof \Traversable) {
             $methods = $this->findAdderAndRemover();
 
             if (null !== $methods) {
@@ -162,14 +162,14 @@ final class AccessHelper
             return [
                 Accessor::ACCESS_HAS_PROPERTY => $hasProperty,
                 Accessor::ACCESS_TYPE => Accessor::ACCESS_TYPE_NOT_FOUND,
-                Accessor::ACCESS_NAME => sprintf(
+                Accessor::ACCESS_NAME => \sprintf(
                     'The property "%s" in class "%s" can be defined with the methods "%s()" but '.
                     'the new value must be an array or an instance of \Traversable, '.
                     '"%s" given.',
                     $this->property,
                     $this->reflectionClass->name,
-                    implode('()", "', $adderRemover),
-                    is_object($value) ? get_class($value) : gettype($value)
+                    \implode('()", "', $adderRemover),
+                    \is_object($value) ? \get_class($value) : \gettype($value)
                 ),
             ];
         }
@@ -177,14 +177,14 @@ final class AccessHelper
         return [
             Accessor::ACCESS_HAS_PROPERTY => $hasProperty,
             Accessor::ACCESS_TYPE => Accessor::ACCESS_TYPE_NOT_FOUND,
-            Accessor::ACCESS_NAME => sprintf(
+            Accessor::ACCESS_NAME => \sprintf(
                 'Neither the property "%s" nor one of the methods %s"%s()", '.
                 '"__set()" or "__call()" exist and have public access in class "%s".',
                 $this->property,
-                implode('', array_map(function ($singular) {
+                \implode('', \array_map(function ($singular) {
                     return '"add'.$singular.'()"/"remove'.$singular.'()", ';
                 }, (array) Inflector::singularize($this->camelized))),
-                implode('()", "', $methods),
+                \implode('()", "', $methods),
                 $this->reflectionClass->name
             ),
         ];
@@ -242,6 +242,6 @@ final class AccessHelper
      */
     public static function camelize($string)
     {
-        return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $string))));
+        return \lcfirst(\str_replace(' ', '', \ucwords(\str_replace('_', ' ', $string))));
     }
 }

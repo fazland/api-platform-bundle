@@ -29,7 +29,7 @@ class FormNotSubmittedExceptionSubscriberTest extends WebTestCase
 
     public function testShouldSubscribeExceptionEvent(): void
     {
-        $this->assertArrayHasKey('kernel.exception', FormNotSubmittedExceptionSubscriber::getSubscribedEvents());
+        self::assertArrayHasKey('kernel.exception', FormNotSubmittedExceptionSubscriber::getSubscribedEvents());
     }
 
     public function testShouldSkipIncorrectExceptions(): void
@@ -67,7 +67,7 @@ class FormNotSubmittedExceptionSubscriberTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        $this->assertJsonStringEqualsJsonString('{"error":"No data sent.","name":"form"}', $response->getContent());
+        self::assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        self::assertJsonStringEqualsJsonString('{"error":"No data sent.","name":"form"}', $response->getContent());
     }
 }
