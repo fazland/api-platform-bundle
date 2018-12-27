@@ -246,7 +246,7 @@ class DoctrineProcessor
         }
 
         foreach ($formData as $key => $filter) {
-            if (null === $filter || '' === $filter) {
+            if (null === $filter || '' === $filter || ! isset($this->columns[$key])) {
                 continue;
             }
 
@@ -259,10 +259,6 @@ class DoctrineProcessor
                 $expression = $grammar->parse($filter);
             } catch (SyntaxError $exception) {
                 $form[$key]->addError(new FormError($exception->getMessage()));
-                continue;
-            }
-
-            if (! isset($this->columns[$key])) {
                 continue;
             }
 
@@ -293,7 +289,10 @@ class DoctrineProcessor
         return ['filters' => $filters, 'ordering' => $ordering, 'page_token' => $form[$this->continuationTokenField]->getData()];
     }
 
-    private function attachToQueryBuilder(array $filters)
+    /**
+     * @param array $filters
+     */
+    private function attachToQueryBuilder(array $filters): void
     {
         $this->queryBuilder->andWhere('1 = 1');
 
