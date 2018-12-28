@@ -72,17 +72,13 @@ class Processor
     /**
      * Adds a column to this list processor.
      *
-     * @param string       $name
-     * @param array|string $options
+     * @param string $name
+     * @param array  $options
      *
      * @return $this
      */
-    public function addColumn(string $name, $options = []): self
+    public function addColumn(string $name, array $options = []): self
     {
-        if (\is_string($options)) {
-            $options = ['field_name' => $options];
-        }
-
         $resolver = new OptionsResolver();
         $options = $resolver
             ->setDefaults([
@@ -124,6 +120,14 @@ class Processor
         }
 
         $this->attachToQueryBuilder($result->filters);
+
+        if (null !== $result->skip) {
+            $this->queryBuilder->setFirstResult($result->skip);
+        }
+
+        if (null !== $result->limit) {
+            $this->queryBuilder->setMaxResults($result->limit);
+        }
 
         if (null !== $result->ordering) {
             $iterator = new PagerIterator($this->queryBuilder, $this->parseOrderings($result->ordering));

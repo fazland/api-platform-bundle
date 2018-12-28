@@ -65,7 +65,11 @@ class Column implements ColumnInterface
         }
 
         $this->mapping = $rootField;
-        $this->processAssociations($entityManager, $rest);
+        $this->associations = [];
+
+        if (null !== $rest) {
+            $this->processAssociations($entityManager, $rest);
+        }
     }
 
     /**
