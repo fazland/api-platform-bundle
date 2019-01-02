@@ -8,11 +8,10 @@ use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\Doctrine\ORM\EntityIterator;
 use Fazland\ApiPlatformBundle\Pagination\Doctrine\ORM\PagerIterator;
-use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\OrderExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Form\DTO\Query;
 use Fazland\ApiPlatformBundle\QueryLanguage\Form\QueryType;
-use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine\DqlWalker;
+use Fazland\ApiPlatformBundle\QueryLanguage\Processor\ColumnInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +32,7 @@ class Processor
     private $entityManager;
 
     /**
-     * @var Column[]
+     * @var ColumnInterface[]
      */
     private $columns;
 
@@ -72,13 +71,19 @@ class Processor
     /**
      * Adds a column to this list processor.
      *
-     * @param string $name
-     * @param array  $options
+     * @param string                $name
+     * @param array|ColumnInterface $options
      *
      * @return $this
      */
-    public function addColumn(string $name, array $options = []): self
+    public function addColumn(string $name, $options = []): self
     {
+        if ($options instanceof ColumnInterface) {
+            $this->columns[$name] = $options;
+
+            return $this;
+        }
+
         $resolver = new OptionsResolver();
         $options = $resolver
             ->setDefaults([
@@ -92,7 +97,7 @@ class Processor
             ->resolve($options)
         ;
 
-        $column = new Column($name, $options['field_name'], $this->rootEntity, $this->entityManager);
+        $column = new Column($options['field_name'], $this->rootAlias, $this->rootEntity, $this->entityManager);
 
         if (null !== $options['walker']) {
             $column->customWalker = $options['walker'];
@@ -153,6 +158,9 @@ class Processor
             'order_field' => $this->options['order_field'],
             'continuation_token_field' => $this->options['continuation_token']['field'] ?? null,
             'columns' => $this->columns,
+            'orderable_columns' => \array_keys(\array_filter($this->columns, function (ColumnInterface $column): bool {
+                return $column instanceof Column;
+            })),
         ]);
 
         $form->handleRequest($request);
@@ -174,88 +182,8 @@ class Processor
 
         foreach ($filters as $key => $expr) {
             $column = $this->columns[$key];
-
-            if ($column->isAssociation()) {
-                $this->addAssociationCondition($column, $expr);
-            } else {
-                $this->addWhereCondition($column, $expr);
-            }
+            $column->addCondition($this->queryBuilder, $expr);
         }
-    }
-
-    /**
-     * Processes an association column and attaches the conditions to the query builder.
-     *
-     * @param Column              $column
-     * @param ExpressionInterface $expression
-     */
-    private function addAssociationCondition(Column $column, ExpressionInterface $expression): void
-    {
-        $alias = $column->getMappingFieldName();
-        $walker = $column->customWalker;
-
-        $subQb = $this->entityManager->createQueryBuilder()
-            ->select('1')
-            ->from($column->getTargetEntity(), $alias)
-            ->setParameters($this->queryBuilder->getParameters())
-        ;
-
-        $currentFieldName = $alias;
-        $currentAlias = $alias;
-        foreach ($column->associations as $association) {
-            if (isset($association['targetEntity'])) {
-                $currentAlias = $association['fieldName'];
-                $currentFieldName = $association['fieldName'];
-                $subQb->join($currentFieldName.'.'.$association['fieldName'], $association['fieldName']);
-            } else {
-                $currentFieldName = $currentAlias.'.'.$association['fieldName'];
-            }
-        }
-
-        if (null !== $walker) {
-            $walker = \is_string($walker) ? new $walker($subQb, $currentFieldName) : $walker($subQb, $currentFieldName);
-        } else {
-            $walker = new DqlWalker($subQb, $currentFieldName);
-        }
-
-        $subQb->where($expression->dispatch($walker));
-
-        if ($column->isManyToMany()) {
-            // Many-to-Many
-            throw new \Exception('Not implemented yet.');
-        }
-
-        if ($column->isOwningSide()) {
-            $subQb->andWhere($subQb->expr()->eq($this->rootAlias.'.'.$alias, $alias));
-        } else {
-            $subQb->andWhere($subQb->expr()->eq($alias.'.'.$column->mapping['inversedBy'], $this->rootAlias));
-        }
-
-        $this->queryBuilder
-            ->andWhere($this->queryBuilder->expr()->exists($subQb->getDQL()))
-            ->setParameters($subQb->getParameters())
-        ;
-    }
-
-    /**
-     * Adds a simple condition to the query builder.
-     *
-     * @param Column              $column
-     * @param ExpressionInterface $expression
-     */
-    private function addWhereCondition(Column $column, ExpressionInterface $expression): void
-    {
-        $alias = $column->discriminator ? null : $column->getMappingFieldName();
-        $walker = $column->customWalker;
-
-        $fieldName = $column->discriminator ? $this->rootAlias : $this->rootAlias.'.'.$alias;
-        if (null !== $walker) {
-            $walker = \is_string($walker) ? new $walker($this->queryBuilder, $fieldName) : $walker($this->queryBuilder, $fieldName);
-        } else {
-            $walker = new DqlWalker($this->queryBuilder, $fieldName);
-        }
-
-        $this->queryBuilder->andWhere($expression->dispatch($walker));
     }
 
     /**
@@ -269,6 +197,10 @@ class Processor
     {
         $checksumColumn = $this->rootEntity->getIdentifierColumnNames()[0];
         if (isset($this->options['continuation_token']['checksum_field'])) {
+            if (! $this->columns[$checksumColumn] instanceof Column) {
+                throw new \InvalidArgumentException(\sprintf('%s is not a valid field for checksum', $this->options['continuation_token']['checksum_field']));
+            }
+
             $checksumColumn = $this->columns[$checksumColumn]->fieldName;
         }
 

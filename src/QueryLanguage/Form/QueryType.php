@@ -6,10 +6,12 @@ use Fazland\ApiPlatformBundle\Form\PageTokenType;
 use Fazland\ApiPlatformBundle\QueryLanguage\Form\DTO\Query;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\ColumnInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Validator\Expression;
+use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\OrderWalker;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class QueryType extends AbstractType
@@ -20,7 +22,12 @@ class QueryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         if (null !== $options['order_field']) {
-            $builder->add($options['order_field'], FieldType::class, ['property_path' => 'ordering']);
+            $builder->add($options['order_field'], FieldType::class, [
+                'property_path' => 'ordering',
+                'constraints' => [
+                    new Expression(new OrderWalker($options['orderable_columns'])),
+                ],
+            ]);
         }
 
         if (null !== $options['continuation_token_field']) {
@@ -60,6 +67,9 @@ class QueryType extends AbstractType
                 'order_field' => null,
                 'allow_extra_fields' => true,
                 'method' => Request::METHOD_GET,
+                'orderable_columns' => function (Options $options) {
+                    return \array_keys($options['columns']);
+                },
             ])
             ->setAllowedTypes('skip_field', ['null', 'string'])
             ->setAllowedTypes('limit_field', ['null', 'string'])

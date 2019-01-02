@@ -4,9 +4,12 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\ORM;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\QueryLanguage\Exception\Doctrine\FieldNotFoundException;
+use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\ColumnInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine\DiscriminatorWalker;
+use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine\DqlWalker;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\EnumWalker;
 
 /**
@@ -17,7 +20,7 @@ class Column implements ColumnInterface
     /**
      * @var string
      */
-    public $requestName;
+    private $rootAlias;
 
     /**
      * @var string
@@ -43,20 +46,24 @@ class Column implements ColumnInterface
      * @var null|string|callable
      */
     public $customWalker;
-
     /**
      * @var bool
      */
     public $discriminator;
 
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
     public function __construct(
-        string $requestName,
         string $fieldName,
+        string $rootAlias,
         ClassMetadata $rootEntity,
         EntityManagerInterface $entityManager
     ) {
-        $this->requestName = $requestName;
         $this->fieldName = $fieldName;
+        $this->rootAlias = $rootAlias;
 
         [$rootField, $rest] = MappingHelper::processFieldName($rootEntity, $fieldName);
 
@@ -70,6 +77,94 @@ class Column implements ColumnInterface
         if (null !== $rest) {
             $this->processAssociations($entityManager, $rest);
         }
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addCondition($queryBuilder, ExpressionInterface $expression): void
+    {
+        if (! $this->isAssociation()) {
+            $this->addWhereCondition($queryBuilder, $expression);
+        } else {
+            $this->addAssociationCondition($queryBuilder, $expression);
+        }
+    }
+
+    /**
+     * Adds a simple condition to the query builder.
+     *
+     * @param QueryBuilder        $queryBuilder
+     * @param ExpressionInterface $expression
+     */
+    private function addWhereCondition(QueryBuilder $queryBuilder, ExpressionInterface $expression): void
+    {
+        $alias = $this->discriminator ? null : $this->getMappingFieldName();
+        $walker = $this->customWalker;
+
+        $fieldName = $this->discriminator ? $this->rootAlias : $this->rootAlias.'.'.$alias;
+        if (null !== $walker) {
+            $walker = \is_string($walker) ? new $walker($queryBuilder, $fieldName) : $walker($queryBuilder, $fieldName);
+        } else {
+            $walker = new DqlWalker($queryBuilder, $fieldName);
+        }
+
+        $queryBuilder->andWhere($expression->dispatch($walker));
+    }
+
+    /**
+     * Processes an association column and attaches the conditions to the query builder.
+     *
+     * @param QueryBuilder        $queryBuilder
+     * @param ExpressionInterface $expression
+     */
+    private function addAssociationCondition(QueryBuilder $queryBuilder, ExpressionInterface $expression): void
+    {
+        $alias = $this->getMappingFieldName();
+        $walker = $this->customWalker;
+
+        $subQb = $this->entityManager->createQueryBuilder()
+            ->select('1')
+            ->from($this->getTargetEntity(), $alias)
+            ->setParameters($queryBuilder->getParameters())
+        ;
+
+        $currentFieldName = $alias;
+        $currentAlias = $alias;
+        foreach ($this->associations as $association) {
+            if (isset($association['targetEntity'])) {
+                $currentAlias = $association['fieldName'];
+                $currentFieldName = $association['fieldName'];
+                $subQb->join($currentFieldName.'.'.$association['fieldName'], $association['fieldName']);
+            } else {
+                $currentFieldName = $currentAlias.'.'.$association['fieldName'];
+            }
+        }
+
+        if (null !== $walker) {
+            $walker = \is_string($walker) ? new $walker($subQb, $currentFieldName) : $walker($subQb, $currentFieldName);
+        } else {
+            $walker = new DqlWalker($subQb, $currentFieldName);
+        }
+
+        $subQb->where($expression->dispatch($walker));
+
+        if ($this->isManyToMany()) {
+            // Many-to-Many
+            throw new \Exception('Not implemented yet.');
+        }
+
+        if ($this->isOwningSide()) {
+            $subQb->andWhere($subQb->expr()->eq($this->rootAlias.'.'.$alias, $alias));
+        } else {
+            $subQb->andWhere($subQb->expr()->eq($alias.'.'.$this->mapping['inversedBy'], $this->rootAlias));
+        }
+
+        $queryBuilder
+            ->andWhere($queryBuilder->expr()->exists($subQb->getDQL()))
+            ->setParameters($subQb->getParameters())
+        ;
     }
 
     /**
