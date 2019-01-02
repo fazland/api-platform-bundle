@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\ORM;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\QueryLanguage\Exception\Doctrine\FieldNotFoundException;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
@@ -151,20 +152,21 @@ class Column implements ColumnInterface
         $subQb->where($expression->dispatch($walker));
 
         if ($this->isManyToMany()) {
-            // Many-to-Many
-            throw new \Exception('Not implemented yet.');
-        }
-
-        if ($this->isOwningSide()) {
-            $subQb->andWhere($subQb->expr()->eq($this->rootAlias.'.'.$alias, $alias));
+            $queryBuilder
+                ->distinct()
+                ->join($this->rootAlias.'.'.$alias, $alias, Join::WITH, $subQb->getDQLPart('where'));
         } else {
-            $subQb->andWhere($subQb->expr()->eq($alias.'.'.$this->mapping['inversedBy'], $this->rootAlias));
-        }
+            if ($this->isOwningSide()) {
+                $subQb->andWhere($subQb->expr()->eq($this->rootAlias.'.'.$alias, $alias));
+            } else {
+                $subQb->andWhere($subQb->expr()->eq($alias.'.'.$this->mapping['inversedBy'], $this->rootAlias));
+            }
 
-        $queryBuilder
-            ->andWhere($queryBuilder->expr()->exists($subQb->getDQL()))
-            ->setParameters($subQb->getParameters())
-        ;
+            $queryBuilder
+                ->andWhere($queryBuilder->expr()->exists($subQb->getDQL()))
+                ->setParameters($subQb->getParameters())
+            ;
+        }
     }
 
     /**
