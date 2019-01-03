@@ -135,9 +135,9 @@ class Column implements ColumnInterface
         $currentAlias = $alias;
         foreach ($this->associations as $association) {
             if (isset($association['targetEntity'])) {
+                $subQb->join($currentFieldName.'.'.$association['fieldName'], $association['fieldName']);
                 $currentAlias = $association['fieldName'];
                 $currentFieldName = $association['fieldName'];
-                $subQb->join($currentFieldName.'.'.$association['fieldName'], $association['fieldName']);
             } else {
                 $currentFieldName = $currentAlias.'.'.$association['fieldName'];
             }
