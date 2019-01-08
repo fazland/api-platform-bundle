@@ -16,7 +16,7 @@ class EnumWalker extends ValidationWalker
     public function __construct($values)
     {
         if (\is_string($values) && \class_exists($values) && \is_subclass_of($values, Enum::class, true)) {
-            $values = $values::values();
+            $values = $values::toArray();
         }
 
         if (! \is_array($values)) {
@@ -36,12 +36,13 @@ class EnumWalker extends ValidationWalker
      */
     public function walkLiteral(LiteralExpression $expression)
     {
-        if (\in_array($expression->getValue(), $this->values, true)) {
+        $expressionValue = $expression->getValue();
+        if (\in_array($expressionValue, $this->values, true)) {
             return;
         }
 
         $this->addViolation('Value "{{ value }}" is not allowed. Must be one of "{{ allowed_values }}".', [
-            '{{ value }}' => (string) $expression->getValue(),
+            '{{ value }}' => (string) $expressionValue,
             '{{ allowed_values }}' => \implode('", "', $this->values),
         ]);
     }
