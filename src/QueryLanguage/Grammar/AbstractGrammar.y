@@ -1,8 +1,9 @@
-%token ALL STRING NOT EQ NEQ LIKE LT LTE GT GTE ORDER RANGE AND_OP OR_OP IN_OP ORDER_DIRECTION ENTRY
+%token ALL STRING NOT EQ NEQ LIKE LT LTE GT GTE ORDER RANGE AND_OP OR_OP IN_OP ORDER_DIRECTION ENTRY EXISTS
 %start expression
 
 %%
 
+simple     : ALL | EXISTS
 unary      : EQ | NEQ | LIKE | LT | LTE | GT | GTE
 variadic   : AND_OP | OR_OP | IN_OP
 
@@ -10,9 +11,9 @@ token      : STRING { $$ = $1; }
            | ORDER_DIRECTION { $$ = $1; }
            ;
 
-all_expression   : ALL              { $$ = $this->unaryExpression('all', null); }
-                 | ALL '(' ')'      { $$ = $this->unaryExpression('all', null); }
-                 ;
+simple_expression : simple              { $$ = $this->unaryExpression($1, null); }
+                  | simple '(' ')'      { $$ = $this->unaryExpression($1, null); }
+                  ;
 
 not_expression   : NOT '(' expression ')'     { $$ = $this->unaryExpression('not', $3); }
                  ;
@@ -46,7 +47,7 @@ argument_list    : /* empty */                              { $$ = []; }
 
 variadic_expression : variadic '(' argument_list ')' { $$ = $this->variadicExpression($1, $3); }
 
-complex    : all_expression
+complex    : simple_expression
            | not_expression
            | unary_expression
            | binary_expression
@@ -78,6 +79,7 @@ private const __QL_OPERATORS = [
     self::IN_OP => 'in',
     self::RANGE => 'range',
     self::ENTRY => 'entry',
+    self::EXISTS => 'exists',
 ];
 
 private function yylex(): int

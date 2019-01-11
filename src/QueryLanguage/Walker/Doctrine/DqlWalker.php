@@ -6,6 +6,7 @@ use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
+use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\NullExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\StringExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\AbstractWalker;
@@ -42,6 +43,10 @@ class DqlWalker extends AbstractWalker
         if ('like' === $operator) {
             $field = 'LOWER('.$field.')';
             $expression = StringExpression::create('%'.$expression.'%');
+        }
+
+        if ($expression instanceof NullExpression) {
+            return new Expr\Comparison($field, 'IS', 'NULL');
         }
 
         $parameterName = $this->generateParameterName();

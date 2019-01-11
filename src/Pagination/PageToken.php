@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * This class is the object representation of a ContinuousToken.
- * The three fields are each:
+ * The three fields are each:.
  *
  * - the timestamp representation for an object (default: an unix timestamp), this will be calculated from a getPageableTimestamp function of a PageableInterface object
  * - the offset of the object relative to similar objects with the same timestamp (eg. 3 object with same timestamp, the second one will be represented by a "2" offset)
@@ -67,7 +67,7 @@ final class PageToken
          * - the third part represents the checksum as crc32($entitiesWithSameTimestampInThisPage->getIds());
          */
 
-        if (is_numeric($this->orderValue)) {
+        if (\is_numeric($this->orderValue)) {
             $timestamp = \base_convert($this->orderValue, 10, 36);
 
             return \implode(self::TOKEN_DELIMITER, [
@@ -78,7 +78,7 @@ final class PageToken
         }
 
         return \implode(self::TOKEN_DELIMITER, [
-            '=' . base64_encode($this->orderValue),
+            '='.\base64_encode($this->orderValue),
             $this->offset,
             \base_convert($this->checksum, 10, 36),
         ]);
@@ -106,7 +106,7 @@ final class PageToken
         if ('=' === $orderValue[0]) {
             $orderValue = \base64_decode(\substr($orderValue, 1));
         } else {
-            $orderValue = (int)\base_convert($tokenSplit[0], 36, 10);
+            $orderValue = (int) \base_convert($tokenSplit[0], 36, 10);
         }
 
         return new self(

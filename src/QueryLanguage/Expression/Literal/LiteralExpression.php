@@ -32,6 +32,9 @@ abstract class LiteralExpression extends ValueExpression
             case 'false' === $value:
                 return new BooleanExpression('true' === $value);
 
+            case 'null' === $value:
+                return new NullExpression();
+
             case 1 === \preg_match('/^\d+$/', $value):
                 return new IntegerExpression((int) $value);
 

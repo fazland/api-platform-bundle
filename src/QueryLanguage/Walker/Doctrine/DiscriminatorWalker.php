@@ -38,10 +38,6 @@ class DiscriminatorWalker extends DqlWalker
      */
     public function walkComparison(string $operator, ValueExpression $expression)
     {
-        if ('=' !== $operator) {
-            throw new \Exception();
-        }
-
         return new Expr\Comparison($this->field, 'INSTANCE OF', $expression->dispatch($this));
     }
 }
