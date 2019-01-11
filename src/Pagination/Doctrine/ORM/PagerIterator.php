@@ -83,13 +83,13 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
         $alias = $queryBuilder->getRootAliases()[0];
 
         foreach ($this->orderBy as $key => list($field, $direction)) {
-            $method = 0 == $key ? 'orderBy' : 'addOrderBy';
+            $method = 0 === $key ? 'orderBy' : 'addOrderBy';
             $queryBuilder->{$method}($alias.'.'.$field, \strtoupper($direction));
         }
 
         $limit = $this->pageSize;
         if (null !== $this->token) {
-            $timestamp = $this->token->getTimestamp();
+            $timestamp = $this->token->getOrderValue();
             $limit += $this->token->getOffset();
             $mainOrder = $this->orderBy[0];
 

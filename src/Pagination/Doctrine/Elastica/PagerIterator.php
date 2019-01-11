@@ -86,7 +86,7 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
 
         $limit = $this->pageSize;
         if (null !== $this->token) {
-            $timestamp = $this->token->getTimestamp();
+            $timestamp = $this->token->getOrderValue();
             $limit += $this->token->getOffset();
             $mainOrder = $this->orderBy[0];
 

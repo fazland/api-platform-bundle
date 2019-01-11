@@ -158,7 +158,7 @@ class PagerIterator implements \Iterator
 
         $refObjects = \iterator_to_array($this->getLastObjectsWithCommonTimestamp($this->page), false);
 
-        return new PageToken($this->getTimestampForObject($refObjects[0]), \count($refObjects), $this->getChecksumForObjects($refObjects));
+        return new PageToken($this->getOrderValueForObject($refObjects[0]), \count($refObjects), $this->getChecksumForObjects($refObjects));
     }
 
     /**
@@ -184,7 +184,7 @@ class PagerIterator implements \Iterator
         $order = $this->orderBy[0];
 
         return \array_filter($objects, function ($entity) use ($order) {
-            $referenceTimestamp = $this->token->getTimestamp();
+            $referenceTimestamp = $this->token->getOrderValue();
             $value = self::getAccessor()->getValue($entity, $order[0]);
 
             if ($value instanceof \DateTimeInterface) {
@@ -221,11 +221,11 @@ class PagerIterator implements \Iterator
      *
      * @return bool
      */
-    protected function timestampDiffers($objects): bool
+    protected function orderValueDiffers($objects): bool
     {
         $reference = \reset($objects);
 
-        return $this->getTimestampForObject($reference) !== $this->token->getTimestamp();
+        return $this->getOrderValueForObject($reference) !== $this->token->getOrderValue();
     }
 
     /**
@@ -265,7 +265,7 @@ class PagerIterator implements \Iterator
             return [];
         }
 
-        if ($this->timestampDiffers($objects) || $this->checksumDiffers($objects)) {
+        if ($this->orderValueDiffers($objects) || $this->checksumDiffers($objects)) {
             // Fallback: deliver all the first-page of the filtered elements involved (the elements >= timestamp requested)
             return \array_slice($objects, 0, $this->pageSize);
         }
@@ -290,12 +290,12 @@ class PagerIterator implements \Iterator
     private function getLastObjectsWithCommonTimestamp(array $objects): iterable
     {
         $reference = \array_pop($objects);
-        $referenceTimestamp = $this->getTimestampForObject($reference);
+        $referenceOrderValue = $this->getOrderValueForObject($reference);
 
         yield $reference;
 
         foreach (\array_reverse($objects, false) as $object) {
-            if ($this->getTimestampForObject($object) !== $referenceTimestamp) {
+            if ($this->getOrderValueForObject($object) !== $referenceOrderValue) {
                 break;
             }
 
@@ -308,19 +308,19 @@ class PagerIterator implements \Iterator
      *
      * @param mixed $object
      *
-     * @return int
+     * @return mixed
      */
-    private function getTimestampForObject($object): int
+    private function getOrderValueForObject($object)
     {
         $order = $this->orderBy[0];
         $propertyAccessor = self::getAccessor();
-        $datetime = $propertyAccessor->getValue($object, $order[0]);
+        $orderValue = $propertyAccessor->getValue($object, $order[0]);
 
-        if ($datetime instanceof \DateTimeInterface) {
-            $datetime = $datetime->getTimestamp();
+        if ($orderValue instanceof \DateTimeInterface) {
+            $orderValue = $orderValue->getTimestamp();
         }
 
-        return $datetime;
+        return $orderValue;
     }
 
     /**

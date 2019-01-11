@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * This class is the object representation of a ContinuousToken.
- * The three fields are each:.
+ * The three fields are each:
  *
  * - the timestamp representation for an object (default: an unix timestamp), this will be calculated from a getPageableTimestamp function of a PageableInterface object
  * - the offset of the object relative to similar objects with the same timestamp (eg. 3 object with same timestamp, the second one will be represented by a "2" offset)
@@ -30,7 +30,7 @@ final class PageToken
      *
      * @var \DateTimeInterface
      */
-    private $timestamp;
+    private $orderValue;
 
     /**
      * How many elements should be skipped from the filtered set.
@@ -46,13 +46,13 @@ final class PageToken
      */
     private $checksum;
 
-    public function __construct(int $timestamp, int $offset, int $checksum)
+    public function __construct($orderValue, int $offset, int $checksum)
     {
         if ($offset < 1) {
             throw new InvalidArgumentException('Offset cannot be less than 1');
         }
 
-        $this->timestamp = $timestamp;
+        $this->orderValue = $orderValue;
         $this->offset = $offset;
         $this->checksum = $checksum;
     }
@@ -67,10 +67,18 @@ final class PageToken
          * - the third part represents the checksum as crc32($entitiesWithSameTimestampInThisPage->getIds());
          */
 
-        $timestamp = \base_convert($this->timestamp, 10, 36);
+        if (is_numeric($this->orderValue)) {
+            $timestamp = \base_convert($this->orderValue, 10, 36);
+
+            return \implode(self::TOKEN_DELIMITER, [
+                $timestamp,
+                $this->offset,
+                \base_convert($this->checksum, 10, 36),
+            ]);
+        }
 
         return \implode(self::TOKEN_DELIMITER, [
-            $timestamp,
+            '=' . base64_encode($this->orderValue),
             $this->offset,
             \base_convert($this->checksum, 10, 36),
         ]);
@@ -93,12 +101,18 @@ final class PageToken
             throw new InvalidTokenException('Malformed token');
         }
 
-        $timestamp = (int) \base_convert($tokenSplit[0], 36, 10);
+        list($orderValue, $offset, $checksum) = $tokenSplit;
+
+        if ('=' === $orderValue[0]) {
+            $orderValue = \base64_decode(\substr($orderValue, 1));
+        } else {
+            $orderValue = (int)\base_convert($tokenSplit[0], 36, 10);
+        }
 
         return new self(
-            $timestamp,
-            (int) $tokenSplit[1],
-            (int) \base_convert($tokenSplit[2], 36, 10)
+            $orderValue,
+            (int) $offset,
+            (int) \base_convert($checksum, 36, 10)
         );
     }
 
@@ -121,11 +135,11 @@ final class PageToken
     /**
      * Gets the page timestamp (starting point).
      *
-     * @return int
+     * @return mixed
      */
-    public function getTimestamp(): int
+    public function getOrderValue()
     {
-        return $this->timestamp;
+        return $this->orderValue;
     }
 
     /**
