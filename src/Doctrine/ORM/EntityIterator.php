@@ -52,8 +52,10 @@ class EntityIterator implements ObjectIterator
             $alias = $queryBuilder->getRootAliases()[0];
 
             $queryBuilder->resetDQLPart('orderBy');
+            $distinct = $queryBuilder->getDQLPart('distinct') ? 'DISTINCT ' : '';
+            $queryBuilder->resetDQLPart('distinct');
 
-            $this->_totalCount = (int) $queryBuilder->select('COUNT('.$alias.')')
+            $this->_totalCount = (int) $queryBuilder->select('COUNT('.$distinct.$alias.')')
                 ->setFirstResult(null)
                 ->setMaxResults(null)
                 ->getQuery()
