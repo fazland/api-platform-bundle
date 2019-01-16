@@ -27,7 +27,7 @@ class BodyConverter implements EventSubscriberInterface
         $request = $event->getRequest();
         $contentType = $request->headers->get('Content-Type', 'application/x-www-form-urlencoded');
 
-        if (\in_array($request->getMethod(), [Request::METHOD_GET, Request::METHOD_HEAD])) {
+        if (\in_array($request->getMethod(), [Request::METHOD_GET, Request::METHOD_HEAD], true)) {
             return;
         }
 
@@ -49,14 +49,14 @@ class BodyConverter implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => ['onKernelRequest', 35],
         ];
     }
 
-    private function getFormat(Request $request, string $contentType): ? string
+    private function getFormat(Request $request, string $contentType): ?string
     {
         $format = $request->getFormat($contentType);
 

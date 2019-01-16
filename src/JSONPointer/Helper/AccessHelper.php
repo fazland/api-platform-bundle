@@ -33,7 +33,6 @@ final class AccessHelper
     public function __construct(string $class, string $property)
     {
         $this->reflectionClass = new \ReflectionClass($class);
-        $this->reflectionProperty = null;
 
         $this->property = $property;
         $this->camelized = self::camelize($property);
@@ -240,7 +239,7 @@ final class AccessHelper
      *
      * @return string The camelized version of the string
      */
-    public static function camelize($string)
+    public static function camelize(string $string): string
     {
         return \lcfirst(\str_replace(' ', '', \ucwords(\str_replace('_', ' ', $string))));
     }

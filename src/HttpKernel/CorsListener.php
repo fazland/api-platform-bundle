@@ -37,7 +37,7 @@ class CorsListener implements EventSubscriberInterface
     public function __construct(array $allowedOrigins = null, array $exposedHeaders = [])
     {
         if (null !== $allowedOrigins) {
-            $allowedOrigins = (function (string ...$origins) {
+            $allowedOrigins = (function (string ...$origins): array {
                 return $origins;
             })(...$allowedOrigins);
 
@@ -114,7 +114,7 @@ class CorsListener implements EventSubscriberInterface
         $response->headers->set('Access-Control-Expose-Headers', $this->exposedHeaders);
 
         $vary = $response->getVary();
-        if ('*' !== $origin && ! \in_array('Origin', $vary)) {
+        if ('*' !== $origin && ! \in_array('Origin', $vary, true)) {
             $vary[] = 'Origin';
             $response->setVary($vary);
         }

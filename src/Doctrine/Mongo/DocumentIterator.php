@@ -33,7 +33,6 @@ class DocumentIterator implements ObjectIterator
     {
         $this->queryBuilder = clone $queryBuilder;
         $this->internalIterator = $this->queryBuilder->getQuery()->getIterator();
-        $this->_totalCount = null;
 
         $this->apply(null);
         $this->_currentElement = $this->internalIterator->current()[0];
@@ -86,7 +85,7 @@ class DocumentIterator implements ObjectIterator
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->_current = null;
         $this->internalIterator->rewind();

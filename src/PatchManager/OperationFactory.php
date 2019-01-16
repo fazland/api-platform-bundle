@@ -19,13 +19,9 @@ class OperationFactory
      */
     private $accessor;
 
-    public function __construct(Accessor $accessor = null)
+    public function __construct(?Accessor $accessor = null)
     {
-        if (null === $accessor) {
-            $accessor = new Accessor();
-        }
-
-        $this->accessor = $accessor;
+        $this->accessor = $accessor ?? new Accessor();
     }
 
     /**

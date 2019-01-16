@@ -8,7 +8,7 @@ use Fazland\ApiPlatformBundle\HttpKernel\View\Context;
 use Fazland\ApiPlatformBundle\HttpKernel\View\View;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
-use Kcs\Serializer\Serializer;
+use Kcs\Serializer\SerializerInterface;
 use Kcs\Serializer\Type\Type;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class ViewHandler implements EventSubscriberInterface
 {
     /**
-     * @var Serializer
+     * @var SerializerInterface
      */
     private $serializer;
 
@@ -41,7 +41,7 @@ class ViewHandler implements EventSubscriberInterface
     private $responseCharset;
 
     public function __construct(
-        Serializer $serializer,
+        SerializerInterface $serializer,
         SerializationContext $serializationContext,
         ?TokenStorageInterface $tokenStorage,
         string $responseCharset

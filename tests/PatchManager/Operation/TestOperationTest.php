@@ -85,7 +85,7 @@ class TestOperationTest extends TestCase
     /**
      * @dataProvider getEqualValues
      */
-    public function testEqualValues($path, $value): void
+    public function testEqualValues(string $path, $value): void
     {
         $testObj = $this->getTestObject();
 
@@ -132,7 +132,7 @@ class TestOperationTest extends TestCase
     /**
      * @dataProvider getEqualValues
      */
-    public function testUnequalValues($path, $value): void
+    public function testUnequalValues(string $path, $value): void
     {
         $testObj = $this->getTestObject();
 

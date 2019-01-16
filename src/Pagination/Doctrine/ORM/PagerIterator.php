@@ -46,7 +46,8 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
                 ->setFirstResult(0)
                 ->setMaxResults(1)
                 ->getQuery()
-                ->getSingleScalarResult();
+                ->getSingleScalarResult()
+            ;
         }
 
         return $this->_totalCount;
@@ -55,7 +56,7 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
     /**
      * {@inheritdoc}
      */
-    public function next()
+    public function next(): void
     {
         parent::next();
 
@@ -66,7 +67,7 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         parent::rewind();
 
@@ -82,7 +83,7 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
         $queryBuilder = clone $this->queryBuilder;
         $alias = $queryBuilder->getRootAliases()[0];
 
-        foreach ($this->orderBy as $key => list($field, $direction)) {
+        foreach ($this->orderBy as $key => [$field, $direction]) {
             $method = 0 === $key ? 'orderBy' : 'addOrderBy';
             $queryBuilder->{$method}($alias.'.'.$field, \strtoupper($direction));
         }

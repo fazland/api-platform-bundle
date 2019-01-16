@@ -7,7 +7,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class PagerIterator implements \Iterator
 {
-    const DEFAULT_PAGE_SIZE = 10;
+    public const DEFAULT_PAGE_SIZE = 10;
 
     /**
      * Ordering information holder.
@@ -76,7 +76,7 @@ class PagerIterator implements \Iterator
     /**
      * {@inheritdoc}
      */
-    public function next()
+    public function next(): void
     {
         $check = \next($this->page);
         $this->valid = false !== $check || null !== \key($this->page);
@@ -101,7 +101,7 @@ class PagerIterator implements \Iterator
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         if (null === $this->page) {
             $this->page = $this->getPage();
@@ -203,7 +203,7 @@ class PagerIterator implements \Iterator
      *
      * @return bool
      */
-    protected function checksumDiffers($objects): bool
+    protected function checksumDiffers(array $objects): bool
     {
         $head = \array_slice($objects, 0, $this->token->getOffset());
 
@@ -221,7 +221,7 @@ class PagerIterator implements \Iterator
      *
      * @return bool
      */
-    protected function orderValueDiffers($objects): bool
+    protected function orderValueDiffers(array $objects): bool
     {
         $reference = \reset($objects);
 
@@ -251,7 +251,7 @@ class PagerIterator implements \Iterator
     private function getPage(): array
     {
         $objects = $this->getObjects();
-        if (0 === \count($objects) || 0 === $this->pageSize) {
+        if (0 === $this->pageSize || 0 === \count($objects)) {
             return [];
         }
 

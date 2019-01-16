@@ -158,7 +158,7 @@ class PatchManagerTest extends TestCase
      * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
      * @expectedExceptionMessage Invalid document.
      */
-    public function testPatchShouldThrowIfDocumentIsInvalid($params): void
+    public function testPatchShouldThrowIfDocumentIsInvalid(array $params): void
     {
         $request = $this->prophesize(Request::class);
         $request->reveal()->headers = new HeaderBag();
@@ -204,7 +204,7 @@ class PatchManagerTest extends TestCase
      * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
      * @expectedExceptionMessageRegExp #Operation failed at path#
      */
-    public function testPatchShouldThrowIfOperationErrored($params, $object): void
+    public function testPatchShouldThrowIfOperationErrored(array $params, $object): void
     {
         $request = $this->prophesize(Request::class);
         $request->reveal()->headers = new HeaderBag();

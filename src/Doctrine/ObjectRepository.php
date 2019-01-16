@@ -50,7 +50,7 @@ interface ObjectRepository extends BaseRepository
      */
     public function findByCached(
         array $criteria,
-        array $orderBy = null,
+        ?array $orderBy = null,
         ?int $limit = null,
         ?int $offset = null,
         int $ttl = 28800
@@ -60,9 +60,9 @@ interface ObjectRepository extends BaseRepository
      * Finds an object by its primary key / identifier.
      * Throws an exception if the object cannot be found.
      *
-     * @param mixed $id
-     * @param null  $lockMode
-     * @param null  $lockVersion
+     * @param mixed      $id
+     * @param mixed|null $lockMode
+     * @param mixed|null $lockVersion
      *
      * @return object
      *
@@ -81,7 +81,7 @@ interface ObjectRepository extends BaseRepository
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
-    public function getOneBy(array $criteria, array $orderBy = null);
+    public function getOneBy(array $criteria, ?array $orderBy = null);
 
     /**
      * Finds a single object by a set of criteria and cache the result for next calls.
@@ -96,5 +96,5 @@ interface ObjectRepository extends BaseRepository
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
-    public function getOneByCached(array $criteria, array $orderBy = null, int $ttl = 28800);
+    public function getOneByCached(array $criteria, ?array $orderBy = null, int $ttl = 28800);
 }

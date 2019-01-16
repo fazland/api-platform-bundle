@@ -35,11 +35,11 @@ class EntityRepository extends BaseRepository implements ObjectRepository
     /**
      * {@inheritdoc}
      */
-    public function findOneByCached(array $criteria, array $orderBy = null, int $ttl = 28800)
+    public function findOneByCached(array $criteria, ?array $orderBy = null, int $ttl = 28800)
     {
         $query = $this->buildQueryForFind($criteria, $orderBy);
         $query->setMaxResults(1);
-        $query->useResultCache(true, $ttl, '__'.\get_called_class().'::'.__FUNCTION__.\sha1(\serialize(\func_get_args())));
+        $query->useResultCache(true, $ttl, '__'.static::class.'::'.__FUNCTION__.\sha1(\serialize(\func_get_args())));
 
         try {
             return $query->getOneOrNullResult();
@@ -53,7 +53,7 @@ class EntityRepository extends BaseRepository implements ObjectRepository
      */
     public function findByCached(
         array $criteria,
-        array $orderBy = null,
+        ?array $orderBy = null,
         ?int $limit = null,
         ?int $offset = null,
         int $ttl = 28800
@@ -67,7 +67,7 @@ class EntityRepository extends BaseRepository implements ObjectRepository
             $query->setFirstResult($offset);
         }
 
-        $query->useResultCache(true, $ttl, '__'.\get_called_class().'::'.__FUNCTION__.\sha1(\serialize(\func_get_args())));
+        $query->useResultCache(true, $ttl, '__'.static::class.'::'.__FUNCTION__.\sha1(\serialize(\func_get_args())));
 
         return $query->getResult();
     }
@@ -89,7 +89,7 @@ class EntityRepository extends BaseRepository implements ObjectRepository
     /**
      * {@inheritdoc}
      */
-    public function getOneBy(array $criteria, array $orderBy = null)
+    public function getOneBy(array $criteria, ?array $orderBy = null)
     {
         $entity = $this->findOneBy($criteria, $orderBy);
 
@@ -103,11 +103,11 @@ class EntityRepository extends BaseRepository implements ObjectRepository
     /**
      * {@inheritdoc}
      */
-    public function getOneByCached(array $criteria, array $orderBy = null, int $ttl = 28800)
+    public function getOneByCached(array $criteria, ?array $orderBy = null, int $ttl = 28800)
     {
         $query = $this->buildQueryForFind($criteria, $orderBy);
         $query->setMaxResults(1);
-        $query->useResultCache(true, $ttl, '__'.\get_called_class().'::'.__FUNCTION__.\sha1(\serialize(\func_get_args())));
+        $query->useResultCache(true, $ttl, '__'.static::class.'::'.__FUNCTION__.\sha1(\serialize(\func_get_args())));
 
         try {
             return $query->getSingleResult();
@@ -126,7 +126,7 @@ class EntityRepository extends BaseRepository implements ObjectRepository
      *
      * @return Query
      */
-    private function buildQueryForFind(array $criteria, array $orderBy = null): Query
+    private function buildQueryForFind(array $criteria, ?array $orderBy = null): Query
     {
         return $this->buildQueryBuilderForCriteria($criteria, $orderBy)->getQuery();
     }
@@ -139,7 +139,7 @@ class EntityRepository extends BaseRepository implements ObjectRepository
      *
      * @return QueryBuilder
      */
-    private function buildQueryBuilderForCriteria(array $criteria, array $orderBy = null): QueryBuilder
+    private function buildQueryBuilderForCriteria(array $criteria, ?array $orderBy = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('a');
         $and = $qb->expr()->andX();

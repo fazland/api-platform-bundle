@@ -23,7 +23,7 @@ class Priority extends BaseAccept implements AcceptHeader
      */
     private $version;
 
-    public function __construct($value)
+    public function __construct(string $value)
     {
         parent::__construct($value);
         $parts = \explode('/', $this->type);
@@ -53,7 +53,7 @@ class Priority extends BaseAccept implements AcceptHeader
     }
 
     /**
-     * @param string $version
+     * @param string|null $version
      */
     public function setVersion(?string $version): void
     {
@@ -61,7 +61,7 @@ class Priority extends BaseAccept implements AcceptHeader
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getVersion(): ?string
     {

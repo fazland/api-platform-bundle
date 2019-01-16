@@ -120,7 +120,7 @@ class DocumentIteratorTest extends TestCase
             ]));
 
         $calledCount = 0;
-        $this->iterator->apply(function (FooBar $bar) use (&$calledCount) {
+        $this->iterator->apply(function (FooBar $bar) use (&$calledCount): int {
             ++$calledCount;
 
             return $bar->id;

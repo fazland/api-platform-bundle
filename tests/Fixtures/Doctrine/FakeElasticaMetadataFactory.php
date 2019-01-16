@@ -51,7 +51,7 @@ class FakeElasticaMetadataFactory extends MetadataFactory
     /**
      * {@inheritdoc}
      */
-    public function setMetadataFor($className, $class)
+    public function setMetadataFor($className, $class): void
     {
         $this->_metadata[$className] = $class;
     }

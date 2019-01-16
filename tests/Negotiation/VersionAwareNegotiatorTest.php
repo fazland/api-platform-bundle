@@ -43,7 +43,7 @@ class VersionAwareNegotiatorTest extends TestCase
     /**
      * @dataProvider dataProviderForTestGetBest
      */
-    public function testGetBest($header, $priorities, $expected): void
+    public function testGetBest(string $header, array $priorities, $expected): void
     {
         try {
             $acceptHeader = $this->negotiator->getBest($header, $priorities);

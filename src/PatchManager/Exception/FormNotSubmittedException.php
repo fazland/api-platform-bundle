@@ -11,7 +11,7 @@ class FormNotSubmittedException extends BadRequestException
      */
     private $form;
 
-    public function __construct(FormInterface $form, string $message = '', int $code = 0, ? \Throwable $previous = null)
+    public function __construct(FormInterface $form, string $message = '', int $code = 0, ?\Throwable $previous = null)
     {
         $this->form = $form;
         parent::__construct($message, $code, $previous);

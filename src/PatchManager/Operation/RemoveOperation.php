@@ -24,7 +24,9 @@ class RemoveOperation extends AbstractOperation
 
         if (null === $value) {
             return;
-        } elseif (\is_array($value) || $value instanceof \ArrayAccess) {
+        }
+
+        if (\is_array($value) || $value instanceof \ArrayAccess) {
             unset($value[$element]);
         } elseif (\is_iterable($value)) {
             $value = \iterator_to_array($value);

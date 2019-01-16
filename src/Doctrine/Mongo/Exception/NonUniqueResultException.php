@@ -7,12 +7,12 @@ use Fazland\ApiPlatformBundle\Doctrine\Exception\NonUniqueResultException as Non
 
 class NonUniqueResultException extends MongoDBException implements NonUniqueResultExceptionInterface
 {
-    const DEFAULT_MESSAGE = 'More than one result was found for query although one document or none was expected.';
+    private const DEFAULT_MESSAGE = 'More than one result was found for query although one document or none was expected.';
 
     /**
      * @param string|null $message
      */
-    public function __construct(string $message = null)
+    public function __construct(?string $message = null)
     {
         parent::__construct($message ?? self::DEFAULT_MESSAGE);
     }

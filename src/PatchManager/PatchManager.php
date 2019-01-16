@@ -56,7 +56,7 @@ class PatchManager implements PatchManagerInterface
             throw TypeError::createArgumentInvalid(1, __METHOD__, PatchableInterface::class, $patchable);
         }
 
-        if (\method_exists($patchable, 'getTypeClass') && ! $patchable instanceof MergeablePatchableInterface) {
+        if (! $patchable instanceof MergeablePatchableInterface && \method_exists($patchable, 'getTypeClass')) {
             \trigger_error(\sprintf(
                 '%s does not implement %s. %s::getTypeClass() is deprecated and will be removed in the first stable release.',
                 \get_class($patchable),
@@ -212,7 +212,7 @@ class PatchManager implements PatchManagerInterface
             }
 
             $path = new PropertyPath($path);
-            if (! \in_array($path->getElement(0), $paths)) {
+            if (! \in_array($path->getElement(0), $paths, true)) {
                 $violations->remove($i);
             }
         }

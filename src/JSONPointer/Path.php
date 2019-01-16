@@ -45,7 +45,7 @@ class Path implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function getLength()
+    public function getLength(): int
     {
         return $this->length;
     }
@@ -53,7 +53,7 @@ class Path implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): ?PropertyPathInterface
     {
         if ($this->length <= 1) {
             return null;
@@ -69,7 +69,7 @@ class Path implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function getElements()
+    public function getElements(): array
     {
         return $this->parts;
     }
@@ -77,7 +77,7 @@ class Path implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function getElement($index)
+    public function getElement($index): string
     {
         if (! isset($this->parts[$index])) {
             throw new OutOfBoundsException(\sprintf('The index %s is not within the property path', $index));
@@ -89,7 +89,7 @@ class Path implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function isProperty($index)
+    public function isProperty($index): bool
     {
         return true;
     }
@@ -97,7 +97,7 @@ class Path implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function isIndex($index)
+    public function isIndex($index): bool
     {
         return false;
     }
@@ -105,7 +105,7 @@ class Path implements \IteratorAggregate, PropertyPathInterface
     /**
      * {@inheritdoc}
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getPath();
     }
@@ -117,7 +117,7 @@ class Path implements \IteratorAggregate, PropertyPathInterface
      */
     private function decode(string $path): void
     {
-        if ('#' === \substr($path, 0, 1)) {
+        if (0 === \strpos($path, '#')) {
             $path = \urldecode(\substr($path, 1));
         }
 
@@ -135,17 +135,11 @@ class Path implements \IteratorAggregate, PropertyPathInterface
             throw new InvalidPropertyPathException('Invalid path syntax');
         }
 
-        $token = \str_replace('~1', '/', $token);
-        $token = \str_replace('~0', '~', $token);
-
-        return $token;
+        return \str_replace(['~1', '~0'], ['/', '~'], $token);
     }
 
     private function escape(string $token): string
     {
-        $token = \str_replace('~', '~0', $token);
-        $token = \str_replace('/', '~1', $token);
-
-        return $token;
+        return \str_replace(['~', '/'], ['~0', '~1'], $token);
     }
 }

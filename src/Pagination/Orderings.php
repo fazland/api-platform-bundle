@@ -7,8 +7,8 @@ namespace Fazland\ApiPlatformBundle\Pagination;
  */
 final class Orderings implements \Countable, \IteratorAggregate, \ArrayAccess
 {
-    const SORT_ASC = 'asc';
-    const SORT_DESC = 'desc';
+    public const SORT_ASC = 'asc';
+    public const SORT_DESC = 'desc';
 
     /**
      * @var array

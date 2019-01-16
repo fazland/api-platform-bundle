@@ -14,7 +14,7 @@ use Fazland\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\View\Controller\TestController;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
-use Kcs\Serializer\Serializer;
+use Kcs\Serializer\SerializerInterface;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -32,7 +32,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class ViewHandlerTest extends WebTestCase
 {
     /**
-     * @var Serializer|ObjectProphecy
+     * @var SerializerInterface|ObjectProphecy
      */
     private $serializer;
 
@@ -61,9 +61,12 @@ class ViewHandlerTest extends WebTestCase
      */
     private $defaultResponseCharset;
 
-    protected function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
     {
-        $this->serializer = $this->prophesize(Serializer::class);
+        $this->serializer = $this->prophesize(SerializerInterface::class);
         $this->serializationContext = SerializationContext::create();
         $this->httpKernel = $this->prophesize(HttpKernelInterface::class);
         $this->tokenStorage = $this->prophesize(TokenStorageInterface::class);
@@ -77,7 +80,7 @@ class ViewHandlerTest extends WebTestCase
         );
     }
 
-    public function skipProvider()
+    public function skipProvider(): array
     {
         $tests = [];
 
@@ -93,7 +96,7 @@ class ViewHandlerTest extends WebTestCase
     /**
      * @dataProvider skipProvider
      */
-    public function testSkip($request, $result)
+    public function testSkip(Request $request, $result)
     {
         $event = $this->prophesize(GetResponseForControllerResultEvent::class);
         $event->getRequest()->willReturn($request);
@@ -246,7 +249,7 @@ class ViewHandlerTest extends WebTestCase
         $this->viewHandler->onView($event->reveal());
     }
 
-    public function provideIterator(): \Generator
+    public function provideIterator(): iterable
     {
         yield [new \ArrayIterator(['foo' => 'bar'])];
         yield [new class() implements \IteratorAggregate {
@@ -260,7 +263,7 @@ class ViewHandlerTest extends WebTestCase
     /**
      * @dataProvider provideIterator
      */
-    public function testShouldTransformAnIteratorIntoAnArrayBeforeSerializing($iterator)
+    public function testShouldTransformAnIteratorIntoAnArrayBeforeSerializing(iterable $iterator): void
     {
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
@@ -307,7 +310,7 @@ class ViewHandlerTest extends WebTestCase
     /**
      * @depends testShouldAddXTotalCountHeaderForEntityIterators
      */
-    public function testShouldUnwrapIteratorFromIteratorAggregate(ObjectProphecy $iterator)
+    public function testShouldUnwrapIteratorFromIteratorAggregate(ObjectProphecy $iterator): void
     {
         $result = new class($iterator->reveal()) implements \IteratorAggregate {
             private $iterator;
@@ -348,7 +351,7 @@ class ViewHandlerTest extends WebTestCase
 
         $iterator = $this->prophesize(PagerIterator::class);
         $iterator->getNextPageToken()->willReturn(new PageToken((new Chronos('1991-11-24 02:00:00'))->getTimestamp(), 1, 1275024653));
-        $iterator->rewind()->willReturn();
+        $iterator->rewind()->shouldBeCalled();
         $iterator->valid()->willReturn(false);
 
         $event = $this->prophesize(GetResponseForControllerResultEvent::class);

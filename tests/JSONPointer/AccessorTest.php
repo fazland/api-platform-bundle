@@ -568,20 +568,28 @@ class AccessorTest extends TestCase
 
         $car->expects(self::any())
             ->method('getStructure')
-            ->will(self::returnValue($structure));
+            ->will(self::returnValue($structure))
+        ;
 
         $structure->expects(self::at(0))
             ->method('getAxes')
-            ->will(self::returnValue($axesBefore));
+            ->will(self::returnValue($axesBefore))
+        ;
+
         $structure->expects(self::at(1))
             ->method('addAxis')
-            ->with('third');
+            ->with('third')
+        ;
+
         $structure->expects(self::at(2))
             ->method('getAxes')
-            ->will(self::returnValue($axesAfterOne));
+            ->will(self::returnValue($axesAfterOne))
+        ;
+
         $structure->expects(self::at(3))
             ->method('addAxis')
-            ->with('fourth');
+            ->with('fourth')
+        ;
 
         $this->propertyAccessor->setValue($car, '/structure/axes/-', 'third');
         $this->propertyAccessor->setValue($car, '/structure/axes/-', 'fourth');

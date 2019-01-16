@@ -23,12 +23,12 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class PageToken
 {
-    const TOKEN_DELIMITER = '_';
+    public const TOKEN_DELIMITER = '_';
 
     /**
-     * The timestamp used as starting point to "cut" the object set.
+     * The value used as starting point to "cut" the object set.
      *
-     * @var \DateTimeInterface
+     * @var mixed
      */
     private $orderValue;
 
@@ -133,7 +133,7 @@ final class PageToken
     }
 
     /**
-     * Gets the page timestamp (starting point).
+     * Gets the page order value (starting point).
      *
      * @return mixed
      */

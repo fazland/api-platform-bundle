@@ -47,7 +47,7 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
     /**
      * {@inheritdoc}
      */
-    public function next()
+    public function next(): void
     {
         parent::next();
 
@@ -58,7 +58,7 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         parent::rewind();
 

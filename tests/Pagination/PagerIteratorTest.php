@@ -11,16 +11,25 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PagerIteratorTest extends TestCase
 {
-    const PAGE_SIZE = 3;
+    private const PAGE_SIZE = 3;
 
+    /**
+     * @var int[]
+     */
     private $case1 = [
         1, 2, 3, 4, 5, 6,
     ];
 
+    /**
+     * @var int[]
+     */
     private $case2 = [
         1, 2, 2, 2, 2, 3,
     ];
 
+    /**
+     * @var string[]
+     */
     private $uuids = [
         'b4902bde-28d2-4ff9-8971-8bfeb3e943c1',
         '191a54d8-990c-4ea7-9a23-0aed29d1fffe',
@@ -30,6 +39,9 @@ class PagerIteratorTest extends TestCase
         'eadd7470-95f5-47e8-8e74-083d45c307f6',
     ];
 
+    /**
+     * @var string[]
+     */
     private $wrong_uuids = [
         'eadd7470-95f5-47e8-8e74-083d45c307f6',
         '84810e2e-448f-4f58-acb8-4db1381f5de3',

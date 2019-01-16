@@ -12,12 +12,12 @@ class AccessorCollectionTest_Car
     }
 
     // In the test, use a name that StringUtil can't uniquely singularify
-    public function addAxis($axis)
+    public function addAxis($axis): void
     {
         $this->axes[] = $axis;
     }
 
-    public function removeAxis($axis)
+    public function removeAxis($axis): void
     {
         foreach ($this->axes as $key => $value) {
             if ($value === $axis) {
@@ -36,7 +36,7 @@ class AccessorCollectionTest_Car
 
 class AccessorCollectionTest_CarOnlyAdder
 {
-    public function addAxis($axis)
+    public function addAxis($axis): void
     {
     }
 
@@ -47,7 +47,7 @@ class AccessorCollectionTest_CarOnlyAdder
 
 class AccessorCollectionTest_CarOnlyRemover
 {
-    public function removeAxis($axis)
+    public function removeAxis($axis): void
     {
     }
 
@@ -69,18 +69,18 @@ class AccessorCollectionTest_CompositeCar
     {
     }
 
-    public function setStructure($structure)
+    public function setStructure($structure): void
     {
     }
 }
 
 class AccessorCollectionTest_CarStructure
 {
-    public function addAxis($axis)
+    public function addAxis($axis): void
     {
     }
 
-    public function removeAxis($axis)
+    public function removeAxis($axis): void
     {
     }
 

@@ -16,5 +16,8 @@ class FooBar
      */
     public $id;
 
+    /**
+     * @var mixed
+     */
     public $prop;
 }

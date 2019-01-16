@@ -59,7 +59,8 @@ class EntityIterator implements ObjectIterator
                 ->setFirstResult(null)
                 ->setMaxResults(null)
                 ->getQuery()
-                ->getSingleScalarResult();
+                ->getSingleScalarResult()
+            ;
         }
 
         return $this->_totalCount;
@@ -95,7 +96,7 @@ class EntityIterator implements ObjectIterator
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->_current = null;
         $this->internalIterator->rewind();

@@ -12,10 +12,29 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class View
 {
+    /**
+     * @var mixed
+     */
     public $result;
+
+    /**
+     * @var array
+     */
     public $headers;
+
+    /**
+     * @var int
+     */
     public $statusCode;
+
+    /**
+     * @var string[]|null
+     */
     public $serializationGroups;
+
+    /**
+     * @var string|null
+     */
     public $serializationType;
 
     public function __construct($result, int $statusCode = Response::HTTP_OK)

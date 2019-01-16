@@ -6,7 +6,7 @@ use Fazland\ApiPlatformBundle\HttpKernel\Exception\DebugSerializableException;
 use Fazland\ApiPlatformBundle\HttpKernel\Exception\SerializableException;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
-use Kcs\Serializer\Serializer;
+use Kcs\Serializer\SerializerInterface;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ExceptionController
 {
     /**
-     * @var Serializer
+     * @var SerializerInterface
      */
     private $serializer;
 
@@ -28,7 +28,7 @@ class ExceptionController
      */
     private $exceptionClass;
 
-    public function __construct(Serializer $serializer, SerializationContext $serializationContext, bool $debug = false)
+    public function __construct(SerializerInterface $serializer, SerializationContext $serializationContext, bool $debug = false)
     {
         $this->serializer = $serializer;
         $this->serializationContext = $serializationContext;

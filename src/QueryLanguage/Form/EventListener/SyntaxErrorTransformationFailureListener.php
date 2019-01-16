@@ -55,6 +55,7 @@ class SyntaxErrorTransformationFailureListener implements EventSubscriberInterfa
         $previous = $failure;
 
         while ((null !== $previous = $previous->getPrevious()) && ! $previous instanceof SyntaxError) {
+            // Intentionally empty. Just cycle all previous exceptions until a SyntaxError is found.
         }
 
         if (null === $previous) {

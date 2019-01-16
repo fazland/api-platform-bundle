@@ -5,9 +5,9 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Exception;
 final class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
     /**
-     * @param mixed $message
+     * @param string $message
      */
-    public function setMessage($message): void
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }

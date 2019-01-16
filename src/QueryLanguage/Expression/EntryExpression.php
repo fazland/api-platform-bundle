@@ -25,7 +25,7 @@ final class EntryExpression implements ExpressionInterface
         $this->value = $value;
     }
 
-    public static function create(ExpressionInterface $key, ExpressionInterface $value)
+    public static function create(ExpressionInterface $key, ExpressionInterface $value): self
     {
         self::assertLiteral($key, 1);
 

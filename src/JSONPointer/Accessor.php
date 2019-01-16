@@ -17,82 +17,82 @@ class Accessor implements PropertyAccessorInterface
     /**
      * @internal
      */
-    const VALUE = 0;
+    public const VALUE = 0;
 
     /**
      * @internal
      */
-    const REF = 1;
+    public const REF = 1;
 
     /**
      * @internal
      */
-    const IS_REF_CHAINED = 2;
+    public const IS_REF_CHAINED = 2;
 
     /**
      * @internal
      */
-    const ACCESS_HAS_PROPERTY = 0;
+    public const ACCESS_HAS_PROPERTY = 0;
 
     /**
      * @internal
      */
-    const ACCESS_TYPE = 1;
+    public const ACCESS_TYPE = 1;
 
     /**
      * @internal
      */
-    const ACCESS_NAME = 2;
+    public const ACCESS_NAME = 2;
 
     /**
      * @internal
      */
-    const ACCESS_REF = 3;
+    public const ACCESS_REF = 3;
 
     /**
      * @internal
      */
-    const ACCESS_ADDER = 4;
+    public const ACCESS_ADDER = 4;
 
     /**
      * @internal
      */
-    const ACCESS_REMOVER = 5;
+    public const ACCESS_REMOVER = 5;
 
     /**
      * @internal
      */
-    const ACCESS_TYPE_METHOD = 0;
+    public const ACCESS_TYPE_METHOD = 0;
 
     /**
      * @internal
      */
-    const ACCESS_TYPE_PROPERTY = 1;
+    public const ACCESS_TYPE_PROPERTY = 1;
 
     /**
      * @internal
      */
-    const ACCESS_TYPE_ADDER_AND_REMOVER = 3;
+    public const ACCESS_TYPE_ADDER_AND_REMOVER = 3;
 
     /**
      * @internal
      */
-    const ACCESS_TYPE_NOT_FOUND = 4;
+    public const ACCESS_TYPE_NOT_FOUND = 4;
 
     /**
      * @internal
      */
-    const CACHE_PREFIX_READ = 'r';
+    public const CACHE_PREFIX_READ = 'r';
 
     /**
      * @internal
      */
-    const CACHE_PREFIX_WRITE = 'w';
+    public const CACHE_PREFIX_WRITE = 'w';
 
     /**
      * @internal
      */
-    const CACHE_PREFIX_PROPERTY_PATH = 'p';
+    public const CACHE_PREFIX_PROPERTY_PATH = 'p';
 
     /**
      * @var CacheItemPoolInterface
@@ -108,11 +108,15 @@ class Accessor implements PropertyAccessorInterface
      * @var array
      */
     private $writePropertyCache = [];
+
+    /**
+     * @var array
+     */
     private static $resultProto = [self::VALUE => null];
 
-    public function __construct(CacheItemPoolInterface $cacheItemPool = null)
+    public function __construct(?CacheItemPoolInterface $cacheItemPool = null)
     {
-        $this->cacheItemPool = null === $cacheItemPool ? new ArrayAdapter() : $cacheItemPool; // Replace the NullAdapter by the null value
+        $this->cacheItemPool = $cacheItemPool ?? new ArrayAdapter();
     }
 
     /**
@@ -141,7 +145,7 @@ class Accessor implements PropertyAccessorInterface
             // OR
             // 2. its child is not passed by reference
             //
-            // This may avoid uncessary value setting process for array elements.
+            // This may avoid unnecessary value setting process for array elements.
             // For example:
             // '/a/b/c' => 'old-value'
             // If you want to change its value to 'new-value',
@@ -209,9 +213,7 @@ class Accessor implements PropertyAccessorInterface
     {
         $propertyPath = $this->getPath($propertyPath);
 
-        $zval = [
-            self::VALUE => $objectOrArray,
-        ];
+        $zval = [self::VALUE => $objectOrArray];
         $propertyValues = $this->readPropertiesUntil($zval, $propertyPath, $propertyPath->getLength());
 
         return $propertyValues[\count($propertyValues) - 1][self::VALUE];
@@ -225,9 +227,7 @@ class Accessor implements PropertyAccessorInterface
         $propertyPath = $this->getPath($propertyPath);
 
         try {
-            $zval = [
-                self::VALUE => $objectOrArray,
-            ];
+            $zval = [self::VALUE => $objectOrArray];
             $this->readPropertiesUntil($zval, $propertyPath, $propertyPath->getLength());
 
             return true;
@@ -244,9 +244,7 @@ class Accessor implements PropertyAccessorInterface
         $propertyPath = $this->getPath($propertyPath);
 
         try {
-            $zval = [
-                self::VALUE => $objectOrArray,
-            ];
+            $zval = [self::VALUE => $objectOrArray];
             $propertyValues = $this->readPropertiesUntil($zval, $propertyPath, $propertyPath->getLength() - 1);
 
             $i = \count($propertyValues) - 1;
@@ -254,7 +252,9 @@ class Accessor implements PropertyAccessorInterface
 
             if ($zval[self::VALUE] instanceof \ArrayAccess || \is_array($zval[self::VALUE])) {
                 return true;
-            } elseif (! $this->isPropertyWritable($zval[self::VALUE], $propertyPath->getElement($i))) {
+            }
+
+            if (! $this->isPropertyWritable($zval[self::VALUE], $propertyPath->getElement($i))) {
                 return false;
             }
 
@@ -600,6 +600,7 @@ class Accessor implements PropertyAccessorInterface
         return self::ACCESS_TYPE_METHOD === $access[self::ACCESS_TYPE]
             || self::ACCESS_TYPE_PROPERTY === $access[self::ACCESS_TYPE]
             || self::ACCESS_TYPE_ADDER_AND_REMOVER === $access[self::ACCESS_TYPE]
-            || (! $access[self::ACCESS_HAS_PROPERTY] && \property_exists($object, $property));
+            || (! $access[self::ACCESS_HAS_PROPERTY] && \property_exists($object, $property))
+        ;
     }
 }

@@ -6,6 +6,9 @@ use Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer\NonTraversableArrayObje
 
 class AccessorNonTraversableArrayObjectTest extends AccessorArrayAccessTest
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function getContainer(array $array)
     {
         return new NonTraversableArrayObject($array);

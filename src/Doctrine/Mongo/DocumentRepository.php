@@ -25,17 +25,20 @@ class DocumentRepository extends BaseRepository implements ObjectRepository
         return (int) $this->buildQueryBuilderForCriteria($criteria)
             ->count()
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function findOneByCached(array $criteria, array $orderBy = null, int $ttl = 28800)
+    public function findOneByCached(array $criteria, ?array $orderBy = null, int $ttl = 28800)
     {
         $query = $this->buildQueryBuilderForCriteria($criteria, $orderBy);
         $query->limit(1);
-//        $query->getQuery()->useResultCache(true, $ttl, '__'.get_called_class().'::'.__FUNCTION__.sha1(serialize(func_get_args())));
+
+        // This is commented due to the missing cache part in doctrine/mongo-odm
+        // $query->getQuery()->useResultCache(true, $ttl, '__'.get_called_class().'::'.__FUNCTION__.sha1(serialize(func_get_args())));
 
         return $query->getQuery()->getSingleResult();
     }
@@ -45,13 +48,14 @@ class DocumentRepository extends BaseRepository implements ObjectRepository
      */
     public function findByCached(
         array $criteria,
-        array $orderBy = null,
+        ?array $orderBy = null,
         ?int $limit = null,
         ?int $offset = null,
         int $ttl = 28800
     ) {
         $query = $this->buildQueryBuilderForCriteria($criteria, $orderBy);
-//        $query->getQuery()->useResultCache(true, $ttl, '__'.get_called_class().'::'.__FUNCTION__.sha1(serialize(func_get_args())));
+        // This is commented due to the missing cache part in doctrine/mongo-odm
+        // $query->getQuery()->useResultCache(true, $ttl, '__'.get_called_class().'::'.__FUNCTION__.sha1(serialize(func_get_args())));
 
         return \iterator_to_array($query->getQuery()->getIterator());
     }
@@ -73,7 +77,7 @@ class DocumentRepository extends BaseRepository implements ObjectRepository
     /**
      * {@inheritdoc}
      */
-    public function getOneBy(array $criteria, array $orderBy = null)
+    public function getOneBy(array $criteria, ?array $orderBy = null)
     {
         $query = $this->buildQueryBuilderForCriteria($criteria, $orderBy);
         $query->limit(1);
@@ -90,7 +94,7 @@ class DocumentRepository extends BaseRepository implements ObjectRepository
     /**
      * {@inheritdoc}
      */
-    public function getOneByCached(array $criteria, array $orderBy = null, int $ttl = 28800)
+    public function getOneByCached(array $criteria, ?array $orderBy = null, int $ttl = 28800)
     {
         $query = $this->buildQueryBuilderForCriteria($criteria, $orderBy);
         $query->limit(1);
@@ -113,7 +117,7 @@ class DocumentRepository extends BaseRepository implements ObjectRepository
      *
      * @return Builder
      */
-    private function buildQueryBuilderForCriteria(array $criteria, array $orderBy = null): Builder
+    private function buildQueryBuilderForCriteria(array $criteria, ?array $orderBy = null): Builder
     {
         $qb = $this->createQueryBuilder();
 

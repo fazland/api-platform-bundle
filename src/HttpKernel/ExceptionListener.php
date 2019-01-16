@@ -24,7 +24,7 @@ class ExceptionListener implements EventSubscriberInterface
      */
     private $logger;
 
-    public function __construct(string $controller, LoggerInterface $logger = null)
+    public function __construct(string $controller, ?LoggerInterface $logger = null)
     {
         $this->controller = $controller;
         $this->logger = $logger;

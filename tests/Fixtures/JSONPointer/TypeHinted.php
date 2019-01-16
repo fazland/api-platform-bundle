@@ -14,7 +14,7 @@ class TypeHinted
      */
     private $countable;
 
-    public function setDate(\DateTimeInterface $date)
+    public function setDate(\DateTimeInterface $date): void
     {
         $this->date = $date;
     }

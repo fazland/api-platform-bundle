@@ -34,7 +34,7 @@ class FieldType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent(): string
+    public function getParent(): ?string
     {
         return TextType::class;
     }

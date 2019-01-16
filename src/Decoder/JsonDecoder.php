@@ -2,6 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle\Decoder;
 
+use Fazland\ApiPlatformBundle\Decoder\Exception\InvalidJSONException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class JsonDecoder implements DecoderInterface
@@ -25,7 +26,7 @@ class JsonDecoder implements DecoderInterface
             if (false === $value) {
                 $value = '0';
             } elseif (! \is_string($value)) {
-                $value = \strval($value);
+                $value = (string) $value;
             }
         });
 
@@ -54,7 +55,7 @@ class JsonDecoder implements DecoderInterface
         $returnValue = @\json_decode($json, true);
 
         if (null === $returnValue && JSON_ERROR_NONE !== \json_last_error()) {
-            throw new \Exception('Cannot decode JSON: '.\json_last_error_msg());
+            throw new InvalidJSONException($json, \json_last_error_msg());
         }
 
         return $returnValue;

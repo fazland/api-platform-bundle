@@ -4,8 +4,14 @@ namespace Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer;
 
 class TestClassMagicGet
 {
+    /**
+     * @var mixed
+     */
     private $magicProperty;
 
+    /**
+     * @var mixed
+     */
     public $publicProperty;
 
     public function __construct($value)
@@ -13,14 +19,14 @@ class TestClassMagicGet
         $this->magicProperty = $value;
     }
 
-    public function __set($property, $value)
+    public function __set(string $property, $value)
     {
         if ('magicProperty' === $property) {
             $this->magicProperty = $value;
         }
     }
 
-    public function __get($property)
+    public function __get(string $property)
     {
         if ('magicProperty' === $property) {
             return $this->magicProperty;

@@ -12,8 +12,13 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $tb = new TreeBuilder();
-        $rootNode = $tb->root('api_platform', 'array');
+        if (\method_exists(TreeBuilder::class, 'getRootNode')) {
+            $treeBuilder = new TreeBuilder('api_platform');
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            $treeBuilder = new TreeBuilder();
+            $rootNode = $treeBuilder->root('api_platform');
+        }
 
         $rootNode
             ->addDefaultsIfNotSet()
@@ -45,6 +50,6 @@ class Configuration implements ConfigurationInterface
             ->end()
         ;
 
-        return $tb;
+        return $treeBuilder;
     }
 }
