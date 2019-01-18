@@ -10,7 +10,7 @@ trait IteratorTrait
      * A function to be applied to each element
      * while iterating.
      *
-     * @var null|callable
+     * @var callable|null
      */
     private $_apply;
 

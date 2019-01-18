@@ -17,7 +17,7 @@ interface ColumnInterface
     /**
      * Gets the validation walker factory for the current column.
      *
-     * @return null|string|callable
+     * @return string|callable|null
      */
     public function getValidationWalker();
 }

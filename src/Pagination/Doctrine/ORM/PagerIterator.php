@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\DateTimeTzType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
-use Fazland\ApiPlatformBundle\Doctrine\Traits\IteratorTrait;
+use Fazland\ApiPlatformBundle\Doctrine\Traits\ORM\IteratorTrait;
 use Fazland\ApiPlatformBundle\Pagination\Orderings;
 use Fazland\ApiPlatformBundle\Pagination\PagerIterator as BaseIterator;
 
@@ -15,42 +15,12 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
 {
     use IteratorTrait;
 
-    /**
-     * @var QueryBuilder
-     */
-    private $queryBuilder;
-
-    /**
-     * @var null|int
-     */
-    private $_totalCount;
-
     public function __construct(QueryBuilder $searchable, $orderBy)
     {
         $this->queryBuilder = clone $searchable;
         $this->apply(null);
 
         parent::__construct([], $orderBy);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function count(): int
-    {
-        if (null === $this->_totalCount) {
-            $queryBuilder = clone $this->queryBuilder;
-            $alias = $queryBuilder->getRootAliases()[0];
-
-            $this->_totalCount = (int) $queryBuilder->select('COUNT(DISTINCT '.$alias.')')
-                ->setFirstResult(0)
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getSingleScalarResult()
-            ;
-        }
-
-        return $this->_totalCount;
     }
 
     /**

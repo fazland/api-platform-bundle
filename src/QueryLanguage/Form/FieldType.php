@@ -11,7 +11,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 class FieldType extends AbstractType
 {
     /**
-     * @var null|TranslatorInterface
+     * @var TranslatorInterface|null
      */
     private $translator;
 

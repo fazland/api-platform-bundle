@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraint;
 class Expression extends Constraint
 {
     /**
-     * @var null|string|callable
+     * @var string|callable|null
      *
      * @Required()
      */

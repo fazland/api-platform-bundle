@@ -20,7 +20,7 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
     private $search;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     private $_totalCount;
 

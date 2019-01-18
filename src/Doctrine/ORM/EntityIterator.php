@@ -5,7 +5,7 @@ namespace Fazland\ApiPlatformBundle\Doctrine\ORM;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
-use Fazland\ApiPlatformBundle\Doctrine\Traits\IteratorTrait;
+use Fazland\ApiPlatformBundle\Doctrine\Traits\ORM\IteratorTrait;
 
 /**
  * This class allows iterating a query iterator for a single entity query.
@@ -19,16 +19,6 @@ class EntityIterator implements ObjectIterator
      */
     private $internalIterator;
 
-    /**
-     * @var QueryBuilder
-     */
-    private $queryBuilder;
-
-    /**
-     * @var null|int
-     */
-    private $_totalCount;
-
     public function __construct(QueryBuilder $queryBuilder)
     {
         if (1 !== \count($queryBuilder->getRootAliases())) {
@@ -40,30 +30,6 @@ class EntityIterator implements ObjectIterator
 
         $this->apply(null);
         $this->_currentElement = $this->internalIterator->current()[0];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function count(): int
-    {
-        if (null === $this->_totalCount) {
-            $queryBuilder = clone $this->queryBuilder;
-            $alias = $queryBuilder->getRootAliases()[0];
-
-            $queryBuilder->resetDQLPart('orderBy');
-            $distinct = $queryBuilder->getDQLPart('distinct') ? 'DISTINCT ' : '';
-            $queryBuilder->resetDQLPart('distinct');
-
-            $this->_totalCount = (int) $queryBuilder->select('COUNT('.$distinct.$alias.')')
-                ->setFirstResult(null)
-                ->setMaxResults(null)
-                ->getQuery()
-                ->getSingleScalarResult()
-            ;
-        }
-
-        return $this->_totalCount;
     }
 
     /**

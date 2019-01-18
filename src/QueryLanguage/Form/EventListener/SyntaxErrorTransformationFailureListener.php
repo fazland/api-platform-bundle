@@ -12,7 +12,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 class SyntaxErrorTransformationFailureListener implements EventSubscriberInterface
 {
     /**
-     * @var null|TranslatorInterface
+     * @var TranslatorInterface|null
      */
     private $translator;
 

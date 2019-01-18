@@ -39,12 +39,12 @@ class Column implements ColumnInterface
     public $associations;
 
     /**
-     * @var null|string|callable
+     * @var string|callable|null
      */
     public $validationWalker;
 
     /**
-     * @var null|string|callable
+     * @var string|callable|null
      */
     public $customWalker;
     /**

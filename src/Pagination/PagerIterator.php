@@ -26,7 +26,7 @@ class PagerIterator implements \Iterator
     /**
      * The current continuation token.
      *
-     * @var null|PageToken
+     * @var PageToken|null
      */
     protected $token;
 

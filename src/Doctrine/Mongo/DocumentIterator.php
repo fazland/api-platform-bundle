@@ -25,7 +25,7 @@ class DocumentIterator implements ObjectIterator
     private $queryBuilder;
 
     /**
-     * @var null|int
+     * @var int|null
      */
     private $_totalCount;
 
