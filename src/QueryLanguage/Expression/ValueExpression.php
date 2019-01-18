@@ -47,7 +47,7 @@ class ValueExpression implements ExpressionInterface
     /**
      * Creates a new value expression.
      *
-     * @param $value
+     * @param mixed $value
      *
      * @return ValueExpression
      */
