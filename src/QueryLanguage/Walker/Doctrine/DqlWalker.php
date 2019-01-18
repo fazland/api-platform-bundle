@@ -2,10 +2,12 @@
 
 namespace Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
+use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\LiteralExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\NullExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\StringExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
@@ -38,6 +40,30 @@ class DqlWalker extends AbstractWalker
 
         $this->queryBuilder = $queryBuilder;
         $this->columnType = $columnType;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function walkLiteral(LiteralExpression $expression)
+    {
+        $value = parent::walkLiteral($expression);
+        if ($expression instanceof NullExpression) {
+            return $value;
+        }
+
+        switch ($this->columnType) {
+            case Type::DATETIME:
+            case Type::DATETIMETZ:
+                return new \DateTime($value);
+
+            case Type::DATETIME_IMMUTABLE:
+            case Type::DATETIMETZ_IMMUTABLE:
+                return new \DateTimeImmutable($value);
+
+            default:
+                return $value;
+        }
     }
 
     /**
