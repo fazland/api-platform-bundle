@@ -27,11 +27,17 @@ class DqlWalker extends AbstractWalker
      */
     protected $queryBuilder;
 
-    public function __construct(QueryBuilder $queryBuilder, string $field)
+    /**
+     * @var string
+     */
+    private $columnType;
+
+    public function __construct(QueryBuilder $queryBuilder, string $field, string $columnType = 'string')
     {
         parent::__construct($field);
 
         $this->queryBuilder = $queryBuilder;
+        $this->columnType = $columnType;
     }
 
     /**
@@ -50,7 +56,7 @@ class DqlWalker extends AbstractWalker
         }
 
         $parameterName = $this->generateParameterName();
-        $this->queryBuilder->setParameter($parameterName, $expression->dispatch($this));
+        $this->queryBuilder->setParameter($parameterName, $expression->dispatch($this), $this->columnType);
 
         return new Expr\Comparison($field, self::COMPARISON_MAP[$operator], ':'.$parameterName);
     }

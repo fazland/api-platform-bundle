@@ -108,7 +108,7 @@ class Column implements ColumnInterface
         if (null !== $walker) {
             $walker = \is_string($walker) ? new $walker($queryBuilder, $fieldName) : $walker($queryBuilder, $fieldName);
         } else {
-            $walker = new DqlWalker($queryBuilder, $fieldName);
+            $walker = new DqlWalker($queryBuilder, $fieldName, $this->mapping['type'] ?? 'string');
         }
 
         $queryBuilder->andWhere($expression->dispatch($walker));
@@ -146,7 +146,7 @@ class Column implements ColumnInterface
         if (null !== $walker) {
             $walker = \is_string($walker) ? new $walker($subQb, $currentFieldName) : $walker($subQb, $currentFieldName);
         } else {
-            $walker = new DqlWalker($subQb, $currentFieldName);
+            $walker = new DqlWalker($subQb, $currentFieldName, $this->mapping['type'] ?? 'string');
         }
 
         $subQb->where($expression->dispatch($walker));
