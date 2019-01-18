@@ -4,7 +4,7 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation;
 
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\LiteralExpression;
 
-class NumericFieldWalker extends ValidationWalker
+class NumericWalker extends ValidationWalker
 {
     /**
      * {@inheritdoc}
