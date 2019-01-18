@@ -1,5 +1,6 @@
 Fazland - ApiPlatformBundle
 ===========================
+[![Build Status](https://travis-ci.org/fazland/api-platform-bundle.svg?branch=master)](https://travis-ci.org/fazland/api-platform-bundle)
 
 This bundle helps to build RESTful API within a Symfony project.
 
