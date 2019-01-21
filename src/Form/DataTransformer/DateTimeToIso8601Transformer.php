@@ -8,6 +8,17 @@ use Symfony\Component\Form\Extension\Core\DataTransformer\BaseDateTimeTransforme
 class DateTimeToIso8601Transformer extends BaseDateTimeTransformer
 {
     /**
+     * @var bool
+     */
+    private $asImmutable;
+
+    public function __construct(?string $inputTimezone = null, ?string $outputTimezone = null, bool $asImmutable = false)
+    {
+        parent::__construct($inputTimezone, $outputTimezone);
+        $this->asImmutable = $asImmutable;
+    }
+
+    /**
      * Transforms a normalized date into a localized date.
      *
      * @param \DateTimeInterface $dateTime A DateTimeInterface object
@@ -49,6 +60,10 @@ class DateTimeToIso8601Transformer extends BaseDateTimeTransformer
      */
     public function reverseTransform($iso8601): ?\DateTimeInterface
     {
+        if (null === $iso8601 || $iso8601 instanceof \DateTimeInterface) {
+            return $iso8601;
+        }
+
         if (! \is_string($iso8601)) {
             throw new TransformationFailedException('Expected a string.');
         }
@@ -62,7 +77,11 @@ class DateTimeToIso8601Transformer extends BaseDateTimeTransformer
         }
 
         try {
-            $dateTime = new \DateTime($iso8601);
+            if (! $this->asImmutable) {
+                $dateTime = new \DateTime($iso8601);
+            } else {
+                $dateTime = new \DateTimeImmutable($iso8601);
+            }
         } catch (\Exception $e) {
             throw new TransformationFailedException($e->getMessage(), $e->getCode(), $e);
         }
