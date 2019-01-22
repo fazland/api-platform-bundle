@@ -32,6 +32,7 @@ class ApiPlatformExtension extends Extension
 
         if ($config['view']['enabled']) {
             $loader->load('view.xml');
+            $loader->load('sunset.xml');
             $loader->load('exception_listeners.xml');
         }
 

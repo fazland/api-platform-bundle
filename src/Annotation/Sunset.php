@@ -8,34 +8,21 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @Annotation()
  */
-class View implements ConfigurationInterface
+class Sunset implements ConfigurationInterface
 {
     /**
-     * @var int
-     */
-    public $statusCode = Response::HTTP_OK;
-
-    /**
-     * @var string[]
-     */
-    public $groups;
-
-    /**
      * @var string
+     *
+     * @Required()
      */
-    public $groupsProvider;
-
-    /**
-     * @var string
-     */
-    public $serializationType;
+    public $date;
 
     /**
      * {@inheritdoc}
      */
     public function getAliasName(): string
     {
-        return 'rest_view';
+        return 'rest_sunset';
     }
 
     /**
