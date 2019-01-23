@@ -47,6 +47,9 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('response_charset')
                     ->defaultValue('UTF-8')
                 ->end()
+                ->arrayNode('auto_submit_request_handler')
+                    ->canBeDisabled()
+                ->end()
             ->end()
         ;
 

@@ -49,6 +49,7 @@ class ApiPlatformExtension extends Extension
         }
 
         $container->setParameter('fazland_api.response_charset', $config['response_charset']);
+        $container->setParameter('fazland_api.auto_submit_request_handler_is_enabled', $config['auto_submit_request_handler']['enabled']);
     }
 
     /**

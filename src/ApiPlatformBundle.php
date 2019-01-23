@@ -2,6 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle;
 
+use Fazland\ApiPlatformBundle\DependencyInjection\CompilerPass\OverrideDefaultRequestHandlerPass;
 use Fazland\ApiPlatformBundle\DependencyInjection\CompilerPass\RegisterDecoders;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -15,6 +16,7 @@ class ApiPlatformBundle extends Bundle
     {
         $container
             ->addCompilerPass(new RegisterDecoders())
+            ->addCompilerPass(new OverrideDefaultRequestHandlerPass())
         ;
     }
 }
