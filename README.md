@@ -33,4 +33,4 @@ Contributions are welcome. Feel free to open a PR or file an issue here on GitHu
 
 License
 -------
-ApiPlatformBundle is licensed under the MIT License - see the [LICENSE](https://github.com/fazland/Notifire/blob/master/LICENSE) file for details
+ApiPlatformBundle is licensed under the MIT License - see the [LICENSE](https://github.com/fazland/api-platform-bundle/blob/master/LICENSE) file for details
