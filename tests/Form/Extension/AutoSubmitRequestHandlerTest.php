@@ -5,7 +5,6 @@ namespace Fazland\ApiPlatformBundle\Tests\Form\Extension;
 use Fazland\ApiPlatformBundle\Form\Extension\AutoSubmitRequestHandler;
 use Symfony\Component\Form\RequestHandlerInterface;
 use Symfony\Component\Form\Tests\Extension\HttpFoundation\HttpFoundationRequestHandlerTest;
-use Symfony\Component\HttpFoundation\Request;
 
 class AutoSubmitRequestHandlerTest extends HttpFoundationRequestHandlerTest
 {
@@ -22,22 +21,24 @@ class AutoSubmitRequestHandlerTest extends HttpFoundationRequestHandlerTest
      */
     public function testDoNotSubmitFormWithEmptyNameIfNoFieldInRequest($method): void
     {
-        $form = $this->getMockForm('', $method);
-        $form->expects(self::any())
-            ->method('all')
-            ->will(self::returnValue([
-                'param1' => $this->getMockForm('param1'),
-                'param2' => $this->getMockForm('param2'),
-            ]))
-        ;
+        self::markTestSkipped('Not applicable to this request handler');
+    }
 
-        $this->setRequestData($method, ['paramx' => 'submitted value']);
+    /**
+     * @dataProvider methodProvider
+     */
+    public function testDoSubmitFormWithEmptyNameIfNoFieldInRequest(string $method): void
+    {
+        $form = $this->createForm('', $method, true);
+        $form->add($this->createForm('param1'));
+        $form->add($this->createForm('param2'));
 
-        $form->expects(self::once())
-            ->method('submit')
-            ->with(['paramx' => 'submitted value'], Request::METHOD_PATCH !== $method)
-        ;
+        $this->setRequestData($method, [
+            'paramx' => 'submitted value',
+        ]);
 
         $this->requestHandler->handleRequest($form, $this->request);
+
+        $this->assertTrue($form->isSubmitted());
     }
 }
