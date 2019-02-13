@@ -39,6 +39,6 @@ class AutoSubmitRequestHandlerTest extends HttpFoundationRequestHandlerTest
 
         $this->requestHandler->handleRequest($form, $this->request);
 
-        $this->assertTrue($form->isSubmitted());
+        self::assertTrue($form->isSubmitted());
     }
 }

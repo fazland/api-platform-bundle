@@ -11,10 +11,10 @@ class SyntheticUploadedFile extends UploadedFile
     /**
      * SyntheticUploadedFile constructor.
      *
-     * @param string $contents
+     * @param string      $contents
      * @param string|null $originalName
      * @param string|null $mimeType
-     * @param int|null $error
+     * @param int|null    $error
      */
     public function __construct(
         string $contents,

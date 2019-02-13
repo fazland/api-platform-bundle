@@ -3,7 +3,6 @@
 namespace Fazland\ApiPlatformBundle\Annotation;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Annotation()

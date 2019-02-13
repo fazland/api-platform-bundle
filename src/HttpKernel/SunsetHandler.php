@@ -3,11 +3,6 @@
 namespace Fazland\ApiPlatformBundle\HttpKernel;
 
 use Fazland\ApiPlatformBundle\Annotation\Sunset;
-use Fazland\ApiPlatformBundle\Annotation\View as ViewAnnotation;
-use Fazland\ApiPlatformBundle\HttpKernel\View\Context;
-use Fazland\ApiPlatformBundle\HttpKernel\View\View;
-use Kcs\Serializer\Exception\UnsupportedFormatException;
-use Kcs\Serializer\Type\Type;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;

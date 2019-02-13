@@ -79,7 +79,7 @@ class Base64ToUploadedFileTransformerTest extends TestCase
         self::assertInstanceOf(File::class, $file);
 
         $handle = $file->openFile();
-        self::assertStringEqualsFile(__DIR__ . '/../../Fixtures/test.gif', $handle->fread($handle->getSize()));
+        self::assertStringEqualsFile(__DIR__.'/../../Fixtures/test.gif', $handle->fread($handle->getSize()));
         self::assertEquals('image/gif', $file->getMimeType());
     }
 }

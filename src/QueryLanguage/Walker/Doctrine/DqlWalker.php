@@ -43,7 +43,7 @@ class DqlWalker extends AbstractWalker
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function walkLiteral(LiteralExpression $expression)
     {
