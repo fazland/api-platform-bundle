@@ -1,14 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Form\DataTransformer;
+namespace Fazland\ApiPlatformBundle\Tests\Form\DataTransformer;
 
 use Fazland\ApiPlatformBundle\Form\DataTransformer\DateTimeToIso8601Transformer;
 use PHPUnit\Framework\TestCase;
 
 class DateTimeToIso8601TransformerTest extends TestCase
 {
-    protected $dateTime;
-    protected $dateTimeWithoutSeconds;
+    /**
+     * @var \DateTimeInterface
+     */
+    private $dateTime;
+
+    /**
+     * @var \DateTimeInterface
+     */
+    private $dateTimeWithoutSeconds;
 
     /**
      * {@inheritdoc}
