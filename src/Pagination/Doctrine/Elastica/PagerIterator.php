@@ -74,7 +74,7 @@ final class PagerIterator extends BaseIterator implements ObjectIterator
         $search = clone $this->search;
 
         $sort = [];
-        foreach ($this->orderBy as list($field, $direction)) {
+        foreach ($this->orderBy as [$field, $direction]) {
             $sort[$field] = $direction;
         }
 

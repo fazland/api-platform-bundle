@@ -56,7 +56,7 @@ trait MongoDocumentManagerMockTrait
                 'wtimeout' => 5000,
             ]);
             $server->selectDB('doctrine')->will(function ($args) use (&$mongoDb) {
-                list($dbName) = $args;
+                [$dbName] = $args;
                 if (isset($mongoDb)) {
                     return $mongoDb;
                 }

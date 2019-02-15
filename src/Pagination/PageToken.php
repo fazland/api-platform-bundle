@@ -101,7 +101,7 @@ final class PageToken
             throw new InvalidTokenException('Malformed token');
         }
 
-        list($orderValue, $offset, $checksum) = $tokenSplit;
+        [$orderValue, $offset, $checksum] = $tokenSplit;
 
         if ('=' === $orderValue[0]) {
             $orderValue = \base64_decode(\substr($orderValue, 1));

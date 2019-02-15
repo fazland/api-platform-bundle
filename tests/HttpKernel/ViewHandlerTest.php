@@ -147,7 +147,7 @@ class ViewHandlerTest extends WebTestCase
             ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::type(SerializationContext::class), null)
             ->will(function ($args) {
                 /** @var SerializationContext $context */
-                list(, , $context) = $args;
+                [, , $context] = $args;
                 Assert::assertEquals(['group_foo', 'bar_bar'], $context->attributes->get('groups'));
 
                 return '';
@@ -174,7 +174,7 @@ class ViewHandlerTest extends WebTestCase
             ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::type(SerializationContext::class), null)
             ->will(function ($args) {
                 /** @var SerializationContext $context */
-                list(, , $context) = $args;
+                [, , $context] = $args;
                 Assert::assertEquals(['foobar'], $context->attributes->get('groups'));
 
                 return '';
@@ -386,7 +386,7 @@ class ViewHandlerTest extends WebTestCase
             ->serialize(Argument::type(TestObject::class), Argument::any(), Argument::type(SerializationContext::class), null)
             ->will(function ($args) use ($self) {
                 /** @var SerializationContext $context */
-                list(, , $context) = $args;
+                [, , $context] = $args;
                 Assert::assertNotEquals(\spl_object_hash($self->serializationContext), \spl_object_hash($context));
 
                 return '';
@@ -411,7 +411,7 @@ class ViewHandlerTest extends WebTestCase
             ->serialize(Argument::type('array'), Argument::any(), Argument::type(SerializationContext::class), null)
             ->will(function ($args) use ($self) {
                 /** @var SerializationContext $context */
-                list(, , $context) = $args;
+                [, , $context] = $args;
                 Assert::assertNotEquals(\spl_object_hash($self->serializationContext), \spl_object_hash($context));
 
                 return '{"foobar": "no no no"}';

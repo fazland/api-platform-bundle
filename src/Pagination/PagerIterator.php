@@ -373,7 +373,7 @@ class PagerIterator implements \Iterator
         $accessor = self::getAccessor();
         $ord1 = $ord2 = [];
 
-        foreach ($this->orderBy as list($field, $direction)) {
+        foreach ($this->orderBy as [$field, $direction]) {
             $valueA = (string) $accessor->getValue($a, $field);
             $valueB = (string) $accessor->getValue($b, $field);
 

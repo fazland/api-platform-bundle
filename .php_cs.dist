@@ -15,6 +15,7 @@ return PhpCsFixer\Config::create()
         '@Symfony' => true,
         'psr0' => false,
         'array_syntax' => ['syntax' => 'short'],
+        'list_syntax' => ['syntax' => 'short'],
         'concat_space' => ['spacing' => 'none'],
         'blank_line_after_opening_tag' => false,
         'lowercase_cast' => true,
