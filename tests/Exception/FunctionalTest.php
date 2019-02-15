@@ -52,6 +52,6 @@ class FunctionalTest extends WebTestCase
         self::assertEquals('No route found for "GET /non-existent"', $res['error_message']);
         self::assertArrayHasKey('error_code', $res);
         self::assertArrayHasKey('exception', $res);
-        self::assertInternalType('array', $res['exception']);
+        self::assertIsArray($res['exception']);
     }
 }
