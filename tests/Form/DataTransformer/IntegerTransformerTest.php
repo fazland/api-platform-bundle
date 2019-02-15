@@ -39,7 +39,7 @@ class IntegerTransformerTest extends TestCase
         yield ['transform'];
         yield ['reverseTransform'];
     }
-    
+
     /**
      * @dataProvider provideEmptyValues
      */

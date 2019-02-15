@@ -13,7 +13,7 @@ class BooleanTransformerTest extends TestCase
     private $transformer;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function setUp(): void
     {

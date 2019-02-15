@@ -14,7 +14,7 @@ class DateTransformerTest extends TestCase
     private $transformer;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setUp(): void
     {
