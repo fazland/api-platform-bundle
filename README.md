@@ -6,8 +6,8 @@ This bundle helps to build RESTful API within a Symfony project.
 
 Requirements
 ------------
-- php ^7.1
-- symfony/symfony ^2.8
+- php ^7.2
+- symfony/symfony ^3.4
 
 Installation
 ------------

@@ -14,7 +14,7 @@
     ],
     "description": "Build RESTful API within a Symfony project.",
     "require": {
-        "php": "^7.1",
+        "php": "^7.2",
         "ext-json": "*",
         "ext-pdo": "*",
         "cakephp/chronos": "^1.1",
