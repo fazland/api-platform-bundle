@@ -4,7 +4,6 @@ namespace Fazland\ApiPlatformBundle\Tests\HttpKernel;
 
 use Cake\Chronos\Chronos;
 use Fazland\ApiPlatformBundle\Annotation\View as ViewAnnotation;
-use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\HttpKernel\View\View;
 use Fazland\ApiPlatformBundle\HttpKernel\ViewHandler;
 use Fazland\ApiPlatformBundle\Pagination\PagerIterator;
@@ -12,6 +11,7 @@ use Fazland\ApiPlatformBundle\Pagination\PageToken;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\TestObject;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\View\Controller\TestController;
+use Fazland\DoctrineExtra\ObjectIteratorInterface;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
 use Kcs\Serializer\SerializerInterface;
@@ -285,7 +285,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
 
-        $iterator = $this->prophesize(ObjectIterator::class);
+        $iterator = $this->prophesize(ObjectIteratorInterface::class);
         $iterator->count()->willReturn(42);
         $iterator->rewind()->willReturn();
         $iterator->valid()->willReturn(false);

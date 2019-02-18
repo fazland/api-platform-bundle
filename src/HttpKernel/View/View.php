@@ -2,8 +2,8 @@
 
 namespace Fazland\ApiPlatformBundle\HttpKernel\View;
 
-use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
 use Fazland\ApiPlatformBundle\Pagination\PagerIterator;
+use Fazland\DoctrineExtra\ObjectIteratorInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -59,7 +59,7 @@ final class View
             $result = $result->getIterator();
         }
 
-        if ($result instanceof ObjectIterator) {
+        if ($result instanceof ObjectIteratorInterface) {
             $this->headers['X-Total-Count'] = $result->count();
         }
 

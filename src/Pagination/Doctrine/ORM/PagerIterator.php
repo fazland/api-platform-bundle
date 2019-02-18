@@ -6,12 +6,12 @@ use Doctrine\DBAL\Types\DateTimeType;
 use Doctrine\DBAL\Types\DateTimeTzType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\QueryBuilder;
-use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
-use Fazland\ApiPlatformBundle\Doctrine\Traits\ORM\IteratorTrait;
 use Fazland\ApiPlatformBundle\Pagination\Orderings;
 use Fazland\ApiPlatformBundle\Pagination\PagerIterator as BaseIterator;
+use Fazland\DoctrineExtra\ObjectIteratorInterface;
+use Fazland\DoctrineExtra\ORM\IteratorTrait;
 
-final class PagerIterator extends BaseIterator implements ObjectIterator
+final class PagerIterator extends BaseIterator implements ObjectIteratorInterface
 {
     use IteratorTrait;
 

@@ -40,6 +40,7 @@
         "doctrine/doctrine-bundle": "^1.7",
         "doctrine/mongodb-odm-bundle": "^3.4",
         "doctrine/orm": "^2.5",
+        "fazland/doctrine-extra": "dev-master",
         "fazland/elastica-odm": "dev-master",
         "giggsey/libphonenumber-for-php": "^8.10",
         "moneyphp/money": "^3.2",

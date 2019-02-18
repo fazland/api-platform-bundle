@@ -5,13 +5,13 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\ORM;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
-use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
-use Fazland\ApiPlatformBundle\Doctrine\ORM\EntityIterator;
 use Fazland\ApiPlatformBundle\Pagination\Doctrine\ORM\PagerIterator;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\OrderExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Form\DTO\Query;
 use Fazland\ApiPlatformBundle\QueryLanguage\Form\QueryType;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\ColumnInterface;
+use Fazland\DoctrineExtra\ObjectIteratorInterface;
+use Fazland\DoctrineExtra\ORM\EntityIterator;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -115,7 +115,7 @@ class Processor
     /**
      * @param Request $request
      *
-     * @return ObjectIterator|FormInterface
+     * @return ObjectIteratorInterface|FormInterface
      */
     public function processRequest(Request $request)
     {

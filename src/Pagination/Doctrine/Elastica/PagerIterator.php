@@ -3,14 +3,14 @@
 namespace Fazland\ApiPlatformBundle\Pagination\Doctrine\Elastica;
 
 use Elastica\Query;
-use Fazland\ApiPlatformBundle\Doctrine\ObjectIterator;
-use Fazland\ApiPlatformBundle\Doctrine\Traits\IteratorTrait;
 use Fazland\ApiPlatformBundle\Pagination\Orderings;
 use Fazland\ApiPlatformBundle\Pagination\PagerIterator as BaseIterator;
+use Fazland\DoctrineExtra\IteratorTrait;
+use Fazland\DoctrineExtra\ObjectIteratorInterface;
 use Fazland\ODM\Elastica\Search\Search;
 use Fazland\ODM\Elastica\Type\AbstractDateTimeType;
 
-final class PagerIterator extends BaseIterator implements ObjectIterator
+final class PagerIterator extends BaseIterator implements ObjectIteratorInterface
 {
     use IteratorTrait;
 

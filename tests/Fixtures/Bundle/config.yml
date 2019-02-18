@@ -25,7 +25,7 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
-        default_repository_class: Fazland\ApiPlatformBundle\Doctrine\ORM\EntityRepository
+        default_repository_class: Fazland\DoctrineExtra\ORM\EntityRepository
         mappings:
             Fazland\ApiPlatformBundle\Tests\Fixtures:
                 is_bundle: false
@@ -40,7 +40,7 @@ doctrine_mongodb:
             options: {}
     document_managers:
         default:
-            default_repository_class: Fazland\ApiPlatformBundle\Doctrine\Mongo\DocumentRepository
+            default_repository_class: Fazland\DoctrineExtra\ODM\MongoDB\DocumentRepository
             mappings:
                 Fazland\ApiPlatformBundle\Tests\Fixtures:
                     is_bundle: false
