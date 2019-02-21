@@ -4,8 +4,11 @@ namespace Fazland\ApiPlatformBundle\Tests\HttpKernel;
 
 use Cake\Chronos\Chronos;
 use Fazland\ApiPlatformBundle\HttpKernel\AcceptHeaderParser;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -36,12 +39,16 @@ class AcceptHeaderParserTest extends TestCase
 
     /**
      * @dataProvider dataProviderForNotAcceptableHeader
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException
      */
     public function testNotAcceptableHeader(string $header): void
     {
         $event = $this->prophesize(GetResponseEvent::class);
         $event->getRequest()->willReturn(Request::create('/', Request::METHOD_GET, [], [], [], ['HTTP_ACCEPT' => $header]));
+        $event->setResponse(Argument::that(function (Response $response): bool {
+            Assert::assertEquals(Response::HTTP_NOT_ACCEPTABLE, $response->getStatusCode());
+
+            return true;
+        }))->shouldBeCalled();
 
         $this->parser->onKernelRequest($event->reveal());
     }

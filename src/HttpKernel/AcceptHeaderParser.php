@@ -5,6 +5,7 @@ namespace Fazland\ApiPlatformBundle\HttpKernel;
 use Cake\Chronos\Chronos;
 use Fazland\ApiPlatformBundle\Negotiation\VersionAwareNegotiator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -22,12 +23,14 @@ class AcceptHeaderParser implements EventSubscriberInterface
         ]);
 
         if (null === $header) {
-            throw new NotAcceptableHttpException();
+            $event->setResponse(new Response('', Response::HTTP_NOT_ACCEPTABLE));
+            return;
         }
 
         $version = \str_replace('-', '', $header->getVersion() ?? Chronos::now()->format('Ymd'));
         if (! \preg_match('/\d{8}/', $version)) {
-            throw new NotAcceptableHttpException();
+            $event->setResponse(new Response('', Response::HTTP_NOT_ACCEPTABLE));
+            return;
         }
 
         $request->attributes->set('_format', $request->getFormat($header->getType()));
