@@ -26,6 +26,13 @@ class ApiPlatformExtension extends Extension
             $loader->load('decoders.xml');
         }
 
+        if ($config['versioning']['accept_header']['enabled']) {
+            $container->setParameter('fazland_api.versioning.accept_header.default_type', $config['versioning']['accept_header']['default_type']);
+            $container->setParameter('fazland_api.versioning.accept_header.uris', $config['versioning']['accept_header']['uris']);
+
+            $loader->load('accept_header_parser.xml');
+        }
+
         $loader->load('patch_manager.xml');
         $loader->load('serializer.xml');
         $loader->load('form.xml');

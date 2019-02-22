@@ -12,9 +12,5 @@
             <argument>%fazland_api.response_charset%</argument>
             <tag name="kernel.event_subscriber" />
         </service>
-
-        <service class="Fazland\ApiPlatformBundle\HttpKernel\AcceptHeaderParser" id="Fazland\ApiPlatformBundle\HttpKernel\AcceptHeaderParser">
-            <tag name="kernel.event_subscriber" />
-        </service>
     </services>
 </container>

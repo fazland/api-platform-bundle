@@ -3,3 +3,6 @@ imports:
 
 api_platform:
     view: { enabled: false }
+    versioning:
+        accept_header:
+            enabled: false

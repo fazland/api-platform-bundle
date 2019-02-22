@@ -2,6 +2,7 @@ imports:
     - { resource: ../../../src/Resources/config/exception.xml }
     - { resource: ../../../src/Resources/config/serializer.xml }
     - { resource: ../../../src/Resources/config/view.xml }
+    - { resource: ../../../src/Resources/config/accept_header_parser.xml }
 
 parameters:
     fazland_api.response_charset: UTF-8
