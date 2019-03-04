@@ -197,6 +197,7 @@ class Processor
     {
         $checksumColumn = $this->rootEntity->getIdentifierColumnNames()[0];
         if (isset($this->options['continuation_token']['checksum_field'])) {
+            $checksumColumn = $this->options['continuation_token']['checksum_field'];
             if (! $this->columns[$checksumColumn] instanceof Column) {
                 throw new \InvalidArgumentException(\sprintf('%s is not a valid field for checksum', $this->options['continuation_token']['checksum_field']));
             }

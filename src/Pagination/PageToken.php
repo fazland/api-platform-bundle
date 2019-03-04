@@ -78,7 +78,7 @@ final class PageToken
         }
 
         return \implode(self::TOKEN_DELIMITER, [
-            '='.\base64_encode($this->orderValue),
+            '='.\base64_encode((string) $this->orderValue),
             $this->offset,
             \base_convert($this->checksum, 10, 36),
         ]);

@@ -339,7 +339,12 @@ class PagerIterator implements \Iterator
 
         /** @var array $object */
         foreach ($objects as $object) {
-            $idArray[] = $propertyAccessor->getValue($object, $order[0]);
+            $value = $propertyAccessor->getValue($object, $order[0]);
+            if ($value instanceof \DateTimeInterface) {
+                $value = $value->format('Y-m-d H:i:s');
+            }
+
+            $idArray[] = $value;
         }
 
         return \crc32(\implode(',', $idArray));

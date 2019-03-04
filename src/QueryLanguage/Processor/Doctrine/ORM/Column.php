@@ -34,6 +34,11 @@ class Column implements ColumnInterface
     public $mapping;
 
     /**
+     * @var string
+     */
+    private $columnType;
+
+    /**
      * @var array
      */
     public $associations;
@@ -47,6 +52,7 @@ class Column implements ColumnInterface
      * @var string|callable|null
      */
     public $customWalker;
+
     /**
      * @var bool
      */
@@ -73,11 +79,13 @@ class Column implements ColumnInterface
         }
 
         $this->mapping = $rootField;
+        $this->columnType = isset($this->mapping['targetEntity']) ? 'string' : ($this->mapping['type'] ?? 'string');
         $this->associations = [];
 
         if (null !== $rest) {
             $this->processAssociations($entityManager, $rest);
         }
+
         $this->entityManager = $entityManager;
     }
 
@@ -106,9 +114,9 @@ class Column implements ColumnInterface
 
         $fieldName = $this->discriminator ? $this->rootAlias : $this->rootAlias.'.'.$alias;
         if (null !== $walker) {
-            $walker = \is_string($walker) ? new $walker($queryBuilder, $fieldName) : $walker($queryBuilder, $fieldName, $this->mapping['type'] ?? 'string');
+            $walker = \is_string($walker) ? new $walker($queryBuilder, $fieldName) : $walker($queryBuilder, $fieldName, $this->columnType);
         } else {
-            $walker = new DqlWalker($queryBuilder, $fieldName, $this->mapping['type'] ?? 'string');
+            $walker = new DqlWalker($queryBuilder, $fieldName, $this->columnType);
         }
 
         $queryBuilder->andWhere($expression->dispatch($walker));
@@ -144,9 +152,9 @@ class Column implements ColumnInterface
         }
 
         if (null !== $walker) {
-            $walker = \is_string($walker) ? new $walker($subQb, $currentFieldName) : $walker($subQb, $currentFieldName, $this->mapping['type'] ?? 'string');
+            $walker = \is_string($walker) ? new $walker($subQb, $currentFieldName) : $walker($subQb, $currentFieldName, $this->columnType);
         } else {
-            $walker = new DqlWalker($subQb, $currentFieldName, $this->mapping['type'] ?? 'string');
+            $walker = new DqlWalker($subQb, $currentFieldName, $this->columnType);
         }
 
         $subQb->where($expression->dispatch($walker));
