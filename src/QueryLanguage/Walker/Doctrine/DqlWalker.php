@@ -74,7 +74,7 @@ class DqlWalker extends AbstractWalker
         $field = $this->field;
         if ('like' === $operator) {
             $field = 'LOWER('.$field.')';
-            $expression = StringExpression::create('%'.$expression.'%');
+            $expression = StringExpression::create('%'.\mb_strtolower($expression).'%');
         }
 
         if ($expression instanceof NullExpression) {
