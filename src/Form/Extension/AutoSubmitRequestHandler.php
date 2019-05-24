@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\RequestHandlerInterface;
 use Symfony\Component\Form\Util\ServerParams;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 final class AutoSubmitRequestHandler implements RequestHandlerInterface
@@ -97,5 +98,21 @@ final class AutoSubmitRequestHandler implements RequestHandlerInterface
     public function isFileUpload($data): bool
     {
         return $data instanceof File;
+    }
+
+    /**
+     * Gets the upload file error from data
+     *
+     * @param mixed $data
+     *
+     * @return int|null
+     */
+    public function getUploadFileError($data): ?int
+    {
+        if (! $data instanceof UploadedFile || $data->isValid()) {
+            return null;
+        }
+
+        return $data->getError();
     }
 }
