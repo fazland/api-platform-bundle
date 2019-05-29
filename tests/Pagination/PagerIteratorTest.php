@@ -125,7 +125,7 @@ class PagerIteratorTest extends TestCase
         );
 
         self::assertEquals(
-            '=OWM1ZjZmZjctYjI4Zi00OGZiLWJhNDctOGJjYzNiMjM1YmVk_1_1ak2bqf', (string) $pager->getNextPageToken()
+            '=OWM1ZjZmZjctYjI4Zi00OGZiLWJhNDctOGJjYzNiMjM1YmVk_1_68lkk0', (string) $pager->getNextPageToken()
         );
     }
 
@@ -163,7 +163,7 @@ class PagerIteratorTest extends TestCase
         $pager->setPageSize(3);
 
         $request = $this->prophesize(Request::class);
-        $request->query = new ParameterBag(['continue' => '=OWM1ZjZmZjctYjI4Zi00OGZiLWJhNDctOGJjYzNiMjM1YmVk_1_1ak2bqf']);
+        $request->query = new ParameterBag(['continue' => '=OWM1ZjZmZjctYjI4Zi00OGZiLWJhNDctOGJjYzNiMjM1YmVk_1_68lkk0']);
 
         $pager->setToken(PageToken::fromRequest($request->reveal()));
 
@@ -177,7 +177,7 @@ class PagerIteratorTest extends TestCase
         );
 
         self::assertEquals(
-            '=ZWFkZDc0NzAtOTVmNS00N2U4LThlNzQtMDgzZDQ1YzMwN2Y2_1_rb4ort', (string) $pager->getNextPageToken()
+            '=ZWFkZDc0NzAtOTVmNS00N2U4LThlNzQtMDgzZDQ1YzMwN2Y2_1_aa6ezc', (string) $pager->getNextPageToken()
         );
     }
 
