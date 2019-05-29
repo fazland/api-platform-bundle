@@ -2,6 +2,9 @@
 
 namespace Fazland\ApiPlatformBundle\Pagination;
 
+use Fazland\ApiPlatformBundle\Pagination\Accessor\DateTimeValueAccessor;
+use Fazland\ApiPlatformBundle\Pagination\Accessor\ValueAccessor;
+use Fazland\ApiPlatformBundle\Pagination\Accessor\ValueAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -185,11 +188,7 @@ class PagerIterator implements \Iterator
 
         return \array_filter($objects, function ($entity) use ($order) {
             $referenceTimestamp = $this->token->getOrderValue();
-            $value = self::getAccessor()->getValue($entity, $order[0]);
-
-            if ($value instanceof \DateTimeInterface) {
-                $value = $value->getTimestamp();
-            }
+            $value = static::getAccessor()->getValue($entity, $order[0]);
 
             return Orderings::SORT_ASC === $order[1] ? $value >= $referenceTimestamp : $value <= $referenceTimestamp;
         });
@@ -226,6 +225,22 @@ class PagerIterator implements \Iterator
         $reference = \reset($objects);
 
         return $this->getOrderValueForObject($reference) !== $this->token->getOrderValue();
+    }
+
+    /**
+     * Gets a value accessor.
+     *
+     * @return ValueAccessorInterface
+     */
+    protected static function getAccessor(): ValueAccessorInterface
+    {
+        static $accessor = null;
+        if (null === $accessor) {
+            $propertyAccess = PropertyAccess::createPropertyAccessor();
+            $accessor = new DateTimeValueAccessor(new ValueAccessor($propertyAccess));
+        }
+
+        return $accessor;
     }
 
     /**
@@ -312,15 +327,7 @@ class PagerIterator implements \Iterator
      */
     private function getOrderValueForObject($object)
     {
-        $order = $this->orderBy[0];
-        $propertyAccessor = self::getAccessor();
-        $orderValue = $propertyAccessor->getValue($object, $order[0]);
-
-        if ($orderValue instanceof \DateTimeInterface) {
-            $orderValue = $orderValue->getTimestamp();
-        }
-
-        return $orderValue;
+        return static::getAccessor()->getValue($object, $this->orderBy[0][0]);
     }
 
     /**
@@ -335,34 +342,14 @@ class PagerIterator implements \Iterator
         $idArray = [];
 
         $order = $this->orderBy[1];
-        $propertyAccessor = self::getAccessor();
+        $valueAccessor = static::getAccessor();
 
         /** @var array $object */
         foreach ($objects as $object) {
-            $value = $propertyAccessor->getValue($object, $order[0]);
-            if ($value instanceof \DateTimeInterface) {
-                $value = $value->format('Y-m-d H:i:s');
-            }
-
-            $idArray[] = $value;
+            $idArray[] = $valueAccessor->getValue($object, $order[0]);
         }
 
         return \crc32(\implode(',', $idArray));
-    }
-
-    /**
-     * Gets a property accessor instance.
-     *
-     * @return PropertyAccessorInterface
-     */
-    private static function getAccessor(): PropertyAccessorInterface
-    {
-        static $accessor = null;
-        if (null === $accessor) {
-            $accessor = PropertyAccess::createPropertyAccessor();
-        }
-
-        return $accessor;
     }
 
     /**
@@ -375,7 +362,7 @@ class PagerIterator implements \Iterator
      */
     private function sort($a, $b): int
     {
-        $accessor = self::getAccessor();
+        $accessor = static::getAccessor();
         $ord1 = $ord2 = [];
 
         foreach ($this->orderBy as [$field, $direction]) {

@@ -158,7 +158,7 @@ class Processor
             'order_field' => $this->options['order_field'],
             'continuation_token_field' => $this->options['continuation_token']['field'] ?? null,
             'columns' => $this->columns,
-            'orderable_columns' => \array_keys(\array_filter($this->columns, function (ColumnInterface $column): bool {
+            'orderable_columns' => \array_keys(\array_filter($this->columns, static function (ColumnInterface $column): bool {
                 return $column instanceof Column;
             })),
         ]);
