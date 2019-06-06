@@ -6,6 +6,7 @@ use Fazland\ApiPlatformBundle\Annotation\Sunset;
 use Fazland\ApiPlatformBundle\HttpKernel\SunsetHandler;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Sunset\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -24,6 +25,15 @@ class SunsetHandlerTest extends WebTestCase
     protected function setUp(): void
     {
         $this->sunsetHandler = new SunsetHandler();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function setUpBeforeClass()
+    {
+        $fs = new Filesystem();
+        $fs->remove(__DIR__.'/../../var');
     }
 
     public function skipProvider(): iterable

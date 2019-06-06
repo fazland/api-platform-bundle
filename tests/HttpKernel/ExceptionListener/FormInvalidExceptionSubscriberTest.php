@@ -7,6 +7,7 @@ use Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
 use Prophecy\Argument;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +28,15 @@ class FormInvalidExceptionSubscriberTest extends WebTestCase
     protected function setUp(): void
     {
         $this->subscriber = new FormInvalidExceptionSubscriber();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function setUpBeforeClass()
+    {
+        $fs = new Filesystem();
+        $fs->remove(__DIR__.'/../../../var');
     }
 
     public function testShouldSubscribeExceptionEvent(): void

@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -78,6 +79,15 @@ class ViewHandlerTest extends WebTestCase
             $this->tokenStorage->reveal(),
             $this->defaultResponseCharset
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function setUpBeforeClass()
+    {
+        $fs = new Filesystem();
+        $fs->remove(__DIR__.'/../../var');
     }
 
     public function skipProvider(): array

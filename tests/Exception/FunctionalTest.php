@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Exception;
 
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Exception\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
@@ -20,6 +21,15 @@ class FunctionalTest extends WebTestCase
     protected static function createKernel(array $options = []): KernelInterface
     {
         return new AppKernel('test', $options['debug'] ?? true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function setUpBeforeClass()
+    {
+        $fs = new Filesystem();
+        $fs->remove(__DIR__.'/../../var');
     }
 
     public function testShouldCatchExceptions(): void

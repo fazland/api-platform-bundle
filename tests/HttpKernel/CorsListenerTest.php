@@ -6,6 +6,7 @@ use Fazland\ApiPlatformBundle\HttpKernel\CorsListener;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Cors\AppKernel;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,6 +39,15 @@ class CorsListenerTest extends WebTestCase
     protected function setUp(): void
     {
         $this->listener = new CorsListener();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function setUpBeforeClass()
+    {
+        $fs = new Filesystem();
+        $fs->remove(__DIR__.'/../../var');
     }
 
     public function wrongExceptionRequestProvider(): iterable

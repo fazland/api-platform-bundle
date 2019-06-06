@@ -5,6 +5,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Decoder;
 use Fazland\ApiPlatformBundle\Decoder\JsonDecoder;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Decoder\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class JsonDecoderTest extends WebTestCase
@@ -28,6 +29,15 @@ class JsonDecoderTest extends WebTestCase
     public function setUp(): void
     {
         $this->decoder = new JsonDecoder();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function setUpBeforeClass()
+    {
+        $fs = new Filesystem();
+        $fs->remove(__DIR__.'/../../var');
     }
 
     public function dataProviderForDecode(): iterable

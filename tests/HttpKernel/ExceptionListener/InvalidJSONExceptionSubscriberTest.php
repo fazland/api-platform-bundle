@@ -7,6 +7,7 @@ use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\View\AppKernel;
 use Prophecy\Argument;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
@@ -23,6 +24,15 @@ class InvalidJSONExceptionSubscriberTest extends WebTestCase
     protected function setUp(): void
     {
         $this->subscriber = new InvalidJSONExceptionSubscriber();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function setUpBeforeClass()
+    {
+        $fs = new Filesystem();
+        $fs->remove(__DIR__.'/../../../var');
     }
 
     public function testShouldSubscribeExceptionEvent(): void
