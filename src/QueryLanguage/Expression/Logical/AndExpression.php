@@ -28,7 +28,7 @@ final class AndExpression implements LogicalExpressionInterface
     public static function create(array $arguments)
     {
         $arguments = \array_values(
-            \array_filter($arguments, function ($argument): bool {
+            \array_filter($arguments, static function ($argument): bool {
                 return ! $argument instanceof AllExpression;
             })
         );

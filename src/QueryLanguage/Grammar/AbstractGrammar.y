@@ -81,41 +81,41 @@ private const __QL_OPERATORS = [
     self::ENTRY => 'entry',
     self::EXISTS => 'exists',
 ];
+private const __ALL_OL_OPERATORS = 'all|not|eq|neq|like|lte|lt|gte|gt|order|and|or|in|range|entry|exists';
 
 private function yylex(): int
 {
-    $this->__lex_buffer = preg_replace('/^\s+/', '', $this->__lex_buffer);
-    if (preg_match('/^\s*(asc|desc)\s*/i', $this->__lex_buffer, $matches)) {
-        $this->yylval = strtolower($matches[1]);
-        $this->__lex_buffer = substr($this->__lex_buffer, strlen($matches[0]));
+    $this->__lex_buffer = \ltrim($this->__lex_buffer);
+    if (\preg_match('/^(asc|desc)\b/i', $this->__lex_buffer, $matches)) {
+        $this->yylval = \strtolower($matches[1]);
+        $this->__lex_buffer = \substr($this->__lex_buffer, \strlen($matches[0]));
 
         return self::ORDER_DIRECTION;
     }
 
-    if (preg_match('/^([^\(\)\$\n\r\0\t,]|(?<=\\\\)[\)\(\$])+/', $this->__lex_buffer, $matches)) {
-        $this->yylval = trim($matches[0]);
-        $this->__lex_buffer = substr($this->__lex_buffer, strlen($matches[0]));
+    if (\preg_match('/^([^\(\)\$\n\r\0\t,]|(?<=\\\\)[\)\(\$])++/', $this->__lex_buffer, $matches)) {
+        $this->yylval = \preg_replace('/\\\\([\)\(\$])/', '\\1', \trim($matches[0]));
+        $this->__lex_buffer = \substr($this->__lex_buffer, \strlen($matches[0]));
 
         return self::STRING;
     }
 
-    foreach (self::__QL_OPERATORS as $t => $val) {
-        if (preg_match('/^\$'.$val.'/i', $this->__lex_buffer, $matches)) {
-            $this->yylval = strtolower($val);
-            $this->__lex_buffer = substr($this->__lex_buffer, strlen($matches[0]));
+    if (\preg_match('/^\$('.self::__ALL_OL_OPERATORS.')\b/i', $this->__lex_buffer, $matches)) {
+        $t = \array_search($matches[1], self::__QL_OPERATORS, true);
+        $this->yylval = self::__QL_OPERATORS[$t];
+        $this->__lex_buffer = \substr($this->__lex_buffer, \strlen($matches[0]));
 
-            return $t;
-        }
+        return $t;
     }
 
-    if (! strlen($this->__lex_buffer)) {
+    if ('' === $this->__lex_buffer) {
         return 0;
     }
 
     $val = $this->__lex_buffer[0];
-    $this->__lex_buffer = substr($this->__lex_buffer, 1);
+    $this->__lex_buffer = \substr($this->__lex_buffer, 1);
 
-    return ord($val);
+    return \ord($val);
 }
 
 /**

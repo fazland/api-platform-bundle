@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\HttpKernel\View;
 
 use Fazland\ApiPlatformBundle\Pagination\PagerIterator;
 use Fazland\DoctrineExtra\ObjectIteratorInterface;
+use Kcs\Serializer\Type\Type;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,7 +34,7 @@ final class View
     public $serializationGroups;
 
     /**
-     * @var string|null
+     * @var Type|null
      */
     public $serializationType;
 
