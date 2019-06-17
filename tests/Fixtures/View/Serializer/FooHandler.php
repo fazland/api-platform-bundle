@@ -34,6 +34,6 @@ class FooHandler implements SubscribingHandlerInterface
     {
         $data['additional'] = 'foo';
 
-        return $visitor->visitArray($data, $type, $context);
+        return $visitor->visitHash($data, $type, $context);
     }
 }
