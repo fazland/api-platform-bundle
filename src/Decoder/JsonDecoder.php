@@ -25,7 +25,7 @@ class JsonDecoder implements DecoderInterface
         \array_walk_recursive($content, function (&$value) {
             if (false === $value) {
                 $value = '0';
-            } elseif (! \is_string($value)) {
+            } elseif (null !== $value && ! \is_string($value)) {
                 $value = (string) $value;
             }
         });
