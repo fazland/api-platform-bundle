@@ -34,7 +34,7 @@ class DqlWalker extends AbstractWalker
      */
     private $columnType;
 
-    public function __construct(QueryBuilder $queryBuilder, string $field, string $columnType = 'string')
+    public function __construct(QueryBuilder $queryBuilder, string $field, ?string $columnType = null)
     {
         parent::__construct($field);
 
@@ -154,7 +154,7 @@ class DqlWalker extends AbstractWalker
         );
         $parameterName = $origParamName = \preg_replace('/\W+/', '_', $underscoreField);
 
-        $filter = function (Parameter $parameter) use (&$parameterName): bool {
+        $filter = static function (Parameter $parameter) use (&$parameterName): bool {
             return $parameter->getName() === $parameterName;
         };
 
