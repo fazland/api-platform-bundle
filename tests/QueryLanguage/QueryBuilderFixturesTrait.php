@@ -24,12 +24,12 @@ trait QueryBuilderFixturesTrait
         $configuration->setMetadataDriverImpl(new AnnotationDriver(new AnnotationReader(), __DIR__.'/../Fixtures/Entity/QueryLanguage'));
         $configuration->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_EVAL);
         $configuration->setProxyNamespace('__CG__\\'.QueryLanguageFixtures::class);
-        $configuration->setProxyDir(sys_get_temp_dir().'/'.uniqid('api-platform-proxy', true));
+        $configuration->setProxyDir(\sys_get_temp_dir().'/'.\uniqid('api-platform-proxy', true));
         $configuration->setEntityNamespaces([
             QueryLanguageFixtures::class,
         ]);
 
-        self::$entityManager = EntityManager::create([ 'url' => 'sqlite:///:memory:' ], $configuration);
+        self::$entityManager = EntityManager::create(['url' => 'sqlite:///:memory:'], $configuration);
         $schemaTool = new SchemaTool(self::$entityManager);
         $schemaTool->updateSchema(self::$entityManager->getMetadataFactory()->getAllMetadata(), true);
 

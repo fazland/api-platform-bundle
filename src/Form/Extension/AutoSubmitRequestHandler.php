@@ -101,7 +101,7 @@ final class AutoSubmitRequestHandler implements RequestHandlerInterface
     }
 
     /**
-     * Gets the upload file error from data
+     * Gets the upload file error from data.
      *
      * @param mixed $data
      *

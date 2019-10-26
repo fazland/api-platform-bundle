@@ -3,7 +3,6 @@
 namespace Fazland\ApiPlatformBundle\Tests\QueryLanguage\Walker;
 
 use Doctrine\DBAL\ParameterType;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\LiteralExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;

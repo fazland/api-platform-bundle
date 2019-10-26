@@ -6,7 +6,6 @@ use Fazland\ApiPlatformBundle\Pagination\Accessor\DateTimeValueAccessor;
 use Fazland\ApiPlatformBundle\Pagination\Accessor\ValueAccessor;
 use Fazland\ApiPlatformBundle\Pagination\Accessor\ValueAccessorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class PagerIterator implements \Iterator
 {

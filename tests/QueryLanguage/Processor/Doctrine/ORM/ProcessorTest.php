@@ -3,15 +3,10 @@
 namespace Fazland\ApiPlatformBundle\Tests\QueryLanguage\Processor\Doctrine\ORM;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\Form\Extension\AutoSubmitRequestHandler;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
-use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\LiteralExpression;
-use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\ColumnInterface;
-use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\ORM\Column;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\ORM\Processor;
-use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine\DqlWalker;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\ValidationWalker;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Entity\QueryLanguage\FooBar;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Entity\QueryLanguage\User;
@@ -49,7 +44,7 @@ class ProcessorTest extends TestCase
     public function testBuiltinColumnWorks(): void
     {
         $this->processor->addColumn('name');
-        $itr = $this->processor->processRequest(new Request([ 'name' => 'goofy' ]));
+        $itr = $this->processor->processRequest(new Request(['name' => 'goofy']));
 
         self::assertInstanceOf(ObjectIteratorInterface::class, $itr);
         $result = \iterator_to_array($itr);
@@ -62,7 +57,7 @@ class ProcessorTest extends TestCase
     public function testRelationColumnWorks(): void
     {
         $this->processor->addColumn('foobar');
-        $itr = $this->processor->processRequest(new Request([ 'foobar' => '$entry(foobar, foobar_donald duck)' ]));
+        $itr = $this->processor->processRequest(new Request(['foobar' => '$entry(foobar, foobar_donald duck)']));
 
         self::assertInstanceOf(ObjectIteratorInterface::class, $itr);
         $result = \iterator_to_array($itr);
@@ -75,9 +70,9 @@ class ProcessorTest extends TestCase
     public function testColumnWithFieldInRelatedEntityWorks(): void
     {
         $this->processor->addColumn('foobar', [
-            'field_name' => 'foobar.foobar'
+            'field_name' => 'foobar.foobar',
         ]);
-        $itr = $this->processor->processRequest(new Request([ 'foobar' => 'foobar_donald duck' ]));
+        $itr = $this->processor->processRequest(new Request(['foobar' => 'foobar_donald duck']));
 
         self::assertInstanceOf(ObjectIteratorInterface::class, $itr);
         $result = \iterator_to_array($itr);
@@ -114,7 +109,7 @@ class ProcessorTest extends TestCase
                 return new ValidationWalker();
             }
         });
-        $itr = $this->processor->processRequest(new Request([ 'foobar' => 'foobar_barbar' ]));
+        $itr = $this->processor->processRequest(new Request(['foobar' => 'foobar_barbar']));
 
         self::assertInstanceOf(ObjectIteratorInterface::class, $itr);
         $result = \iterator_to_array($itr);
