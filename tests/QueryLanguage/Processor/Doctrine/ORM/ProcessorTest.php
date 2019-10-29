@@ -10,7 +10,7 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\ORM\Processor;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\ValidationWalker;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Entity\QueryLanguage\FooBar;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Entity\QueryLanguage\User;
-use Fazland\ApiPlatformBundle\Tests\QueryLanguage\QueryBuilderFixturesTrait;
+use Fazland\ApiPlatformBundle\Tests\QueryLanguage\Doctrine\ORM\FixturesTrait;
 use Fazland\DoctrineExtra\ObjectIteratorInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\HttpFoundation\Type\FormTypeHttpFoundationExtension;
@@ -21,7 +21,7 @@ use Symfony\Component\Validator\ValidatorBuilder;
 
 class ProcessorTest extends TestCase
 {
-    use QueryBuilderFixturesTrait;
+    use FixturesTrait;
 
     /**
      * @var Processor
