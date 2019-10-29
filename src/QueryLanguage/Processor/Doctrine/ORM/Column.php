@@ -248,7 +248,7 @@ class Column implements ColumnInterface
         }
 
         $this->discriminator = true;
-        $this->validationWalker = function () use ($rootEntity): EnumWalker {
+        $this->validationWalker = static function () use ($rootEntity): EnumWalker {
             return new EnumWalker(\array_keys($rootEntity->discriminatorMap));
         };
         $this->customWalker = DiscriminatorWalker::class;

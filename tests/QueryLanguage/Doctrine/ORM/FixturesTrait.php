@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Fazland\ApiPlatformBundle\Tests\QueryLanguage;
+namespace Fazland\ApiPlatformBundle\Tests\QueryLanguage\Doctrine\ORM;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Proxy\AbstractProxyFactory;
@@ -11,17 +11,20 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Tools\SchemaTool;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Entity\QueryLanguage as QueryLanguageFixtures;
 
-trait QueryBuilderFixturesTrait
+trait FixturesTrait
 {
     /**
      * @var EntityManagerInterface
      */
     private static $entityManager;
 
+    /**
+     * {@inheritdoc}
+     */
     public static function setUpBeforeClass(): void
     {
         $configuration = new Configuration();
-        $configuration->setMetadataDriverImpl(new AnnotationDriver(new AnnotationReader(), __DIR__.'/../Fixtures/Entity/QueryLanguage'));
+        $configuration->setMetadataDriverImpl(new AnnotationDriver(new AnnotationReader(), __DIR__.'/../../../Fixtures/Entity/QueryLanguage'));
         $configuration->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_EVAL);
         $configuration->setProxyNamespace('__CG__\\'.QueryLanguageFixtures::class);
         $configuration->setProxyDir(\sys_get_temp_dir().'/'.\uniqid('api-platform-proxy', true));
@@ -45,6 +48,9 @@ trait QueryBuilderFixturesTrait
         self::$entityManager->clear();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function tearDown(): void
     {
         self::$entityManager->clear();

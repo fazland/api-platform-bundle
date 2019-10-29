@@ -8,12 +8,12 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\LiteralExpression
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine\DqlWalker;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Entity\QueryLanguage as QueryLanguageFixtures;
-use Fazland\ApiPlatformBundle\Tests\QueryLanguage\QueryBuilderFixturesTrait;
+use Fazland\ApiPlatformBundle\Tests\QueryLanguage\Doctrine\ORM\FixturesTrait;
 use PHPUnit\Framework\TestCase;
 
 class DqlWalkerTest extends TestCase
 {
-    use QueryBuilderFixturesTrait;
+    use FixturesTrait;
 
     /**
      * @var DqlWalker
