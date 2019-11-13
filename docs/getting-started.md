@@ -15,7 +15,6 @@ return [
 
 What comes with ApiPlatformBundle?
 ----------------------------------
-- [Doctrine's ORM/ODM features](./doctrine-features.md)
 - [Form features](./form-features.md)
 - [Request body converters](./request-body-converters.md)
 - [PatchManager](./patch-manager.md)
