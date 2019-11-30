@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Form\DataTransformer;
 
 use Fazland\ApiPlatformBundle\Form\DataTransformer\Base64ToUploadedFileTransformer;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\HttpFoundation\File\File;
 
 class Base64ToUploadedFileTransformerTest extends TestCase
@@ -46,19 +47,17 @@ class Base64ToUploadedFileTransformerTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
      * @dataProvider provideNonString
      */
     public function testReverseTransformShouldThrowOnNonStringValues($value): void
     {
+        $this->expectException(TransformationFailedException::class);
         $this->transformer->reverseTransform($value);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     */
     public function testReverseTransformShouldThrowOnNonDataUri(): void
     {
+        $this->expectException(TransformationFailedException::class);
         $this->transformer->reverseTransform(self::TEST_TXT_CONTENT);
     }
 

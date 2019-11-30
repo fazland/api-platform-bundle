@@ -18,10 +18,7 @@ class DateTransformer implements DataTransformerInterface
         }
 
         if (! $value instanceof \DateTimeInterface) {
-            throw new TransformationFailedException(\sprintf(
-                'Expected a %s instance',
-                \DateTimeInterface::class
-            ));
+            throw new TransformationFailedException(\sprintf('Expected a %s instance', \DateTimeInterface::class));
         }
 
         return Chronos::instance($value)

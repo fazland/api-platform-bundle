@@ -25,7 +25,7 @@ class DqlWalkerTest extends TestCase
      */
     private $queryBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $userRepository = self::$entityManager->getRepository(QueryLanguageFixtures\User::class);
         $this->queryBuilder = $userRepository->createQueryBuilder('u');

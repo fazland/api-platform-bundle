@@ -2,7 +2,11 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\PatchManager;
 
+use Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\OperationNotAllowedException;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\UnmergeablePatchException;
 use Fazland\ApiPlatformBundle\PatchManager\MergeablePatchableInterface;
 use Fazland\ApiPlatformBundle\PatchManager\PatchableInterface;
 use Fazland\ApiPlatformBundle\PatchManager\PatchManager;
@@ -63,11 +67,9 @@ class PatchManagerTest extends TestCase
         $this->patchManager = $this->createPatchManager();
     }
 
-    /**
-     * @expectedException \TypeError
-     */
     public function testPatchShouldRaiseAnErrorIfNotImplementingPatchInterface(): void
     {
+        $this->expectException(\TypeError::class);
         $this->patchManager->patch(new \stdClass(), $this->prophesize(Request::class)->reveal());
     }
 
@@ -94,11 +96,9 @@ class PatchManagerTest extends TestCase
         $this->patchManager->patch($patchable->reveal(), $request->reveal());
     }
 
-    /**
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException
-     */
     public function testMergePatchShouldThrowIfFormIsNotSubmitted(): void
     {
+        $this->expectException(FormNotSubmittedException::class);
         $request = $this->prophesize(Request::class);
         $request->reveal()->headers = new HeaderBag([
             'content-type' => 'application/merge-patch+json',
@@ -119,11 +119,9 @@ class PatchManagerTest extends TestCase
         $this->patchManager->patch($patchable->reveal(), $request->reveal());
     }
 
-    /**
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException
-     */
     public function testMergePatchShouldThrowIfFormIsNotValid(): void
     {
+        $this->expectException(FormInvalidException::class);
         $request = $this->prophesize(Request::class);
         $request->reveal()->headers = new HeaderBag([
             'content-type' => 'application/merge-patch+json',
@@ -155,11 +153,11 @@ class PatchManagerTest extends TestCase
 
     /**
      * @dataProvider getInvalidJson
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
-     * @expectedExceptionMessage Invalid document.
      */
     public function testPatchShouldThrowIfDocumentIsInvalid(array $params): void
     {
+        $this->expectException(InvalidJSONException::class);
+        $this->expectExceptionMessage('Invalid document.');
         $request = $this->prophesize(Request::class);
         $request->reveal()->headers = new HeaderBag();
         $request->reveal()->request = new ParameterBag($params);
@@ -201,11 +199,11 @@ class PatchManagerTest extends TestCase
 
     /**
      * @dataProvider getInvalidJsonAndObject
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
-     * @expectedExceptionMessageRegExp #Operation failed at path#
      */
     public function testPatchShouldThrowIfOperationErrored(array $params, $object): void
     {
+        $this->expectException(InvalidJSONException::class);
+        $this->expectExceptionMessageMatches('/Operation failed at path/');
         $request = $this->prophesize(Request::class);
         $request->reveal()->headers = new HeaderBag();
         $request->reveal()->request = new ParameterBag($params);
@@ -245,12 +243,10 @@ class PatchManagerTest extends TestCase
         ], $object->reveal()->a);
     }
 
-    /**
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
-     * @expectedExceptionMessageRegExp /Invalid entity: /
-     */
     public function testPatchShouldThrowInvalidJSONExceptionIfObjectIsInvalid(): void
     {
+        $this->expectException(InvalidJSONException::class);
+        $this->expectExceptionMessageMatches('/Invalid entity: /');
         $object = $this->prophesize(PatchableInterface::class);
         $object->a = ['b' => ['c' => 'foo']];
 
@@ -291,12 +287,10 @@ class PatchManagerTest extends TestCase
         $this->patchManager->patch($object->reveal(), $request->reveal());
     }
 
-    /**
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
-     * @expectedExceptionMessageRegExp /Invalid entity: /
-     */
     public function testPatchShouldNotIgnoreRootErrors(): void
     {
+        $this->expectException(InvalidJSONException::class);
+        $this->expectExceptionMessageMatches('/Invalid entity: /');
         $object = $this->prophesize(PatchableInterface::class);
         $object->a = ['b' => ['c' => 'foo']];
 
@@ -314,12 +308,10 @@ class PatchManagerTest extends TestCase
         $this->patchManager->patch($object->reveal(), $request->reveal());
     }
 
-    /**
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
-     * @expectedExceptionMessageRegExp /Operation failed at path /
-     */
     public function testPatchShouldThrowInvalidJSONExceptionOnOperationNotAllowedException(): void
     {
+        $this->expectException(InvalidJSONException::class);
+        $this->expectExceptionMessageMatches('/Operation failed at path /');
         $params = [
             [
                 'op' => 'remove',
@@ -362,12 +354,10 @@ class PatchManagerTest extends TestCase
         $this->patchManager->patch($object, $request->reveal());
     }
 
-    /**
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\UnmergeablePatchException
-     * @expectedExceptionMessage Resource cannot be merge patched.
-     */
     public function testPatchShouldThrowIfObjectIsNotInstanceOfMergeablePatchableInterface(): void
     {
+        $this->expectException(UnmergeablePatchException::class);
+        $this->expectExceptionMessage('Resource cannot be merge patched.');
         $object = $this->prophesize(PatchableInterface::class);
         $request = $this->prophesize(Request::class);
 

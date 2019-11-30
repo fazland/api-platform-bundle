@@ -4,9 +4,9 @@ namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Sunset\Controller;
 
 use Fazland\ApiPlatformBundle\Annotation\Sunset;
 use Fazland\ApiPlatformBundle\Annotation\View;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class TestController extends Controller
+class TestController extends AbstractController
 {
     /**
      * @return mixed

@@ -13,10 +13,7 @@ trait ExpressionTrait
             return;
         }
 
-        throw new InvalidArgumentException(
-            self::getShortName().' accepts only literal expressions as argument'.
-            (null !== $argNo ? ' #'.$argNo : '').'. Passed '.(string) $value
-        );
+        throw new InvalidArgumentException(self::getShortName().' accepts only literal expressions as argument'.(null !== $argNo ? ' #'.$argNo : '').'. Passed '.(string) $value);
     }
 
     private static function getShortName(): string

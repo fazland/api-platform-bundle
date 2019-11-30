@@ -4,7 +4,6 @@ namespace Fazland\ApiPlatformBundle\Tests\Form\Extension;
 
 use Fazland\ApiPlatformBundle\Form\Extension\AutoSubmitRequestHandler;
 use Symfony\Component\Form\RequestHandlerInterface;
-use Symfony\Component\Form\Tests\Extension\HttpFoundation\HttpFoundationRequestHandlerTest;
 
 class AutoSubmitRequestHandlerTest extends HttpFoundationRequestHandlerTest
 {

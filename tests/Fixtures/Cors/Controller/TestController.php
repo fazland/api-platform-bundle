@@ -2,10 +2,10 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Cors\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class TestController extends Controller
+class TestController extends AbstractController
 {
     public function indexAction(): Response
     {

@@ -21,7 +21,7 @@ class ApiPlatformBundleTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $fs = new Filesystem();
         $fs->remove(__DIR__.'/../../var');
@@ -72,12 +72,6 @@ class ApiPlatformBundleTest extends WebTestCase
 "{"foo":"bar"}"', $response->getContent());
     }
 
-    /**
-     * Marked as legacy. As of Symfony 4.1:
-     * Referencing controllers with a single colon is deprecated since Symfony 4.1. Use fazland_api.exception_controller::showAction instead.
-     *
-     * @group legacy
-     */
     public function testViewHandlerCanBeDisabled(): void
     {
         $client = static::createClient(['env' => 'no_view', 'debug' => false]);

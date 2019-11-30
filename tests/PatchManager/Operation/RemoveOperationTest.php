@@ -3,6 +3,7 @@
 namespace Fazland\ApiPlatformBundle\Tests\PatchManager\Operation;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Fazland\ApiPlatformBundle\PatchManager\Operation\RemoveOperation;
 use PHPUnit\Framework\TestCase;
 
@@ -92,11 +93,9 @@ class RemoveOperationTest extends TestCase
         self::assertFalse(isset($obj['one']));
     }
 
-    /**
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
-     */
     public function testShouldThrowIfPropertyIsNotAccessible(): void
     {
+        $this->expectException(InvalidJSONException::class);
         $obj = new class() {
             private $elements = [];
         };

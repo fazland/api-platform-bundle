@@ -22,7 +22,7 @@ class ViewSerializationTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $fs = new Filesystem();
         $fs->remove(__DIR__.'/../../var');

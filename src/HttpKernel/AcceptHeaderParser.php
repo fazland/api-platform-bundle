@@ -7,7 +7,7 @@ use Fazland\ApiPlatformBundle\Negotiation\VersionAwareNegotiator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class AcceptHeaderParser implements EventSubscriberInterface
@@ -35,7 +35,7 @@ class AcceptHeaderParser implements EventSubscriberInterface
         }, $uris);
     }
 
-    public function onKernelRequest(GetResponseEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
         if (! $this->isApplicable($request)) {

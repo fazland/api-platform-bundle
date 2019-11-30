@@ -13,3 +13,11 @@ framework:
     translator: ~
     router:
         resource: "%kernel.root_dir%/routing.yml"
+    error_controller: Fazland\ApiPlatformBundle\Controller\ExceptionController
+
+services:
+    Fazland\ApiPlatformBundle\Tests\Fixtures\Exception\Controller\TestController:
+        autowire: true
+        autoconfigure: true
+        tags:
+            - 'controller.argument_value_resolver'

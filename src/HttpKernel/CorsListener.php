@@ -5,8 +5,8 @@ namespace Fazland\ApiPlatformBundle\HttpKernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -34,10 +34,10 @@ class CorsListener implements EventSubscriberInterface
      * @param array|null $allowedOrigins
      * @param array      $exposedHeaders
      */
-    public function __construct(array $allowedOrigins = null, array $exposedHeaders = [])
+    public function __construct(?array $allowedOrigins = null, array $exposedHeaders = [])
     {
         if (null !== $allowedOrigins) {
-            $allowedOrigins = (function (string ...$origins): array {
+            $allowedOrigins = (static function (string ...$origins): array {
                 return $origins;
             })(...$allowedOrigins);
 
@@ -67,9 +67,9 @@ class CorsListener implements EventSubscriberInterface
         ];
     }
 
-    public function onException(GetResponseForExceptionEvent $event): void
+    public function onException(ExceptionEvent $event): void
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
         $request = $event->getRequest();
         if (! $exception instanceof MethodNotAllowedHttpException || Request::METHOD_OPTIONS !== $request->getMethod()) {
             return;
@@ -95,7 +95,7 @@ class CorsListener implements EventSubscriberInterface
         }
     }
 
-    public function onResponse(FilterResponseEvent $event): void
+    public function onResponse(ResponseEvent $event): void
     {
         $request = $event->getRequest();
         $origin = $request->headers->get('Origin');

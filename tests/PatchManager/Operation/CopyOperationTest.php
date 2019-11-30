@@ -2,6 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\PatchManager\Operation;
 
+use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Fazland\ApiPlatformBundle\PatchManager\Operation\CopyOperation;
 use PHPUnit\Framework\TestCase;
 
@@ -29,11 +30,9 @@ class CopyOperationTest extends TestCase
         self::assertEquals('foo', $obj['one']);
     }
 
-    /**
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
-     */
     public function testShouldThrowIfPropertyDoesNotExist(): void
     {
+        $this->expectException(InvalidJSONException::class);
         $obj = (object) ['bar' => 'foo'];
         $this->operation->execute($obj, (object) ['path' => '/two', 'from' => '/one']);
 

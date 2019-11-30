@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Form\DataTransformer;
 
 use Fazland\ApiPlatformBundle\Form\DataTransformer\DateTimeToIso8601Transformer;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class DateTimeToIso8601TransformerTest extends TestCase
 {
@@ -83,11 +84,9 @@ class DateTimeToIso8601TransformerTest extends TestCase
         self::assertSame($to, $transformer->transform(null !== $from ? new \DateTimeImmutable($from) : null));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     */
     public function testTransformRequiresValidDateTime(): void
     {
+        $this->expectException(TransformationFailedException::class);
         $transformer = new DateTimeToIso8601Transformer();
         $transformer->transform('2010-01-01');
     }
@@ -106,20 +105,16 @@ class DateTimeToIso8601TransformerTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     */
     public function testReverseTransformRequiresString(): void
     {
+        $this->expectException(TransformationFailedException::class);
         $transformer = new DateTimeToIso8601Transformer();
         $transformer->reverseTransform(12345);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     */
     public function testReverseTransformWithNonExistingDate(): void
     {
+        $this->expectException(TransformationFailedException::class);
         $transformer = new DateTimeToIso8601Transformer('UTC', 'UTC');
 
         $transformer->reverseTransform('2010-04-31T04:05Z');
@@ -127,10 +122,10 @@ class DateTimeToIso8601TransformerTest extends TestCase
 
     /**
      * @dataProvider invalidDateStringProvider
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
      */
     public function testReverseTransformExpectsValidDateString(string $date): void
     {
+        $this->expectException(TransformationFailedException::class);
         $transformer = new DateTimeToIso8601Transformer('UTC', 'UTC');
 
         $transformer->reverseTransform($date);

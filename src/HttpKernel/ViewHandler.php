@@ -13,8 +13,8 @@ use Kcs\Serializer\Type\Type;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -55,9 +55,9 @@ class ViewHandler implements EventSubscriberInterface
     /**
      * Handles the result of a controller, serializing it when needed.
      *
-     * @param GetResponseForControllerResultEvent $event
+     * @param ViewEvent $event
      */
-    public function onView(GetResponseForControllerResultEvent $event): void
+    public function onView(ViewEvent $event): void
     {
         $request = $event->getRequest();
         $result = $event->getControllerResult();
@@ -85,7 +85,7 @@ class ViewHandler implements EventSubscriberInterface
         }
 
         $headers = $result->headers;
-        $headers['Content-Type'] = $request->getMimeType($request->attributes->get('_format')).'; charset='.$this->responseCharset;
+        $headers['Content-Type'] = $request->getMimeType($request->attributes->get('_format', 'html')).'; charset='.$this->responseCharset;
 
         if ($request->attributes->has('_deprecated')) {
             $notice = $request->attributes->get('_deprecated');
@@ -105,11 +105,11 @@ class ViewHandler implements EventSubscriberInterface
     /**
      * Checks the controller for the deprecated annotation.
      *
-     * @param FilterControllerEvent $event
+     * @param ControllerEvent $event
      *
      * @throws \ReflectionException
      */
-    public function onController(FilterControllerEvent $event): void
+    public function onController(ControllerEvent $event): void
     {
         $controller = $event->getController();
         if (! \is_array($controller) && \method_exists($controller, '__invoke')) {

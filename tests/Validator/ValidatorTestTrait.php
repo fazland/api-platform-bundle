@@ -7,6 +7,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 trait ValidatorTestTrait
 {
@@ -48,11 +49,9 @@ trait ValidatorTestTrait
         $this->validator->validate($value, $this->createConstraint());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
-     */
     public function testValidateShouldThrowOnInvalidConstraint(): void
     {
+        $this->expectException(UnexpectedTypeException::class);
         $invalidConstraint = $this->prophesize(Constraint::class);
         $this->validator->validate(Argument::any(), $invalidConstraint->reveal());
     }
@@ -66,13 +65,13 @@ trait ValidatorTestTrait
     }
 
     /**
-     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      * @dataProvider invalidObjects
      *
      * @param mixed $value
      */
     public function testValidateShouldThrowOnInvalidValueTypes($value): void
     {
+        $this->expectException(UnexpectedTypeException::class);
         $this->validator->validate($value, $this->createConstraint());
     }
 

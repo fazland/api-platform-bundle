@@ -4,6 +4,8 @@ namespace Fazland\ApiPlatformBundle\Tests\JSONPointer;
 
 use Fazland\ApiPlatformBundle\JSONPointer\Path;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\PropertyAccess\Exception\InvalidPropertyPathException;
+use Symfony\Component\PropertyAccess\Exception\OutOfBoundsException;
 
 class PathTest extends TestCase
 {
@@ -53,10 +55,10 @@ class PathTest extends TestCase
 
     /**
      * @dataProvider provideInvalidPath
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\InvalidPropertyPathException
      */
     public function testPathShouldThrowOnInvalidPaths(string $value): void
     {
+        $this->expectException(InvalidPropertyPathException::class);
         new Path($value);
     }
 
@@ -104,11 +106,9 @@ class PathTest extends TestCase
         self::assertFalse($path->isIndex(null));
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\OutOfBoundsException
-     */
     public function testGetElementShouldThrowIfOutOfBoundElementIsRequested(): void
     {
+        $this->expectException(OutOfBoundsException::class);
         $path = new Path('/foo/bar');
         $path->getElement(2);
     }

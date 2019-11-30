@@ -1,3 +1,3 @@
 index:
     path: /
-    defaults: { _controller: 'AppBundle:Test:index' }
+    defaults: { _controller: 'Fazland\ApiPlatformBundle\Tests\Fixtures\Sunset\Controller\TestController::indexAction' }

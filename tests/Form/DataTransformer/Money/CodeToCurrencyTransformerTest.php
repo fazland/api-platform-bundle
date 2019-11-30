@@ -5,6 +5,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Form\DataTransformer\Money;
 use Fazland\ApiPlatformBundle\Form\DataTransformer\Money\CodeToCurrencyTransformer;
 use Money\Currency;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class CodeToCurrencyTransformerTest extends TestCase
 {
@@ -52,11 +53,11 @@ class CodeToCurrencyTransformerTest extends TestCase
 
     /**
      * @dataProvider provideNonCurrencyValues
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Expected Money\Currency
      */
     public function testTransformShouldThrowOnNonMoneyValues($value): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Expected Money\\Currency');
         $this->transformer->transform($value);
     }
 
@@ -75,11 +76,11 @@ class CodeToCurrencyTransformerTest extends TestCase
 
     /**
      * @dataProvider provideNonStringValues
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Expected a string
      */
     public function testReverseTransformShouldThrowOnNonValidValues($value): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Expected a string');
         $this->transformer->reverseTransform($value);
     }
 

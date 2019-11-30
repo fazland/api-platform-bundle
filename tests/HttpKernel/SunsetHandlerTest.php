@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class SunsetHandlerTest extends WebTestCase
@@ -30,7 +30,7 @@ class SunsetHandlerTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $fs = new Filesystem();
         $fs->remove(__DIR__.'/../../var');
@@ -50,7 +50,7 @@ class SunsetHandlerTest extends WebTestCase
      */
     public function testSkip(Request $request, Response $response)
     {
-        $event = $this->prophesize(FilterResponseEvent::class);
+        $event = $this->prophesize(ResponseEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getResponse()->willReturn($response);
 
@@ -67,7 +67,7 @@ class SunsetHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_rest_sunset', $annot);
 
-        $event = $this->prophesize(FilterResponseEvent::class);
+        $event = $this->prophesize(ResponseEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getResponse()->willReturn($response = new Response());
 

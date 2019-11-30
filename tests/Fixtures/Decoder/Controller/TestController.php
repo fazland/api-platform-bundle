@@ -2,12 +2,12 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Decoder\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\VarDumper\Test\VarDumperTestTrait;
 
-class TestController extends Controller
+class TestController extends AbstractController
 {
     use VarDumperTestTrait;
 

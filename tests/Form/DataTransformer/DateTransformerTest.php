@@ -5,6 +5,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Form\DataTransformer;
 use Cake\Chronos\Chronos;
 use Fazland\ApiPlatformBundle\Form\DataTransformer\DateTransformer;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class DateTransformerTest extends TestCase
 {
@@ -46,11 +47,11 @@ class DateTransformerTest extends TestCase
 
     /**
      * @dataProvider provideNonDateTimeInterfaceValues
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Expected a DateTimeInterface instance
      */
     public function testTransformShouldThrowOnNonDateTimeInterfaceValue($value): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Expected a DateTimeInterface instance');
         $this->transformer->transform($value);
     }
 
@@ -78,10 +79,10 @@ class DateTransformerTest extends TestCase
 
     /**
      * @dataProvider provideInvalidReverseTransformValues
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
      */
     public function testReverseTransformShouldThrowOnInvalidValue($value, string $expectedExceptionMessage): void
     {
+        $this->expectException(TransformationFailedException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
         $this->transformer->reverseTransform($value);
     }
