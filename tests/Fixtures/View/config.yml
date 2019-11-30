@@ -35,6 +35,12 @@ sensio_framework_extra:
     psr_message: { enabled: false }
 
 services:
+    Fazland\ApiPlatformBundle\Tests\Fixtures\View\Controller\TestController:
+        autowire: true
+        autoconfigure: true
+        tags:
+            - 'controller.argument_value_resolver'
+
     Fazland\ApiPlatformBundle\Tests\Fixtures\View\Serializer\FooHandler:
         class: Fazland\ApiPlatformBundle\Tests\Fixtures\View\Serializer\FooHandler
         tags:

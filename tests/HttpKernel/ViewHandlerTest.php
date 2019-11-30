@@ -24,8 +24,8 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -84,7 +84,7 @@ class ViewHandlerTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $fs = new Filesystem();
         $fs->remove(__DIR__.'/../../var');
@@ -108,7 +108,7 @@ class ViewHandlerTest extends WebTestCase
      */
     public function testSkip(Request $request, $result)
     {
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn($result);
 
@@ -126,7 +126,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_rest_view', $annot);
 
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn(new TestObject());
 
@@ -149,7 +149,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_rest_view', $annot);
 
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn(new TestObject());
 
@@ -176,7 +176,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_rest_view', $annot);
 
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn(new TestObject());
 
@@ -200,7 +200,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
 
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn(new \stdClass());
 
@@ -224,7 +224,7 @@ class ViewHandlerTest extends WebTestCase
         $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(false);
 
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn($form->reveal());
 
@@ -250,7 +250,7 @@ class ViewHandlerTest extends WebTestCase
 
         $form->submit(null)->shouldBeCalled();
 
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn($form->reveal());
 
@@ -278,7 +278,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
 
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn($iterator);
 
@@ -300,7 +300,7 @@ class ViewHandlerTest extends WebTestCase
         $iterator->rewind()->willReturn();
         $iterator->valid()->willReturn(false);
 
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn($iterator);
 
@@ -339,7 +339,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
 
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn($result);
 
@@ -364,7 +364,7 @@ class ViewHandlerTest extends WebTestCase
         $iterator->rewind()->shouldBeCalled();
         $iterator->valid()->willReturn(false);
 
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn($iterator);
 
@@ -387,7 +387,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_rest_view', $annot);
 
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn(new TestObject());
 
@@ -412,7 +412,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_rest_view', new ViewAnnotation());
 
-        $event = $this->prophesize(GetResponseForControllerResultEvent::class);
+        $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getControllerResult()->willReturn(new View(['foobar' => 'no no no'], Response::HTTP_PAYMENT_REQUIRED));
 
@@ -442,7 +442,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_controller', [$controller, 'deprecatedAction']);
 
-        $event = $this->prophesize(FilterControllerEvent::class);
+        $event = $this->prophesize(ControllerEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getController()->willReturn($request->attributes->get('_controller'));
 
@@ -458,7 +458,7 @@ class ViewHandlerTest extends WebTestCase
         $request = new Request();
         $request->attributes->set('_controller', [$controller, 'deprecatedWithNoticeAction']);
 
-        $event = $this->prophesize(FilterControllerEvent::class);
+        $event = $this->prophesize(ControllerEvent::class);
         $event->getRequest()->willReturn($request);
         $event->getController()->willReturn($request->attributes->get('_controller'));
 

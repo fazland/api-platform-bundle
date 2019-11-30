@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class FormNotSubmittedExceptionSubscriberTest extends WebTestCase
@@ -31,7 +31,7 @@ class FormNotSubmittedExceptionSubscriberTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $fs = new Filesystem();
         $fs->remove(__DIR__.'/../../../var');
@@ -44,8 +44,8 @@ class FormNotSubmittedExceptionSubscriberTest extends WebTestCase
 
     public function testShouldSkipIncorrectExceptions(): void
     {
-        $event = $this->prophesize(GetResponseForExceptionEvent::class);
-        $event->getException()->willReturn(new \Exception());
+        $event = $this->prophesize(ExceptionEvent::class);
+        $event->getThrowable()->willReturn(new \Exception());
         $event->setResponse(Argument::any())->shouldNotBeCalled();
 
         $this->subscriber->onException($event->reveal());
@@ -53,8 +53,8 @@ class FormNotSubmittedExceptionSubscriberTest extends WebTestCase
 
     public function testShouldHandleFormNotSubmittedException(): void
     {
-        $event = $this->prophesize(GetResponseForExceptionEvent::class);
-        $event->getException()->willReturn($exception = $this->prophesize(FormNotSubmittedException::class));
+        $event = $this->prophesize(ExceptionEvent::class);
+        $event->getThrowable()->willReturn($exception = $this->prophesize(FormNotSubmittedException::class));
         $event->setResponse(Argument::type(Response::class))->shouldBeCalled();
 
         $exception->getForm()->willReturn($this->prophesize(FormInterface::class));

@@ -2,6 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle\DependencyInjection;
 
+use Fazland\ApiPlatformBundle\Controller\ExceptionController;
 use Fazland\ApiPlatformBundle\Decoder\DecoderInterface;
 use Fazland\ApiPlatformBundle\HttpKernel\CorsListener;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -44,6 +45,7 @@ class ApiPlatformExtension extends Extension
         }
 
         if ($config['catch_exceptions']) {
+            $container->setParameter('kernel.error_controller', ExceptionController::class);
             $loader->load('exception.xml');
         }
 

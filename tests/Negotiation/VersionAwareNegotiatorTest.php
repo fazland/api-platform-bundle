@@ -24,19 +24,15 @@ class VersionAwareNegotiatorTest extends TestCase
         $this->negotiator = new VersionAwareNegotiator();
     }
 
-    /**
-     * @expectedException \Negotiation\Exception\InvalidHeader
-     */
     public function testPriorityFactoryRaiseExceptionIfContainsVersionParam(): void
     {
+        $this->expectException(InvalidHeader::class);
         $this->negotiator->priorityFactory('text/html; version=12');
     }
 
-    /**
-     * @expectedException \Negotiation\Exception\InvalidMediaType
-     */
     public function testPriorityFactoryRaiseExceptionIfInvalidMediaType(): void
     {
+        $this->expectException(InvalidMediaType::class);
         $this->negotiator->priorityFactory('html');
     }
 

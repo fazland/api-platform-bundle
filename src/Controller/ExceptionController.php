@@ -7,7 +7,7 @@ use Fazland\ApiPlatformBundle\HttpKernel\Exception\SerializableException;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
 use Kcs\Serializer\SerializerInterface;
-use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -47,9 +47,9 @@ class ExceptionController
      *
      * @return Response
      */
-    public function showAction(Request $request, FlattenException $exception): Response
+    public function __invoke(Request $request, FlattenException $exception): Response
     {
-        Response::closeOutputBuffers($request->headers->get('X-Php-Ob-Level', -1) + 1, true);
+        Response::closeOutputBuffers($request->headers->get('X-Php-Ob-Level', '-1') + 1, true);
         $code = $exception->getStatusCode();
         $format = $request->getRequestFormat();
 

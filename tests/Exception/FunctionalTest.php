@@ -7,12 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-/**
- * Marked as legacy. As of Symfony 4.1:
- * Referencing controllers with a single colon is deprecated since Symfony 4.1. Use fazland_api.exception_controller::showAction instead.
- *
- * @group legacy
- */
 class FunctionalTest extends WebTestCase
 {
     /**
@@ -26,7 +20,7 @@ class FunctionalTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $fs = new Filesystem();
         $fs->remove(__DIR__.'/../../var');

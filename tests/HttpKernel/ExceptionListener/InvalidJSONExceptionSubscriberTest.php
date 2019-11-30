@@ -9,7 +9,7 @@ use Prophecy\Argument;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 class InvalidJSONExceptionSubscriberTest extends WebTestCase
 {
@@ -29,7 +29,7 @@ class InvalidJSONExceptionSubscriberTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $fs = new Filesystem();
         $fs->remove(__DIR__.'/../../../var');
@@ -42,8 +42,8 @@ class InvalidJSONExceptionSubscriberTest extends WebTestCase
 
     public function testShouldSkipIncorrectExceptions(): void
     {
-        $event = $this->prophesize(GetResponseForExceptionEvent::class);
-        $event->getException()->willReturn(new \Exception());
+        $event = $this->prophesize(ExceptionEvent::class);
+        $event->getThrowable()->willReturn(new \Exception());
         $event->setResponse(Argument::any())->shouldNotBeCalled();
 
         $this->subscriber->onException($event->reveal());
@@ -51,8 +51,8 @@ class InvalidJSONExceptionSubscriberTest extends WebTestCase
 
     public function testShouldHandleInvalidJSONException(): void
     {
-        $event = $this->prophesize(GetResponseForExceptionEvent::class);
-        $event->getException()->willReturn($exception = $this->prophesize(InvalidJSONException::class));
+        $event = $this->prophesize(ExceptionEvent::class);
+        $event->getThrowable()->willReturn($exception = $this->prophesize(InvalidJSONException::class));
         $event->setResponse(Argument::type(Response::class))->shouldBeCalled();
 
         $this->subscriber->onException($event->reveal());

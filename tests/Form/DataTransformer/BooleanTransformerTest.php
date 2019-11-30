@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Form\DataTransformer;
 
 use Fazland\ApiPlatformBundle\Form\DataTransformer\BooleanTransformer;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class BooleanTransformerTest extends TestCase
 {
@@ -36,11 +37,11 @@ class BooleanTransformerTest extends TestCase
 
     /**
      * @dataProvider provideNonBooleansValues
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Expected a bool
      */
     public function testTransformShouldThrowOnNonBooleans($value): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Expected a bool');
         $this->transformer->transform($value);
     }
 
@@ -71,21 +72,17 @@ class BooleanTransformerTest extends TestCase
         self::assertEquals($value, $this->transformer->reverseTransform($value));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Expected a scalar value, object passed
-     */
     public function testReverseTransformShouldThrowOnObjects(): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Expected a scalar value, object passed');
         $this->transformer->reverseTransform(new \stdClass());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Expected a scalar value, array passed
-     */
     public function testReverseTransformShouldThrowOnArrays(): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Expected a scalar value, array passed');
         $this->transformer->reverseTransform([]);
     }
 
@@ -119,12 +116,10 @@ class BooleanTransformerTest extends TestCase
         self::assertTrue($this->transformer->reverseTransform($value));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Cannot transform value "i_am_not_a_false_value_nor_true_value"
-     */
     public function testReverseTransformShouldThrowOnInvalidStrings(): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Cannot transform value "i_am_not_a_false_value_nor_true_value"');
         $this->transformer->reverseTransform('i_am_not_a_false_value_nor_true_value');
     }
 }

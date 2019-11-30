@@ -7,7 +7,7 @@ use Fazland\ApiPlatformBundle\Decoder\Exception\UnsupportedFormatException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class BodyConverter implements EventSubscriberInterface
@@ -22,7 +22,7 @@ class BodyConverter implements EventSubscriberInterface
         $this->decoderProvider = $decoderProvider;
     }
 
-    public function onKernelRequest(GetResponseEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
         $contentType = $request->headers->get('Content-Type', 'application/x-www-form-urlencoded');

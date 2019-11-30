@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Decoder;
 
 use Fazland\ApiPlatformBundle\Decoder\DecoderInterface;
 use Fazland\ApiPlatformBundle\Decoder\DecoderProvider;
+use Fazland\ApiPlatformBundle\Decoder\Exception\UnsupportedFormatException;
 use PHPUnit\Framework\TestCase;
 
 class DecoderProviderTest extends TestCase
@@ -29,11 +30,9 @@ class DecoderProviderTest extends TestCase
         self::assertTrue($provider->supports('json'));
     }
 
-    /**
-     * @expectedException \Fazland\ApiPlatformBundle\Decoder\Exception\UnsupportedFormatException
-     */
     public function testGetShouldThrowIfFormatIsNotSupported(): void
     {
+        $this->expectException(UnsupportedFormatException::class);
         $provider = new DecoderProvider($this->getProviders());
 
         $provider->get('xml');

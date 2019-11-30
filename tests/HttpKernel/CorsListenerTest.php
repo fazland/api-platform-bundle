@@ -10,8 +10,8 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -44,7 +44,7 @@ class CorsListenerTest extends WebTestCase
     /**
      * {@inheritdoc}
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $fs = new Filesystem();
         $fs->remove(__DIR__.'/../../var');
@@ -72,7 +72,7 @@ class CorsListenerTest extends WebTestCase
         \Throwable $exception,
         ObjectProphecy $request
     ): void {
-        $event = new GetResponseForExceptionEvent(
+        $event = new ExceptionEvent(
             $this->prophesize(HttpKernelInterface::class)->reveal(),
             $request->reveal(),
             HttpKernelInterface::MASTER_REQUEST,
@@ -92,7 +92,7 @@ class CorsListenerTest extends WebTestCase
             'Access-Control-Request-Headers' => 'Authorization',
         ]);
 
-        $event = new GetResponseForExceptionEvent(
+        $event = new ExceptionEvent(
             $this->prophesize(HttpKernelInterface::class)->reveal(),
             $request->reveal(),
             HttpKernelInterface::MASTER_REQUEST,
@@ -128,7 +128,7 @@ class CorsListenerTest extends WebTestCase
         $request = $this->prophesize(Request::class);
         $request->headers = new HeaderBag();
 
-        $event = new FilterResponseEvent(
+        $event = new ResponseEvent(
             $this->prophesize(HttpKernelInterface::class)->reveal(),
             $request->reveal(),
             HttpKernelInterface::MASTER_REQUEST,
@@ -145,7 +145,7 @@ class CorsListenerTest extends WebTestCase
         $request = $this->prophesize(Request::class);
         $request->headers = new HeaderBag(['Origin' => '*']);
 
-        $event = new FilterResponseEvent(
+        $event = new ResponseEvent(
             $this->prophesize(HttpKernelInterface::class)->reveal(),
             $request->reveal(),
             HttpKernelInterface::MASTER_REQUEST,
@@ -162,7 +162,7 @@ class CorsListenerTest extends WebTestCase
         $request = $this->prophesize(Request::class);
         $request->headers = new HeaderBag(['Origin' => 'https://localhost']);
 
-        $event = new FilterResponseEvent(
+        $event = new ResponseEvent(
             $this->prophesize(HttpKernelInterface::class)->reveal(),
             $request->reveal(),
             HttpKernelInterface::MASTER_REQUEST,
@@ -180,7 +180,7 @@ class CorsListenerTest extends WebTestCase
         $request = $this->prophesize(Request::class);
         $request->headers = new HeaderBag(['Origin' => 'https://localhost']);
 
-        $event = new FilterResponseEvent(
+        $event = new ResponseEvent(
             $this->prophesize(HttpKernelInterface::class)->reveal(),
             $request->reveal(),
             HttpKernelInterface::MASTER_REQUEST,
@@ -198,7 +198,7 @@ class CorsListenerTest extends WebTestCase
         $request = $this->prophesize(Request::class);
         $request->headers = new HeaderBag(['Origin' => 'https://www.foobar.com']);
 
-        $event = new FilterResponseEvent(
+        $event = new ResponseEvent(
             $this->prophesize(HttpKernelInterface::class)->reveal(),
             $request->reveal(),
             HttpKernelInterface::MASTER_REQUEST,

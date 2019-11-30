@@ -2,6 +2,8 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\JSONPointer;
 
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
+
 class AccessorCollectionTest_Car
 {
     private $axes;
@@ -137,12 +139,10 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
         $this->propertyAccessor->setValue($car, '/structure/axes', $axesAfter);
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     * @expectedExceptionMessage Could not determine access type for property "axes".
-     */
     public function testSetValueFailsIfNoAdderNorRemoverFound(): void
     {
+        $this->expectException(NoSuchPropertyException::class);
+        $this->expectExceptionMessage('Could not determine access type for property "axes".');
         $car = $this->getMockBuilder(__CLASS__.'_CarNoAdderAndRemover')->getMock();
         $axesBefore = $this->getContainer([1 => 'second', 3 => 'fourth']);
         $axesAfter = $this->getContainer([0 => 'first', 1 => 'second', 2 => 'third']);
@@ -178,12 +178,9 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
         self::assertFalse($this->propertyAccessor->isWritable($car, '/axes'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     * expectedExceptionMessageRegExp /The property "axes" in class "Mock_PropertyAccessorCollectionTest_Car[^"]*" can be defined with the methods "addAxis()", "removeAxis()" but the new value must be an array or an instance of \Traversable, "string" given./
-     */
     public function testSetValueFailsIfAdderAndRemoverExistButValueIsNotTraversable(): void
     {
+        $this->expectException(NoSuchPropertyException::class);
         $car = $this->getMockBuilder(__CLASS__.'_Car')->getMock();
 
         $this->propertyAccessor->setValue($car, '/axes', 'Not an array or Traversable');

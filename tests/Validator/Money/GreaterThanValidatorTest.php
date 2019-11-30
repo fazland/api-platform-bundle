@@ -2,13 +2,13 @@
 
 namespace Money\Tests\Validator;
 
+use Fazland\ApiPlatformBundle\Tests\Validator\AbstractComparisonValidatorTestCase;
+use Fazland\ApiPlatformBundle\Tests\Validator\ComparisonTest_Class;
 use Fazland\ApiPlatformBundle\Validator\Money\GreaterThan;
 use Fazland\ApiPlatformBundle\Validator\Money\GreaterThanValidator;
 use Money\Money;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Tests\Constraints\AbstractComparisonValidatorTestCase;
-use Symfony\Component\Validator\Tests\Constraints\ComparisonTest_Class;
 
 class GreaterThanValidatorTest extends AbstractComparisonValidatorTestCase
 {
@@ -112,9 +112,9 @@ class GreaterThanValidatorTest extends AbstractComparisonValidatorTestCase
      */
     public function testValidComparisonToPropertyPathOnArray($comparedValue): void
     {
-        $constraint = $this->createConstraint(['propertyPath' => '[root][value]']);
+        $constraint = $this->createConstraint(['propertyPath' => 'root[value]']);
 
-        $this->setObject(['root' => ['value' => Money::EUR('5')]]);
+        $this->setObject((object) ['root' => ['value' => Money::EUR('5')]]);
 
         $this->validator->validate($comparedValue, $constraint);
 
@@ -149,7 +149,6 @@ class GreaterThanValidatorTest extends AbstractComparisonValidatorTestCase
             ->setParameter('{{ value }}', 'object')
             ->setParameter('{{ compared_value }}', 'object')
             ->setParameter('{{ compared_value_type }}', $comparedValueType)
-            ->setCode($this->getErrorCode())
             ->assertRaised()
         ;
     }

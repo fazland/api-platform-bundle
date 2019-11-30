@@ -7,15 +7,15 @@ use Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class FormInvalidExceptionSubscriber implements EventSubscriberInterface
 {
-    public function onException(GetResponseForExceptionEvent $event): void
+    public function onException(ExceptionEvent $event): void
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
         if (! $exception instanceof FormInvalidException) {
             return;
         }

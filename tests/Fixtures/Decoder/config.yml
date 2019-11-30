@@ -6,3 +6,10 @@ framework:
     secret: secret
     router:
         resource: "%kernel.root_dir%/routing.yml"
+
+services:
+    Fazland\ApiPlatformBundle\Tests\Fixtures\Decoder\Controller\TestController:
+        autowire: true
+        autoconfigure: true
+        tags:
+            - 'controller.argument_value_resolver'

@@ -7,6 +7,7 @@ use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class PhoneNumberToStringTransformerTest extends TestCase
 {
@@ -40,11 +41,10 @@ class PhoneNumberToStringTransformerTest extends TestCase
 
     /**
      * @dataProvider nonPhoneNumberArguments
-     *
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
      */
     public function testTransformShouldThrowOnNonPhoneNumberArgument($argument): void
     {
+        $this->expectException(TransformationFailedException::class);
         $this->transformer->transform($argument);
     }
 
@@ -71,11 +71,10 @@ class PhoneNumberToStringTransformerTest extends TestCase
 
     /**
      * @dataProvider nonPhoneNumberStringRepresentation
-     *
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
      */
     public function testReverseTransformShouldThrowOnNonPhoneNumberStringRepresentation($argument): void
     {
+        $this->expectException(TransformationFailedException::class);
         $this->transformer->reverseTransform($argument);
     }
 

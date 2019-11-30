@@ -12,7 +12,10 @@ use Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer\Ticket5775Object;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer\TypeHinted;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Component\PropertyAccess\Exception\NoSuchIndexException;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
+use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 
 class AccessorTest extends TestCase
 {
@@ -87,10 +90,10 @@ class AccessorTest extends TestCase
 
     /**
      * @dataProvider getPathsWithMissingProperty
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
      */
     public function testGetValueThrowsExceptionIfPropertyNotFound($objectOrArray, string $path)
     {
+        $this->expectException(NoSuchPropertyException::class);
         $this->propertyAccessor->getValue($objectOrArray, $path);
     }
 
@@ -102,11 +105,9 @@ class AccessorTest extends TestCase
         self::assertNull($this->propertyAccessor->getValue($objectOrArray, $path));
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     */
     public function testGetValueThrowsExceptionIfNotArrayAccess(): void
     {
+        $this->expectException(NoSuchPropertyException::class);
         $this->propertyAccessor->getValue(new \stdClass(), '/index');
     }
 
@@ -115,11 +116,9 @@ class AccessorTest extends TestCase
         self::assertSame('Bernhard', $this->propertyAccessor->getValue(new TestClassMagicGet('Bernhard'), '/magicProperty'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     */
     public function testGetValueConvertsExceptionsWhenMagicGetThrows(): void
     {
+        $this->expectException(NoSuchPropertyException::class);
         $this->propertyAccessor->getValue(new TestClassMagicGet('Bernhard'), '/throwing');
     }
 
@@ -163,11 +162,11 @@ class AccessorTest extends TestCase
 
     /**
      * @dataProvider getPathsWithUnexpectedType
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage PropertyAccessor requires a graph of objects or arrays to operate on
      */
     public function testGetValueThrowsExceptionIfNotObjectOrArray($objectOrArray, string $path): void
     {
+        $this->expectException(UnexpectedTypeException::class);
+        $this->expectExceptionMessage('PropertyAccessor requires a graph of objects or arrays to operate on');
         $this->propertyAccessor->getValue($objectOrArray, $path);
     }
 
@@ -193,10 +192,10 @@ class AccessorTest extends TestCase
 
     /**
      * @dataProvider getPathsWithMissingProperty
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
      */
     public function testSetValueThrowsExceptionIfPropertyNotFound($objectOrArray, string $path): void
     {
+        $this->expectException(NoSuchPropertyException::class);
         $this->propertyAccessor->setValue($objectOrArray, $path, 'Updated');
     }
 
@@ -221,11 +220,9 @@ class AccessorTest extends TestCase
         self::assertSame('Updated', $this->propertyAccessor->getValue($objectOrArray, $path));
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     */
     public function testSetValueThrowsExceptionIfNotArrayAccess(): void
     {
+        $this->expectException(NoSuchPropertyException::class);
         $object = new \stdClass();
 
         $this->propertyAccessor->setValue($object, '/index', 'Updated');
@@ -240,11 +237,9 @@ class AccessorTest extends TestCase
         self::assertEquals('Updated', $author->__get('magicProperty'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException
-     */
     public function testSetValueThrowsExceptionIfThereAreMissingParameters(): void
     {
+        $this->expectException(NoSuchPropertyException::class);
         $object = new TestClass('Bernhard');
 
         $this->propertyAccessor->setValue($object, '/publicAccessorWithMoreRequiredParameters', 'Updated');
@@ -252,11 +247,11 @@ class AccessorTest extends TestCase
 
     /**
      * @dataProvider getPathsWithUnexpectedType
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException
-     * @expectedExceptionMessage PropertyAccessor requires a graph of objects or arrays to operate on
      */
     public function testSetValueThrowsExceptionIfNotObjectOrArray($objectOrArray, string $path): void
     {
+        $this->expectException(UnexpectedTypeException::class);
+        $this->expectExceptionMessage('PropertyAccessor requires a graph of objects or arrays to operate on');
         $this->propertyAccessor->setValue($objectOrArray, $path, 'value');
     }
 
@@ -462,11 +457,9 @@ class AccessorTest extends TestCase
         self::assertEquals($value, $this->propertyAccessor->isWritable($object, $path));
     }
 
-    /**
-     * @expectedException \TypeError
-     */
     public function testThrowTypeError(): void
     {
+        $this->expectException(\TypeError::class);
         $object = new TypeHinted();
 
         $this->propertyAccessor->setValue($object, '/date', 'This is a string, \DateTime expected.');
@@ -541,19 +534,17 @@ class AccessorTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\PropertyAccess\Exception\InvalidArgumentException
      * @dataProvider getUnappendableObjects
      */
     public function testArrayAppendThrowsIfAdderIsNotFound($array): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->propertyAccessor->setValue($array, '/value/foo/-', 'foofoo');
     }
 
-    /**
-     * @expectedException \TypeError
-     */
     public function testThrowTypeErrorWithInterface(): void
     {
+        $this->expectException(\TypeError::class);
         $object = new TypeHinted();
 
         $this->propertyAccessor->setValue($object, '/countable', 'This is a string, \Countable expected.');

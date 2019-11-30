@@ -11,7 +11,7 @@ use Kcs\Serializer\Serializer;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -62,7 +62,7 @@ class ExceptionControllerTest extends TestCase
         $this->serializer->serialize(Argument::cetera())->willReturn();
         $controller = new ExceptionController($this->serializer->reveal(), $this->serializationContext, true);
 
-        $response = $controller->showAction($this->request, FlattenException::create(new NotFoundHttpException()));
+        $response = $controller($this->request, FlattenException::create(new NotFoundHttpException()));
 
         $this->serializer
             ->serialize(Argument::type(DebugSerializableException::class), 'json', $this->serializationContext)
@@ -74,7 +74,7 @@ class ExceptionControllerTest extends TestCase
     public function testShouldSerializeException(): void
     {
         $this->serializer->serialize(Argument::cetera())->willReturn();
-        $response = $this->controller->showAction($this->request, FlattenException::create(new AccessDeniedHttpException()));
+        $response = ($this->controller)($this->request, FlattenException::create(new AccessDeniedHttpException()));
 
         $this->serializer
             ->serialize(Argument::type(SerializableException::class), 'json', $this->serializationContext)
@@ -88,7 +88,7 @@ class ExceptionControllerTest extends TestCase
         $this->serializer->serialize(Argument::cetera())->willThrow(new UnsupportedFormatException());
         $this->request->setRequestFormat('md');
 
-        $response = $this->controller->showAction($this->request, FlattenException::create(new BadRequestHttpException('A message.')));
+        $response = ($this->controller)($this->request, FlattenException::create(new BadRequestHttpException('A message.')));
 
         $this->serializer
             ->serialize(Argument::type(SerializableException::class), 'md', $this->serializationContext)

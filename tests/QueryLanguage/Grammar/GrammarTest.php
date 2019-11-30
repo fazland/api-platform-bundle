@@ -17,7 +17,7 @@ class GrammarTest extends TestCase
      */
     private $grammar;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->grammar = new Grammar();
     }

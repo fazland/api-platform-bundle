@@ -5,6 +5,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Form\DataTransformer\Money;
 use Fazland\ApiPlatformBundle\Form\DataTransformer\Money\MoneyTransformer;
 use Money\Money;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class MoneyTransformerTest extends TestCase
 {
@@ -47,11 +48,11 @@ class MoneyTransformerTest extends TestCase
 
     /**
      * @dataProvider provideNonMoneyValues
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Expected Money\Money
      */
     public function testTransformShouldThrowOnNonMoneyValues($value): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Expected Money\\Money');
         $this->transformer->transform($value);
     }
 
@@ -72,12 +73,10 @@ class MoneyTransformerTest extends TestCase
         self::assertNull($this->transformer->reverseTransform($value));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Amount must be numeric
-     */
     public function testReverseTransformShouldThrowOnInvalidArray(): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Amount must be numeric');
         $this->transformer->reverseTransform(['amount' => 'i am not numeric', 'currency' => 'currency']);
     }
 
@@ -90,11 +89,11 @@ class MoneyTransformerTest extends TestCase
 
     /**
      * @dataProvider provideNonArrayNorNumericValue
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Value must be numeric or an array with amount and currency keys set
      */
     public function testReverseTransformShouldThrowOnNonArrayNorNumericValue($value): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Value must be numeric or an array with amount and currency keys set');
         $this->transformer->reverseTransform($value);
     }
 

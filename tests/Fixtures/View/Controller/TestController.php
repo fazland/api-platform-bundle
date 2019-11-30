@@ -6,11 +6,11 @@ use Fazland\ApiPlatformBundle\Annotation\View;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\FormInvalidException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\FormNotSubmittedException;
 use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 
-class TestController extends Controller
+class TestController extends AbstractController
 {
     /**
      * @return mixed

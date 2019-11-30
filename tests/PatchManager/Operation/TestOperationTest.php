@@ -2,6 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\PatchManager\Operation;
 
+use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Fazland\ApiPlatformBundle\PatchManager\Operation\TestOperation;
 use PHPUnit\Framework\TestCase;
 
@@ -20,11 +21,9 @@ class TestOperationTest extends TestCase
         $this->operation = new TestOperation();
     }
 
-    /**
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
-     */
     public function testShouldThrowIfValuesAreNotEqual(): void
     {
+        $this->expectException(InvalidJSONException::class);
         $op = (object) ['a' => 'foo'];
         $this->operation->execute($op, (object) ['path' => '/a', 'value' => 'bar']);
     }

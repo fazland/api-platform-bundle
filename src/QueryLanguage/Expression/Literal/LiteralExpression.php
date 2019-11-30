@@ -21,10 +21,7 @@ abstract class LiteralExpression extends ValueExpression
     public static function create($value): ValueExpression
     {
         if (! \is_string($value)) {
-            throw new \TypeError(\sprintf(
-                'Argument 1 passed to '.__METHOD__.' must be a string. %s passed',
-                \is_object($value) ? \get_class($value) : \gettype($value)
-            ));
+            throw new \TypeError(\sprintf('Argument 1 passed to '.__METHOD__.' must be a string. %s passed', \is_object($value) ? \get_class($value) : \gettype($value)));
         }
 
         switch (true) {

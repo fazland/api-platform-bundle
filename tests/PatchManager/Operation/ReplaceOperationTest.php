@@ -2,6 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\PatchManager\Operation;
 
+use Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException;
 use Fazland\ApiPlatformBundle\PatchManager\Operation\ReplaceOperation;
 use PHPUnit\Framework\TestCase;
 
@@ -28,12 +29,10 @@ class ReplaceOperationTest extends TestCase
         self::assertEquals('foo', $obj->one);
     }
 
-    /**
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\InvalidJSONException
-     * @expectedExceptionMessage Element at path "/one" does not exist.
-     */
     public function testShouldThrowIfPathDoesNotExists(): void
     {
+        $this->expectException(InvalidJSONException::class);
+        $this->expectExceptionMessage('Element at path "/one" does not exist.');
         $obj = (object) [];
         $this->operation->execute($obj, (object) ['path' => '/one', 'value' => 'foo']);
     }

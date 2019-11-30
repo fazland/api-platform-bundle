@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -42,7 +42,7 @@ class AcceptHeaderParserTest extends TestCase
      */
     public function testNotAcceptableHeader(string $header): void
     {
-        $event = $this->prophesize(GetResponseEvent::class);
+        $event = $this->prophesize(RequestEvent::class);
         $event->getRequest()->willReturn(Request::create('/', Request::METHOD_GET, [], [], [], ['HTTP_ACCEPT' => $header]));
         $event->setResponse(Argument::that(function (Response $response): bool {
             Assert::assertEquals(Response::HTTP_NOT_ACCEPTABLE, $response->getStatusCode());
@@ -70,7 +70,7 @@ class AcceptHeaderParserTest extends TestCase
         Chronos::setTestNow(Chronos::createFromDate(2016, 2, 28));
         $request = Request::create('/', Request::METHOD_GET, [], [], [], ['HTTP_ACCEPT' => $header]);
 
-        $event = $this->prophesize(GetResponseEvent::class);
+        $event = $this->prophesize(RequestEvent::class);
         $event->getRequest()->willReturn($request);
 
         $this->parser->onKernelRequest($event->reveal());

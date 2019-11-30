@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Form\DataTransformer;
 
 use Fazland\ApiPlatformBundle\Form\DataTransformer\IntegerTransformer;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class IntegerTransformerTest extends TestCase
 {
@@ -67,21 +68,21 @@ class IntegerTransformerTest extends TestCase
 
     /**
      * @dataProvider provideNonNumericValues
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Cannot transform a non-numeric string value to an integer
      */
     public function testTransformShouldThrowOnNonNumericStrings($value): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Cannot transform a non-numeric string value to an integer');
         $this->transformer->transform($value);
     }
 
     /**
      * @dataProvider provideNonNumericValues
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Cannot transform a non-numeric string value to an integer
      */
     public function testReverseTransformShouldThrowOnNonNumericStrings($value): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Cannot transform a non-numeric string value to an integer');
         $this->transformer->reverseTransform($value);
     }
 

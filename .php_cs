@@ -28,5 +28,6 @@ return PhpCsFixer\Config::create()
         'declare_strict_types' => true,
         'native_function_invocation' => true,
         'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
+        'no_superfluous_phpdoc_tags' => false,
     ])
 ;

@@ -20,12 +20,7 @@ class EnumWalker extends ValidationWalker
         }
 
         if (! \is_array($values)) {
-            throw new \TypeError(\sprintf(
-                'Argument 1 passed to %s must be an array or an %s class name. %s given',
-                __METHOD__,
-                Enum::class,
-                \is_object($values) ? \get_class($values) : \gettype($values)
-            ));
+            throw new \TypeError(\sprintf('Argument 1 passed to %s must be an array or an %s class name. %s given', __METHOD__, Enum::class, \is_object($values) ? \get_class($values) : \gettype($values)));
         }
 
         $this->values = $values;

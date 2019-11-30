@@ -2,6 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\PatchManager;
 
+use Fazland\ApiPlatformBundle\PatchManager\Exception\UnknownOperationException;
 use Fazland\ApiPlatformBundle\PatchManager\Operation\OperationInterface;
 use Fazland\ApiPlatformBundle\PatchManager\OperationFactory;
 use PHPUnit\Framework\TestCase;
@@ -39,11 +40,9 @@ class OperationFactoryTest extends TestCase
         self::assertInstanceOf(OperationInterface::class, $this->factory->factory($op));
     }
 
-    /**
-     * @expectedException \Fazland\ApiPlatformBundle\PatchManager\Exception\UnknownOperationException
-     */
     public function testFactoryShouldThrowIfOperationIsUnknown(): void
     {
+        $this->expectException(UnknownOperationException::class);
         $this->factory->factory('non-existent');
     }
 }

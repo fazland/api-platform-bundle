@@ -5,7 +5,7 @@ namespace Fazland\ApiPlatformBundle\HttpKernel;
 use Fazland\ApiPlatformBundle\Annotation\Sunset;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -18,9 +18,9 @@ class SunsetHandler implements EventSubscriberInterface
     /**
      * Modify the response adding a Sunset header if needed.
      *
-     * @param FilterResponseEvent $event
+     * @param ResponseEvent $event
      */
-    public function onResponse(FilterResponseEvent $event): void
+    public function onResponse(ResponseEvent $event): void
     {
         $request = $event->getRequest();
 
