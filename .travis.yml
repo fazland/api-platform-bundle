@@ -6,12 +6,11 @@ cache:
 
 php:
     - '7.3'
-#    - '7.4'
+    - '7.4'
 
 matrix:
     fast_finish: true
     include:
-        - php: '7.3'
         - php: '7.3'
           env:
               - SYMFONY_VERSION='^4.4'

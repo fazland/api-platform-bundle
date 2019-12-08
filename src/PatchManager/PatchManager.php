@@ -168,14 +168,16 @@ class PatchManager implements PatchManagerInterface
     protected function mergePatch(PatchableInterface $patchable, Request $request): void
     {
         $form = $this->formFactory
-            ->createNamed(null, $patchable->getTypeClass(), $patchable, [
+            ->createNamed('', $patchable->getTypeClass(), $patchable, [
                 'method' => Request::METHOD_PATCH,
             ]);
 
         $form->handleRequest($request);
         if (! $form->isSubmitted()) {
             throw new FormNotSubmittedException($form);
-        } elseif (! $form->isValid()) {
+        }
+
+        if (! $form->isValid()) {
             throw new FormInvalidException($form);
         }
 

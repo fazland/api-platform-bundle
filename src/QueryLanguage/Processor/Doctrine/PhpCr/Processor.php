@@ -160,7 +160,7 @@ class Processor
     private function handleRequest(Request $request)
     {
         $dto = new Query();
-        $form = $this->formFactory->createNamed(null, QueryType::class, $dto, [
+        $form = $this->formFactory->createNamed('', QueryType::class, $dto, [
             'limit_field' => $this->options['limit_field'],
             'skip_field' => $this->options['skip_field'],
             'order_field' => $this->options['order_field'],

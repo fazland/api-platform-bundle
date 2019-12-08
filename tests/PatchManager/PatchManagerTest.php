@@ -89,7 +89,7 @@ class PatchManagerTest extends TestCase
         $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(true);
 
-        $this->formFactory->createNamed(null, 'Test\\TestType', $patchable, Argument::any())
+        $this->formFactory->createNamed('', 'Test\\TestType', $patchable, Argument::any())
             ->shouldBeCalled()
             ->willReturn($form);
 
@@ -112,7 +112,7 @@ class PatchManagerTest extends TestCase
         $form->handleRequest($request)->willReturn();
         $form->isSubmitted()->willReturn(false);
 
-        $this->formFactory->createNamed(null, 'Test\\TestType', $patchable, Argument::any())
+        $this->formFactory->createNamed('', 'Test\\TestType', $patchable, Argument::any())
             ->shouldBeCalled()
             ->willReturn($form);
 
@@ -136,7 +136,7 @@ class PatchManagerTest extends TestCase
         $form->isSubmitted()->willReturn(true);
         $form->isValid()->willReturn(false);
 
-        $this->formFactory->createNamed(null, 'Test\\TestType', $patchable, Argument::any())
+        $this->formFactory->createNamed('', 'Test\\TestType', $patchable, Argument::any())
             ->shouldBeCalled()
             ->willReturn($form);
 
