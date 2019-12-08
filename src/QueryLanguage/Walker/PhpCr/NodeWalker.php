@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Walker\PhpCr;
 
 use Doctrine\ODM\PHPCR\Query\Builder\AbstractNode;
 use Doctrine\ODM\PHPCR\Query\Builder\ConstraintAndx;
+use Doctrine\ODM\PHPCR\Query\Builder\ConstraintChild;
 use Doctrine\ODM\PHPCR\Query\Builder\ConstraintComparison;
 use Doctrine\ODM\PHPCR\Query\Builder\ConstraintNot;
 use Doctrine\ODM\PHPCR\Query\Builder\ConstraintOrx;
@@ -65,6 +66,14 @@ class NodeWalker extends AbstractWalker
      */
     public function walkComparison(string $operator, ValueExpression $expression)
     {
+        if ('parent' === $this->fieldType) {
+            if ($operator !== '=') {
+                throw new \InvalidArgumentException('Cannot evaluate child nodes with non equals comparison.');
+            }
+
+            return new ConstraintChild(new DummyNode(), \explode('.', $this->field)[0], $this->walkLiteral($expression));
+        }
+
         $comparison = new ConstraintComparison(new DummyNode(), self::COMPARISON_MAP[$operator]);
 
         $field = $this->field;
