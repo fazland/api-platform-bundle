@@ -12,7 +12,7 @@ use Doctrine\ODM\PHPCR\Query\Builder\SourceDocument;
 use Fazland\ApiPlatformBundle\Pagination\Orderings;
 use Fazland\ApiPlatformBundle\Pagination\PagerIterator as BaseIterator;
 use Fazland\DoctrineExtra\ObjectIteratorInterface;
-use Fazland\DoctrineExtra\ORM\IteratorTrait;
+use Fazland\DoctrineExtra\ODM\PhpCr\IteratorTrait;
 
 final class PagerIterator extends BaseIterator implements ObjectIteratorInterface
 {
