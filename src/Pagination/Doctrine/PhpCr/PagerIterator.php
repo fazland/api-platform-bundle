@@ -105,7 +105,8 @@ final class PagerIterator extends BaseIterator implements ObjectIteratorInterfac
         }
 
         $queryBuilder->setMaxResults($limit);
+        $result = $queryBuilder->getQuery()->getResult();
 
-        return $queryBuilder->getQuery()->getResult()->toArray();
+        return \is_array($result) ? \array_values($result) : \iterator_to_array($result, false);
     }
 }
