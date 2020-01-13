@@ -48,7 +48,7 @@ class SunsetHandlerTest extends WebTestCase
     /**
      * @dataProvider skipProvider
      */
-    public function testSkip(Request $request, Response $response)
+    public function testSkip(Request $request, Response $response): void
     {
         $event = $this->prophesize(ResponseEvent::class);
         $event->getRequest()->willReturn($request);
@@ -61,11 +61,11 @@ class SunsetHandlerTest extends WebTestCase
 
     public function testShouldSetStatusCode(): void
     {
-        $annot = new Sunset();
-        $annot->date = '2019-02-01';
+        $annotation = new Sunset();
+        $annotation->date = '2019-02-01';
 
         $request = new Request();
-        $request->attributes->set('_rest_sunset', $annot);
+        $request->attributes->set('_rest_sunset', $annotation);
 
         $event = $this->prophesize(ResponseEvent::class);
         $event->getRequest()->willReturn($request);

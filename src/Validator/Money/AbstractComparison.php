@@ -11,10 +11,12 @@ abstract class AbstractComparison extends BaseAbstractComparison
     /**
      * @var string
      */
-    public $currency = 'EUR';
+    public string $currency;
 
     public function __construct($options = null)
     {
+        $this->currency = 'EUR';
+
         if (null === $options) {
             $options = [];
         }

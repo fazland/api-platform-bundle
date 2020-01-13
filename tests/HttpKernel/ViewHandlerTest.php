@@ -35,32 +35,23 @@ class ViewHandlerTest extends WebTestCase
     /**
      * @var SerializerInterface|ObjectProphecy
      */
-    private $serializer;
+    private object $serializer;
 
     /**
      * @var HttpKernelInterface|ObjectProphecy
      */
-    private $httpKernel;
-
-    /**
-     * @var ViewHandler
-     */
-    private $viewHandler;
-
-    /**
-     * @var SerializationContext
-     */
-    private $serializationContext;
+    private object $httpKernel;
 
     /**
      * @var TokenStorageInterface|ObjectProphecy
      */
-    private $tokenStorage;
+    private object $tokenStorage;
 
-    /**
-     * @var string
-     */
-    private $defaultResponseCharset;
+    private SerializationContext $serializationContext;
+
+    private ViewHandler $viewHandler;
+
+    private string $defaultResponseCharset;
 
     /**
      * {@inheritdoc}
@@ -106,7 +97,7 @@ class ViewHandlerTest extends WebTestCase
     /**
      * @dataProvider skipProvider
      */
-    public function testSkip(Request $request, $result)
+    public function testSkip(Request $request, $result): void
     {
         $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
@@ -120,11 +111,11 @@ class ViewHandlerTest extends WebTestCase
 
     public function testShouldSetStatusCode(): void
     {
-        $annot = new ViewAnnotation();
-        $annot->statusCode = 201;
+        $annotation = new ViewAnnotation();
+        $annotation->statusCode = Response::HTTP_CREATED;
 
         $request = new Request();
-        $request->attributes->set('_rest_view', $annot);
+        $request->attributes->set('_rest_view', $annotation);
 
         $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
@@ -135,7 +126,7 @@ class ViewHandlerTest extends WebTestCase
             /** @var Response $response */
             $response = $args[0];
 
-            TestCase::assertEquals(201, $response->getStatusCode());
+            TestCase::assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         });
 
         $this->viewHandler->onView($event->reveal());
@@ -143,11 +134,11 @@ class ViewHandlerTest extends WebTestCase
 
     public function testShouldSerializeWithCorrectGroups(): void
     {
-        $annot = new ViewAnnotation();
-        $annot->groups = ['group_foo', 'bar_bar'];
+        $annotation = new ViewAnnotation();
+        $annotation->groups = ['group_foo', 'bar_bar'];
 
         $request = new Request();
-        $request->attributes->set('_rest_view', $annot);
+        $request->attributes->set('_rest_view', $annotation);
 
         $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
@@ -170,11 +161,11 @@ class ViewHandlerTest extends WebTestCase
 
     public function testShouldCallSerializationGroupProvider(): void
     {
-        $annot = new ViewAnnotation();
-        $annot->groupsProvider = 'testGroupProvider';
+        $annotation = new ViewAnnotation();
+        $annotation->groupsProvider = 'testGroupProvider';
 
         $request = new Request();
-        $request->attributes->set('_rest_view', $annot);
+        $request->attributes->set('_rest_view', $annotation);
 
         $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
@@ -189,7 +180,9 @@ class ViewHandlerTest extends WebTestCase
 
                 return '';
             })
-            ->shouldBeCalled();
+            ->shouldBeCalled()
+        ;
+
         $event->setResponse(Argument::type(Response::class))->willReturn();
 
         $this->viewHandler->onView($event->reveal());
@@ -206,10 +199,11 @@ class ViewHandlerTest extends WebTestCase
 
         $this->serializer
             ->serialize(Argument::any(), Argument::any(), Argument::type(SerializationContext::class), null)
-            ->willThrow(new UnsupportedFormatException());
+            ->willThrow(new UnsupportedFormatException())
+        ;
 
         $event->setResponse(Argument::that(function ($response) {
-            return $response instanceof Response && 406 == $response->getStatusCode();
+            return $response instanceof Response && Response::HTTP_NOT_ACCEPTABLE === $response->getStatusCode();
         }))->shouldBeCalled();
 
         $this->viewHandler->onView($event->reveal());
@@ -233,7 +227,7 @@ class ViewHandlerTest extends WebTestCase
             ->shouldBeCalled();
 
         $event->setResponse(Argument::that(function ($response) {
-            return $response instanceof Response && 400 == $response->getStatusCode();
+            return $response instanceof Response && Response::HTTP_BAD_REQUEST === $response->getStatusCode();
         }))->shouldBeCalled();
 
         $this->viewHandler->onView($event->reveal());
@@ -309,7 +303,7 @@ class ViewHandlerTest extends WebTestCase
             ->shouldBeCalled();
 
         $event->setResponse(Argument::that(function ($response) {
-            return $response instanceof Response && 42 == $response->headers->get('X-Total-Count');
+            return $response instanceof Response && 42 === (int) $response->headers->get('X-Total-Count');
         }))->shouldBeCalled();
 
         $this->viewHandler->onView($event->reveal());
@@ -348,7 +342,7 @@ class ViewHandlerTest extends WebTestCase
             ->shouldBeCalled();
 
         $event->setResponse(Argument::that(function ($response) {
-            return $response instanceof Response && 42 == $response->headers->get('X-Total-Count');
+            return $response instanceof Response && 42 === (int) $response->headers->get('X-Total-Count');
         }))->shouldBeCalled();
 
         $this->viewHandler->onView($event->reveal());
@@ -381,11 +375,11 @@ class ViewHandlerTest extends WebTestCase
 
     public function testSerializationContextShouldBeReusable(): void
     {
-        $annot = new ViewAnnotation();
-        $annot->groups = ['group_foo', 'bar_bar'];
+        $annotation = new ViewAnnotation();
+        $annotation->groups = ['group_foo', 'bar_bar'];
 
         $request = new Request();
-        $request->attributes->set('_rest_view', $annot);
+        $request->attributes->set('_rest_view', $annotation);
 
         $event = $this->prophesize(ViewEvent::class);
         $event->getRequest()->willReturn($request);
@@ -474,7 +468,7 @@ class ViewHandlerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
         self::assertJsonStringEqualsJsonString('[{"data":"foobar","additional":"foo"},{"test":"barbar","additional":"foo"}]', $response->getContent());
     }
 
@@ -485,7 +479,7 @@ class ViewHandlerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
         self::assertJsonStringEqualsJsonString('[{"data":"foobar","additional":"foo"},{"test":"barbar","additional":"foo"}]', $response->getContent());
     }
 
@@ -496,7 +490,7 @@ class ViewHandlerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
         self::assertEquals('This endpoint has been deprecated and will be discontinued in a future version. Please upgrade your application.', $response->headers->get('X-Deprecated'));
     }
 

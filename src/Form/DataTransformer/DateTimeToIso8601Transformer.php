@@ -7,10 +7,7 @@ use Symfony\Component\Form\Extension\Core\DataTransformer\BaseDateTimeTransforme
 
 class DateTimeToIso8601Transformer extends BaseDateTimeTransformer
 {
-    /**
-     * @var bool
-     */
-    private $asImmutable;
+    private bool $asImmutable;
 
     public function __construct(?string $inputTimezone = null, ?string $outputTimezone = null, bool $asImmutable = false)
     {

@@ -8,10 +8,7 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
 
 class OrderWalker extends ValidationWalker
 {
-    /**
-     * @var array
-     */
-    private $orderableColumns;
+    private array $orderableColumns;
 
     public function __construct(array $orderableColumns)
     {

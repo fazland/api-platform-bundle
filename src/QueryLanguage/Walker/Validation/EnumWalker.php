@@ -8,10 +8,7 @@ use MyCLabs\Enum\Enum;
 
 class EnumWalker extends ValidationWalker
 {
-    /**
-     * @var array
-     */
-    private $values;
+    private array $values;
 
     public function __construct($values)
     {

@@ -1,11 +1,11 @@
 imports:
-    - { resource: ../../../src/Resources/config/decoders.xml }
+    - { resource: '../../../src/Resources/config/decoders.xml' }
 
 framework:
     test: ~
-    secret: secret
+    secret: 'secret'
     router:
-        resource: "%kernel.root_dir%/routing.yml"
+        resource: '%kernel.root_dir%/routing.yml'
 
 services:
     Fazland\ApiPlatformBundle\Tests\Fixtures\Decoder\Controller\TestController:

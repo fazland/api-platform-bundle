@@ -14,6 +14,6 @@ final class LessThanExpression extends ComparisonExpression
      */
     public function __toString(): string
     {
-        return '$lt('.$this->getValue().')';
+        return "\$lt($this->value)";
     }
 }

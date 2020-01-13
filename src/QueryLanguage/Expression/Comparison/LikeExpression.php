@@ -14,6 +14,6 @@ final class LikeExpression extends ComparisonExpression
      */
     public function __toString(): string
     {
-        return '$like('.$this->getValue().')';
+        return "\$like($this->value)";
     }
 }

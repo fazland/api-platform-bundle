@@ -3,7 +3,6 @@
 namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Doctrine;
 
 use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Proxy\AbstractProxyFactory;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Connection as DriverConnection;
@@ -12,53 +11,45 @@ use Doctrine\DBAL\Driver\PDOMySql\Driver;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Fazland\ApiPlatformBundle\Tests\Doctrine\Mocks\MockPlatform;
 use Prophecy\Prophecy\ObjectProphecy;
 
 trait EntityManagerMockTrait
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $_entityManager;
+    private ?EntityManagerInterface $entityManager;
 
-    /**
-     * @var Connection
-     */
-    private $_connection;
+    private Connection $connection;
 
     /**
      * @var DriverConnection|ObjectProphecy
      */
-    private $_innerConnection;
+    private object $innerConnection;
 
-    /**
-     * @var Configuration
-     */
-    private $_configuration;
+    private Configuration $configuration;
 
     public function getEntityManager(): EntityManagerInterface
     {
-        if (null === $this->_entityManager) {
-            $this->_configuration = new Configuration();
+        if (null === $this->entityManager) {
+            $this->configuration = new Configuration();
 
-            $this->_configuration->setResultCacheImpl(new ArrayCache());
-            $this->_configuration->setClassMetadataFactoryName(FakeMetadataFactory::class);
-            $this->_configuration->setMetadataDriverImpl($this->prophesize(MappingDriver::class)->reveal());
-            $this->_configuration->setProxyDir(\sys_get_temp_dir());
-            $this->_configuration->setProxyNamespace('__TMP__\\ProxyNamespace\\');
-            $this->_configuration->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_ALWAYS);
+            $this->configuration->setResultCacheImpl(new ArrayCache());
+            $this->configuration->setClassMetadataFactoryName(FakeMetadataFactory::class);
+            $this->configuration->setMetadataDriverImpl($this->prophesize(MappingDriver::class)->reveal());
+            $this->configuration->setProxyDir(\sys_get_temp_dir());
+            $this->configuration->setProxyNamespace('__TMP__\\ProxyNamespace\\');
+            $this->configuration->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_ALWAYS);
 
-            $this->_innerConnection = $this->prophesize(PDOConnection::class);
+            $this->innerConnection = $this->prophesize(PDOConnection::class);
 
-            $this->_connection = new Connection([
-                'pdo' => $this->_innerConnection->reveal(),
+            $this->connection = new Connection([
+                'pdo' => $this->innerConnection->reveal(),
                 'platform' => new MockPlatform(),
-            ], new Driver(), $this->_configuration);
+            ], new Driver(), $this->configuration);
 
-            $this->_entityManager = EntityManager::create($this->_connection, $this->_configuration);
+            $this->entityManager = EntityManager::create($this->connection, $this->configuration);
         }
 
-        return $this->_entityManager;
+        return $this->entityManager;
     }
 }

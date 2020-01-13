@@ -2,7 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle\QueryLanguage\Walker\Doctrine;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
@@ -24,15 +24,9 @@ class DqlWalker extends AbstractWalker
         'like' => 'LIKE',
     ];
 
-    /**
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
+    protected QueryBuilder $queryBuilder;
 
-    /**
-     * @var string
-     */
-    private $columnType;
+    private ?string $columnType;
 
     public function __construct(QueryBuilder $queryBuilder, string $field, ?string $columnType = null)
     {
@@ -53,12 +47,12 @@ class DqlWalker extends AbstractWalker
         }
 
         switch ($this->columnType) {
-            case Type::DATETIME:
-            case Type::DATETIMETZ:
+            case Types::DATETIME_MUTABLE:
+            case Types::DATETIMETZ_MUTABLE:
                 return new \DateTime($value);
 
-            case Type::DATETIME_IMMUTABLE:
-            case Type::DATETIMETZ_IMMUTABLE:
+            case Types::DATETIME_IMMUTABLE:
+            case Types::DATETIMETZ_IMMUTABLE:
                 return new \DateTimeImmutable($value);
 
             default:

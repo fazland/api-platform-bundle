@@ -2,24 +2,26 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Doctrine;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Doctrine\Common\Persistence\Mapping\ClassMetadataFactory;
-use Doctrine\Common\Persistence\Mapping\MappingException;
-use Doctrine\Common\Persistence\Mapping\RuntimeReflectionService;
+use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadataFactory;
+use Doctrine\Persistence\Mapping\MappingException;
+use Doctrine\Persistence\Mapping\RuntimeReflectionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata as ORMClassMetadata;
 
 class FakeMetadataFactory implements ClassMetadataFactory
 {
-    private $_metadata = [];
-    private $reflService;
+    private array $metadata;
+
+    private RuntimeReflectionService $reflectionService;
 
     /**
      * {@inheritdoc}
      */
     public function __construct()
     {
-        $this->reflService = new RuntimeReflectionService();
+        $this->metadata = [];
+        $this->reflectionService = new RuntimeReflectionService();
     }
 
     public function setEntityManager(EntityManagerInterface $entityManager): void
@@ -43,7 +45,7 @@ class FakeMetadataFactory implements ClassMetadataFactory
      */
     public function getAllMetadata(): array
     {
-        return \array_values($this->_metadata);
+        return \array_values($this->metadata);
     }
 
     /**
@@ -51,11 +53,11 @@ class FakeMetadataFactory implements ClassMetadataFactory
      */
     public function getMetadataFor($className): ClassMetadata
     {
-        if (! isset($this->_metadata[$className])) {
+        if (! isset($this->metadata[$className])) {
             throw new MappingException('Cannot find metadata for "'.$className.'"');
         }
 
-        return $this->_metadata[$className];
+        return $this->metadata[$className];
     }
 
     /**
@@ -63,7 +65,7 @@ class FakeMetadataFactory implements ClassMetadataFactory
      */
     public function hasMetadataFor($className): bool
     {
-        return isset($this->_metadata[$className]);
+        return isset($this->metadata[$className]);
     }
 
     /**
@@ -71,11 +73,11 @@ class FakeMetadataFactory implements ClassMetadataFactory
      */
     public function setMetadataFor($className, $class): void
     {
-        $this->_metadata[$className] = $class;
+        $this->metadata[$className] = $class;
 
         if ($class instanceof ORMClassMetadata) {
-            $class->initializeReflection($this->reflService);
-            $class->wakeupReflection($this->reflService);
+            $class->initializeReflection($this->reflectionService);
+            $class->wakeupReflection($this->reflectionService);
         }
     }
 

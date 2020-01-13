@@ -18,8 +18,6 @@ class TestController extends AbstractController
     use VarDumperTestTrait;
 
     /**
-     * @return mixed
-     *
      * @View()
      */
     public function indexAction(): array
@@ -63,7 +61,8 @@ class TestController extends AbstractController
         $form = $this->createFormBuilder()
             ->add('first')
             ->add('second')
-            ->getForm();
+            ->getForm()
+        ;
 
         throw new FormNotSubmittedException($form);
     }

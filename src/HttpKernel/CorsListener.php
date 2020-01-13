@@ -15,17 +15,13 @@ class CorsListener implements EventSubscriberInterface
     /**
      * Allowed origins regex pattern.
      * Null if all origins are allowed.
-     *
-     * @var string
      */
-    private $allowedOrigins;
+    private ?string $allowedOrigins;
 
     /**
      * Allowed exposed headers.
-     *
-     * @var string
      */
-    private $exposedHeaders;
+    private string $exposedHeaders;
 
     /**
      * Constructor.

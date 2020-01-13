@@ -22,11 +22,11 @@ class PhoneNumber extends Constraint
     public const VOIP = 'voip';
     public const VOICEMAIL = 'voicemail';
 
-    public $message = null;
-    public $type = self::ANY;
-    public $defaultRegion = PhoneNumberUtil::UNKNOWN_REGION;
+    public ?string $message = null;
+    public string $type = self::ANY;
+    public string $defaultRegion = PhoneNumberUtil::UNKNOWN_REGION;
 
-    public function getType()
+    public function getType(): string
     {
         switch ($this->type) {
             case self::FIXED_LINE:
@@ -45,7 +45,7 @@ class PhoneNumber extends Constraint
         return self::ANY;
     }
 
-    public function getMessage()
+    public function getMessage(): string
     {
         if (null !== $this->message) {
             return $this->message;

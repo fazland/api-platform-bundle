@@ -6,8 +6,5 @@ use Symfony\Component\Validator\Constraint;
 
 class IsoCurrency extends Constraint
 {
-    /**
-     * @var string
-     */
-    public $message = '{{ code }} is not a valid ISO currency';
+    public string $message = '{{ code }} is not a valid ISO currency';
 }

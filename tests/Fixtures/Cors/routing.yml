@@ -1,4 +1,4 @@
 index:
-    path: /
-    methods: [ GET ]
+    path: '/'
+    methods: [ 'GET' ]
     defaults: { _controller: 'Fazland\ApiPlatformBundle\Tests\Fixtures\Cors\Controller\TestController::indexAction' }

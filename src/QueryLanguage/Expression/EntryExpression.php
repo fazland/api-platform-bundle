@@ -9,15 +9,9 @@ final class EntryExpression implements ExpressionInterface
 {
     use ExpressionTrait;
 
-    /**
-     * @var LiteralExpression
-     */
-    private $key;
+    private LiteralExpression $key;
 
-    /**
-     * @var ExpressionInterface
-     */
-    private $value;
+    private ExpressionInterface $value;
 
     public function __construct(LiteralExpression $key, ExpressionInterface $value)
     {

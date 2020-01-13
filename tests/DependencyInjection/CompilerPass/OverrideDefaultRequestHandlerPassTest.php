@@ -14,12 +14,9 @@ class OverrideDefaultRequestHandlerPassTest extends TestCase
     /**
      * @var ContainerBuilder|ObjectProphecy
      */
-    private $container;
+    private object $container;
 
-    /**
-     * @var OverrideDefaultRequestHandlerPass
-     */
-    private $compilerPass;
+    private OverrideDefaultRequestHandlerPass $compilerPass;
 
     /**
      * {@inheritdoc}

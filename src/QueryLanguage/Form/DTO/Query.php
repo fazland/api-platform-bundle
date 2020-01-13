@@ -12,32 +12,25 @@ class Query
     /**
      * @var ExpressionInterface[]
      */
-    public $filters;
+    public array $filters;
 
     /**
-     * @var OrderExpression
-     *
      * @Assert\Type(OrderExpression::class)
      */
-    public $ordering;
+    public ?OrderExpression $ordering;
 
-    /**
-     * @var PageToken
-     */
-    public $pageToken;
+    public ?PageToken $pageToken;
 
-    /**
-     * @var int
-     */
-    public $skip;
+    public ?int $skip;
 
-    /**
-     * @var int
-     */
-    public $limit;
+    public ?int $limit;
 
     public function __construct()
     {
         $this->filters = [];
+        $this->ordering = null;
+        $this->pageToken = null;
+        $this->skip = null;
+        $this->limit = null;
     }
 }

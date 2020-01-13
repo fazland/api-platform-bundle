@@ -14,6 +14,6 @@ final class EqualExpression extends ComparisonExpression
      */
     public function __toString(): string
     {
-        return '$eq('.$this->getValue().')';
+        return "\$eq($this->value)";
     }
 }

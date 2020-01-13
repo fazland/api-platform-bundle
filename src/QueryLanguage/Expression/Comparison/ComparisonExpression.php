@@ -11,16 +11,16 @@ abstract class ComparisonExpression implements ComparisonExpressionInterface
     use ExpressionTrait;
 
     /**
-     * @var LiteralExpression
+     * @var mixed
      */
-    private $value;
+    protected $value;
 
     /**
      * Can be <, <=, >, >=, =.
      *
      * @var string
      */
-    private $operator;
+    protected string $operator;
 
     public function __construct($value, string $operator)
     {

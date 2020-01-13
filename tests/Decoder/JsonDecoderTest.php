@@ -10,10 +10,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class JsonDecoderTest extends WebTestCase
 {
-    /**
-     * @var JsonDecoder
-     */
-    private $decoder;
+    private JsonDecoder $decoder;
 
     /**
      * {@inheritdoc}

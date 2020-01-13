@@ -11,15 +11,12 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 trait ElasticaDocumentManagerMockTrait
 {
-    /**
-     * @var DocumentManagerInterface
-     */
-    private $documentManager;
+    private ?DocumentManagerInterface $documentManager;
 
     /**
      * @var Client|ObjectProphecy
      */
-    private $client;
+    private object $client;
 
     public function getDocumentManager(): DocumentManagerInterface
     {

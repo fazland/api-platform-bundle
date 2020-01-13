@@ -18,31 +18,27 @@ final class View
      */
     public $result;
 
-    /**
-     * @var array
-     */
-    public $headers;
+    public array $headers;
 
-    /**
-     * @var int
-     */
-    public $statusCode;
+    public int $statusCode;
 
     /**
      * @var string[]|null
      */
-    public $serializationGroups;
+    public ?array $serializationGroups;
 
     /**
      * @var Type|null
      */
-    public $serializationType;
+    public ?Type $serializationType;
 
     public function __construct($result, int $statusCode = Response::HTTP_OK)
     {
         $this->statusCode = $statusCode;
         $this->headers = [];
         $this->result = $result;
+        $this->serializationGroups = null;
+        $this->serializationType = null;
 
         if ($result instanceof Form) {
             if (! $result->isSubmitted()) {

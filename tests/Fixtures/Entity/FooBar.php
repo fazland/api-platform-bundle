@@ -10,13 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 class FooBar
 {
     /**
-     * @var int
-     *
-     * @ORM\Column()
+     * @ORM\Column(type="integer")
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    public $id;
+    public ?int $id;
 
     /**
      * @var mixed

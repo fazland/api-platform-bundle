@@ -1,6 +1,6 @@
 framework:
     test: ~
-    secret: secret
+    secret: 'secret'
     form: ~
     csrf_protection: false
     router:
@@ -13,25 +13,26 @@ security:
 
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt))/
+            pattern: '^/(_(profiler|wdt))/'
             security: false
         main:
             anonymous: ~
+
 doctrine:
     dbal:
         url: "sqlite:///%kernel.cache_dir%/test.db"
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
-        naming_strategy: doctrine.orm.naming_strategy.underscore
+        naming_strategy: 'doctrine.orm.naming_strategy.underscore_number_aware'
         auto_mapping: true
-        default_repository_class: Fazland\DoctrineExtra\ORM\EntityRepository
+        default_repository_class: 'Fazland\DoctrineExtra\ORM\EntityRepository'
         mappings:
             Fazland\ApiPlatformBundle\Tests\Fixtures:
                 is_bundle: false
-                type: annotation
-                dir: "%kernel.root_dir%/../Entity"
-                prefix: Fazland\ApiPlatformBundle\Tests\Fixtures
+                type: 'annotation'
+                dir: '%kernel.root_dir%/../Entity'
+                prefix: 'Fazland\ApiPlatformBundle\Tests\Fixtures'
 
 doctrine_mongodb:
     connections:
@@ -40,13 +41,13 @@ doctrine_mongodb:
             options: {}
     document_managers:
         default:
-            default_document_repository_class: Fazland\DoctrineExtra\ODM\MongoDB\DocumentRepository
+            default_document_repository_class: 'Fazland\DoctrineExtra\ODM\MongoDB\DocumentRepository'
             mappings:
                 Fazland\ApiPlatformBundle\Tests\Fixtures:
                     is_bundle: false
-                    type: annotation
-                    dir: "%kernel.root_dir%/../Document"
-                    prefix: Fazland\ApiPlatformBundle\Tests\Fixtures
+                    type: 'annotation'
+                    dir: '%kernel.root_dir%/../Document'
+                    prefix: 'Fazland\ApiPlatformBundle\Tests\Fixtures'
 
 sensio_framework_extra:
     router:      { annotations: false }

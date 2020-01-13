@@ -8,10 +8,8 @@ abstract class AbstractWalker implements TreeWalkerInterface
 {
     /**
      * Field name.
-     *
-     * @var string
      */
-    protected $field;
+    protected string $field;
 
     public function __construct(string $field)
     {

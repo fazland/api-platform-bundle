@@ -10,10 +10,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class StringToExpresionTransformer implements DataTransformerInterface
 {
-    /**
-     * @var Grammar
-     */
-    private $grammar;
+    private Grammar $grammar;
 
     public function __construct(?Grammar $grammar = null)
     {

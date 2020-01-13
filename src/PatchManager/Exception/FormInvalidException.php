@@ -6,10 +6,7 @@ use Symfony\Component\Form\FormInterface;
 
 class FormInvalidException extends BadRequestException
 {
-    /**
-     * @var FormInterface
-     */
-    private $form;
+    private FormInterface $form;
 
     public function __construct(FormInterface $form, string $message = '', int $code = 0, ?\Throwable $previous = null)
     {

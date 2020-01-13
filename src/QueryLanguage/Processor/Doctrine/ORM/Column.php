@@ -18,30 +18,17 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\EnumWalker;
  */
 class Column implements ColumnInterface
 {
-    /**
-     * @var string
-     */
-    private $rootAlias;
+    private string $rootAlias;
 
-    /**
-     * @var string
-     */
-    public $fieldName;
+    public string $fieldName;
 
-    /**
-     * @var array
-     */
-    public $mapping;
+    public ?array $mapping;
 
-    /**
-     * @var string
-     */
-    private $columnType;
+    private string $columnType;
 
-    /**
-     * @var array
-     */
-    public $associations;
+    public array $associations;
+
+    private EntityManagerInterface $entityManager;
 
     /**
      * @var string|callable|null
@@ -53,15 +40,7 @@ class Column implements ColumnInterface
      */
     public $customWalker;
 
-    /**
-     * @var bool
-     */
-    public $discriminator;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    public bool $discriminator;
 
     public function __construct(
         string $fieldName,
@@ -71,6 +50,10 @@ class Column implements ColumnInterface
     ) {
         $this->fieldName = $fieldName;
         $this->rootAlias = $rootAlias;
+        $this->entityManager = $entityManager;
+        $this->validationWalker = null;
+        $this->customWalker = null;
+        $this->discriminator = false;
 
         [$rootField, $rest] = MappingHelper::processFieldName($rootEntity, $fieldName);
 
@@ -85,8 +68,6 @@ class Column implements ColumnInterface
         if (null !== $rest) {
             $this->processAssociations($entityManager, $rest);
         }
-
-        $this->entityManager = $entityManager;
     }
 
     /**

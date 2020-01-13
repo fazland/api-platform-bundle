@@ -6,14 +6,11 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Form\EventListener\SyntaxErrorTransf
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FieldType extends AbstractType
 {
-    /**
-     * @var TranslatorInterface|null
-     */
-    private $translator;
+    private ?TranslatorInterface $translator;
 
     public function __construct(?TranslatorInterface $translator = null)
     {

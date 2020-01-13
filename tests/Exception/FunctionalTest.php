@@ -5,10 +5,12 @@ namespace Fazland\ApiPlatformBundle\Tests\Exception;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Exception\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class FunctionalTest extends WebTestCase
 {
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +35,7 @@ class FunctionalTest extends WebTestCase
         $client->request('GET', '/non-existent', [], [], ['HTTP_ACCEPT' => 'application/json']);
         $response = $client->getResponse();
 
-        self::assertEquals(404, $response->getStatusCode());
+        self::assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
 
         $array = '{"error_message":"Not Found","error_code":0}';
         self::assertEquals($array, $response->getContent());
@@ -46,7 +48,7 @@ class FunctionalTest extends WebTestCase
         $client->request('GET', '/non-existent', [], [], ['HTTP_ACCEPT' => 'application/json']);
         $response = $client->getResponse();
 
-        self::assertEquals(404, $response->getStatusCode());
+        self::assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
 
         $content = $response->getContent();
         self::assertJson($content);

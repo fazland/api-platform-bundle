@@ -13,10 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class AutoSubmitRequestHandler implements RequestHandlerInterface
 {
-    /**
-     * @var ServerParams
-     */
-    private $serverParams;
+    private ServerParams $serverParams;
 
     public function __construct(?ServerParams $serverParams = null)
     {

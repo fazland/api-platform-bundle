@@ -6,10 +6,7 @@ use Symfony\Component\Form\DataTransformerInterface;
 
 class MappingTransformer implements DataTransformerInterface
 {
-    /**
-     * @var DataTransformerInterface
-     */
-    private $innerTransformer;
+    private DataTransformerInterface $innerTransformer;
 
     public function __construct(DataTransformerInterface $innerTransformer)
     {

@@ -21,30 +21,19 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PatchManager implements PatchManagerInterface
 {
-    /**
-     * @var CacheItemPoolInterface
-     */
-    protected $cache;
+    private FormFactoryInterface $formFactory;
 
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
+    private ValidatorInterface $validator;
 
-    /**
-     * @var OperationFactory
-     */
-    private $operationsFactory;
+    private OperationFactory $operationsFactory;
 
-    /**
-     * @var ValidatorInterface
-     */
-    private $validator;
+    protected ?CacheItemPoolInterface $cache;
 
     public function __construct(FormFactoryInterface $formFactory, ValidatorInterface $validator)
     {
         $this->formFactory = $formFactory;
         $this->validator = $validator;
+        $this->operationsFactory = new OperationFactory();
     }
 
     /**
@@ -56,18 +45,8 @@ class PatchManager implements PatchManagerInterface
             throw TypeError::createArgumentInvalid(1, __METHOD__, PatchableInterface::class, $patchable);
         }
 
-        if (! $patchable instanceof MergeablePatchableInterface && \method_exists($patchable, 'getTypeClass')) {
-            \trigger_error(\sprintf(
-                '%s does not implement %s. %s::getTypeClass() is deprecated and will be removed in the first stable release.',
-                \get_class($patchable),
-                MergeablePatchableInterface::class,
-                PatchableInterface::class
-            ), E_USER_DEPRECATED);
-        }
-
         if (\preg_match('#application/merge-patch\\+json#i', $request->headers->get('Content-Type', ''))) {
-            // TODO: this should be if (! $patchable instanceof MergeablePatchableInterface).
-            if (! \method_exists($patchable, 'getTypeClass')) {
+            if (! $patchable instanceof MergeablePatchableInterface) {
                 throw new UnmergeablePatchException('Resource cannot be merge patched.');
             }
 
@@ -149,10 +128,6 @@ class PatchManager implements PatchManagerInterface
      */
     protected function getOperationsFactory(): OperationFactory
     {
-        if (null === $this->operationsFactory) {
-            $this->operationsFactory = new OperationFactory();
-        }
-
         return $this->operationsFactory;
     }
 
@@ -167,10 +142,9 @@ class PatchManager implements PatchManagerInterface
      */
     protected function mergePatch(PatchableInterface $patchable, Request $request): void
     {
-        $form = $this->formFactory
-            ->createNamed('', $patchable->getTypeClass(), $patchable, [
-                'method' => Request::METHOD_PATCH,
-            ]);
+        $form = $this->formFactory->createNamed('', $patchable->getTypeClass(), $patchable, [
+            'method' => Request::METHOD_PATCH,
+        ]);
 
         $form->handleRequest($request);
         if (! $form->isSubmitted()) {

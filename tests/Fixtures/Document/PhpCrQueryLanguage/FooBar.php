@@ -14,19 +14,19 @@ class FooBar
      *
      * @PHPCR\Id(strategy="ASSIGNED")
      */
-    public $id;
+    public string $id = '';
 
     /**
      * @var string
      *
      * @PHPCR\Uuid()
      */
-    public $uuid;
+    public string $uuid = '';
 
     /**
      * @var string
      *
      * @PHPCR\Field()
      */
-    public $foobar = 'foobar';
+    public string $foobar = 'foobar';
 }

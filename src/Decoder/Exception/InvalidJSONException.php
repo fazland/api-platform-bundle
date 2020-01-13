@@ -4,10 +4,7 @@ namespace Fazland\ApiPlatformBundle\Decoder\Exception;
 
 class InvalidJSONException extends \RuntimeException
 {
-    /**
-     * @var string
-     */
-    private $invalidJson;
+    private string $invalidJson;
 
     public function __construct(string $invalidJson, string $error)
     {

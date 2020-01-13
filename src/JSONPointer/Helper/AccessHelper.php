@@ -10,25 +10,13 @@ use Symfony\Component\Inflector\Inflector;
  */
 final class AccessHelper
 {
-    /**
-     * @var \ReflectionClass
-     */
-    private $reflectionClass;
+    private \ReflectionClass $reflectionClass;
 
-    /**
-     * @var \ReflectionProperty
-     */
-    private $reflectionProperty;
+    private ?\ReflectionProperty $reflectionProperty;
 
-    /**
-     * @var string
-     */
-    private $property;
+    private string $property;
 
-    /**
-     * @var string
-     */
-    private $camelized;
+    private string $camelized;
 
     public function __construct(string $class, string $property)
     {
@@ -36,6 +24,7 @@ final class AccessHelper
 
         $this->property = $property;
         $this->camelized = self::camelize($property);
+        $this->reflectionProperty = null;
 
         if (
             $this->reflectionClass->hasProperty($property) &&
@@ -51,7 +40,7 @@ final class AccessHelper
     }
 
     /**
-     * Gets the read access informations.
+     * Gets the read access information.
      *
      * @return array
      */
@@ -104,7 +93,7 @@ final class AccessHelper
     }
 
     /**
-     * Gets the write access informations.
+     * Gets the write access information.
      *
      * @param mixed $value
      *
@@ -220,16 +209,16 @@ final class AccessHelper
      */
     private function isMethodAccessible(string $methodName, int $parameters): bool
     {
-        if ($this->reflectionClass->hasMethod($methodName)) {
-            $method = $this->reflectionClass->getMethod($methodName);
-
-            return $method->isPublic()
-                && $method->getNumberOfRequiredParameters() <= $parameters
-                && $method->getNumberOfParameters() >= $parameters
-            ;
+        if (! $this->reflectionClass->hasMethod($methodName)) {
+            return false;
         }
 
-        return false;
+        $method = $this->reflectionClass->getMethod($methodName);
+
+        return $method->isPublic()
+            && $method->getNumberOfRequiredParameters() <= $parameters
+            && $method->getNumberOfParameters() >= $parameters
+        ;
     }
 
     /**

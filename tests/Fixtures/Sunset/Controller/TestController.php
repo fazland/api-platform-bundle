@@ -9,8 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class TestController extends AbstractController
 {
     /**
-     * @return mixed
-     *
      * @View()
      * @Sunset("2019-03-01")
      */

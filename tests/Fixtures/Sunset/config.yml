@@ -5,15 +5,15 @@ imports:
     - { resource: ../../../src/Resources/config/exception_listeners.xml }
 
 parameters:
-    fazland_api.response_charset: UTF-8
+    fazland_api.response_charset: 'UTF-8'
 
 framework:
     test: ~
-    secret: secret
+    secret: 'secret'
     form: ~
     csrf_protection: false
     router:
-        resource: "%kernel.root_dir%/routing.yml"
+        resource: '%kernel.root_dir%/routing.yml'
 
 security:
     providers:
@@ -22,7 +22,7 @@ security:
 
     firewalls:
         dev:
-            pattern: ^/(_(profiler|wdt))/
+            pattern: '^/(_(profiler|wdt))/'
             security: false
         main:
             anonymous: ~
