@@ -29,4 +29,12 @@ abstract class TestKernel extends Kernel
             $this->container->get('cache_warmer')->warmUp($this->container->getParameter('kernel.cache_dir'));
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCacheDir()
+    {
+        return \dirname((new \ReflectionClass($this))->getFileName()).'/var/cache/'.$this->environment;
+    }
 }
