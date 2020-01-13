@@ -34,17 +34,13 @@ final class PageToken
 
     /**
      * How many elements should be skipped from the filtered set.
-     *
-     * @var int
      */
-    private $offset;
+    private int $offset;
 
     /**
      * The checksum if the first $offset elements.
-     *
-     * @var string
      */
-    private $checksum;
+    private int $checksum;
 
     public function __construct($orderValue, int $offset, int $checksum)
     {

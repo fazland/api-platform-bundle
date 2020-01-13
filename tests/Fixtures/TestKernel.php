@@ -21,14 +21,7 @@ abstract class TestKernel extends Kernel
         $container->compile();
         $this->dumpContainer($cache, $container, $class, $this->getContainerBaseClass());
 
-        if (Kernel::VERSION_ID >= 30400) {
-            $this->container = require $cache->getPath();
-        } else {
-            // Legacy-compiled container.
-            // Do not require the same file twice, as this will lead to a fatal error.
-            require_once $cache->getPath();
-            $this->container = new $class();
-        }
+        $this->container = require $cache->getPath();
 
         $this->container->set('kernel', $this);
 

@@ -1,19 +1,19 @@
 index:
-    path: /
+    path: '/'
     defaults: { _controller: 'Fazland\ApiPlatformBundle\Tests\Fixtures\Bundle\Controller\TestController::indexAction' }
 
 body:
-    path: /body
+    path: '/body'
     defaults: { _controller: 'Fazland\ApiPlatformBundle\Tests\Fixtures\Bundle\Controller\TestController::bodyAction' }
 
 form_invalid:
-    path: /form-invalid
+    path: '/form-invalid'
     defaults: { _controller: 'Fazland\ApiPlatformBundle\Tests\Fixtures\Bundle\Controller\TestController::formInvalidExceptionAction' }
 
 form_not_submitted:
-    path: /form-not-submitted
+    path: '/form-not-submitted'
     defaults: { _controller: 'Fazland\ApiPlatformBundle\Tests\Fixtures\Bundle\Controller\TestController::formNotSubmittedExceptionAction' }
 
 invalid_json:
-    path: /invalid-json
+    path: '/invalid-json'
     defaults: { _controller: 'Fazland\ApiPlatformBundle\Tests\Fixtures\Bundle\Controller\TestController::invalidJsonExceptionAction' }

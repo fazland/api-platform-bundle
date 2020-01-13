@@ -10,10 +10,7 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ValueExpression;
 
 class DiscriminatorWalker extends DqlWalker
 {
-    /**
-     * @var ClassMetadata
-     */
-    private $rootEntity;
+    private ClassMetadata $rootEntity;
 
     public function __construct(QueryBuilder $queryBuilder, string $field)
     {

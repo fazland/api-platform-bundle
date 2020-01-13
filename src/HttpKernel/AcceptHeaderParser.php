@@ -12,15 +12,12 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class AcceptHeaderParser implements EventSubscriberInterface
 {
-    /**
-     * @var string
-     */
-    private $defaultType;
+    private string $defaultType;
 
     /**
      * @var string[]
      */
-    private $uris;
+    private array $uris;
 
     public function __construct(string $defaultType = 'application/json', array $uris = ['.*'])
     {

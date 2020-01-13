@@ -24,43 +24,29 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Processor
 {
-    /**
-     * @var QueryBuilder
-     */
-    private $queryBuilder;
+    private QueryBuilder $queryBuilder;
 
-    /**
-     * @var DocumentManagerInterface
-     */
-    private $documentManager;
+    private DocumentManagerInterface $documentManager;
 
     /**
      * @var ColumnInterface[]
      */
-    private $columns;
+    private array $columns;
 
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
-    /**
-     * @var array
-     */
-    private $options;
+    private array $options;
 
-    /**
-     * @var ClassMetadata
-     */
-    private $rootDocument;
+    private ClassMetadata $rootDocument;
 
-    /**
-     * @var string
-     */
-    private $rootAlias;
+    private string $rootAlias;
 
-    public function __construct(QueryBuilder $queryBuilder, DocumentManagerInterface $documentManager, FormFactoryInterface $formFactory, array $options = [])
-    {
+    public function __construct(
+        QueryBuilder $queryBuilder,
+        DocumentManagerInterface $documentManager,
+        FormFactoryInterface $formFactory,
+        array $options = []
+    ) {
         $this->queryBuilder = $queryBuilder;
         $this->documentManager = $documentManager;
         $this->columns = [];

@@ -9,7 +9,7 @@ class ChainTransformer implements DataTransformerInterface
     /**
      * @var DataTransformerInterface[]
      */
-    private $transformers;
+    private array $transformers;
 
     public function __construct(DataTransformerInterface ...$transformers)
     {

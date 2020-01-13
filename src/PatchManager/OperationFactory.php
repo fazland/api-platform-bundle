@@ -14,10 +14,7 @@ use Fazland\ApiPlatformBundle\PatchManager\Operation\TestOperation;
 
 class OperationFactory
 {
-    /**
-     * @var Accessor
-     */
-    private $accessor;
+    private Accessor $accessor;
 
     public function __construct(?Accessor $accessor = null)
     {

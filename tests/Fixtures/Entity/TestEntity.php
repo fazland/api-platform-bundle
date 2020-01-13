@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TestEntity
 {
     /**
-     * @ORM\Column()
+     * @ORM\Column(type="string")
      * @ORM\Id()
      */
     public $id;

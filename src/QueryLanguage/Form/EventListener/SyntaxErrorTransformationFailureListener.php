@@ -7,14 +7,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SyntaxErrorTransformationFailureListener implements EventSubscriberInterface
 {
-    /**
-     * @var TranslatorInterface|null
-     */
-    private $translator;
+    private ?TranslatorInterface $translator;
 
     public function __construct(?TranslatorInterface $translator = null)
     {

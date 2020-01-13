@@ -2,7 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\ORM;
 
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Fazland\ApiPlatformBundle\Pagination\Doctrine\ORM\PagerIterator;
@@ -21,35 +21,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Processor
 {
-    /**
-     * @var QueryBuilder
-     */
-    private $queryBuilder;
+    private QueryBuilder $queryBuilder;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
     /**
      * @var ColumnInterface[]
      */
-    private $columns;
+    private array $columns;
 
-    /**
-     * @var string
-     */
-    private $rootAlias;
+    private string $rootAlias;
 
-    /**
-     * @var ClassMetadata
-     */
-    private $rootEntity;
+    private ClassMetadata $rootEntity;
 
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
     /**
      * @var array
@@ -60,12 +45,12 @@ class Processor
     {
         $this->queryBuilder = $queryBuilder;
         $this->entityManager = $this->queryBuilder->getEntityManager();
+        $this->formFactory = $formFactory;
         $this->columns = [];
-        $this->options = $this->resolveOptions($options);
 
+        $this->options = $this->resolveOptions($options);
         $this->rootAlias = $this->queryBuilder->getRootAliases()[0];
         $this->rootEntity = $this->entityManager->getClassMetadata($this->queryBuilder->getRootEntities()[0]);
-        $this->formFactory = $formFactory;
     }
 
     /**

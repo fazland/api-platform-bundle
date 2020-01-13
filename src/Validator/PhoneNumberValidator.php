@@ -100,7 +100,7 @@ class PhoneNumberValidator extends ConstraintValidator
         if (\count($validTypes)) {
             $type = $phoneUtil->getNumberType($phoneNumber);
 
-            if (false === \in_array($type, $validTypes)) {
+            if (false === \in_array($type, $validTypes, true)) {
                 $this->addViolation($value, $constraint);
 
                 return;

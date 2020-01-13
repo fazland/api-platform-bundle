@@ -14,19 +14,15 @@ final class PagerIterator extends BaseIterator implements ObjectIteratorInterfac
 {
     use IteratorTrait;
 
-    /**
-     * @var Search
-     */
-    private $search;
+    private Search $search;
 
-    /**
-     * @var int|null
-     */
-    private $_totalCount;
+    private ?int $totalCount;
 
     public function __construct(Search $search, $orderBy)
     {
         $this->search = clone $search;
+        $this->totalCount = null;
+
         $this->apply(null);
 
         parent::__construct([], $orderBy);
@@ -37,11 +33,11 @@ final class PagerIterator extends BaseIterator implements ObjectIteratorInterfac
      */
     public function count(): int
     {
-        if (null === $this->_totalCount) {
-            $this->_totalCount = $this->search->count();
+        if (null === $this->totalCount) {
+            $this->totalCount = $this->search->count();
         }
 
-        return $this->_totalCount;
+        return $this->totalCount;
     }
 
     /**
@@ -51,8 +47,8 @@ final class PagerIterator extends BaseIterator implements ObjectIteratorInterfac
     {
         parent::next();
 
-        $this->_current = null;
-        $this->_currentElement = parent::current();
+        $this->current = null;
+        $this->currentElement = parent::current();
     }
 
     /**
@@ -62,8 +58,8 @@ final class PagerIterator extends BaseIterator implements ObjectIteratorInterfac
     {
         parent::rewind();
 
-        $this->_current = null;
-        $this->_currentElement = parent::current();
+        $this->current = null;
+        $this->currentElement = parent::current();
     }
 
     /**
@@ -90,13 +86,11 @@ final class PagerIterator extends BaseIterator implements ObjectIteratorInterfac
             $limit += $this->token->getOffset();
             $mainOrder = $this->orderBy[0];
 
-            $dm = $this->search->getDocumentManager();
+            $documentManager = $this->search->getDocumentManager();
 
-            $type = $dm->getTypeManager()
-                ->getType(
-                    $dm->getClassMetadata($this->search->getDocumentClass())
-                        ->getTypeOfField($mainOrder[0])
-                );
+            $type = $documentManager->getTypeManager()
+                ->getType($documentManager->getClassMetadata($this->search->getDocumentClass())->getTypeOfField($mainOrder[0]))
+            ;
 
             if ($type instanceof AbstractDateTimeType) {
                 $datetime = \DateTimeImmutable::createFromFormat('U', (string) $timestamp);

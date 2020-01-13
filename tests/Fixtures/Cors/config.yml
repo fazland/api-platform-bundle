@@ -1,11 +1,11 @@
 imports:
-    - { resource: ../../../src/Resources/config/cors.xml }
+    - { resource: '../../../src/Resources/config/cors.xml' }
 
 framework:
     test: ~
-    secret: secret
+    secret: 'secret'
     router:
-        resource: "%kernel.root_dir%/routing.yml"
+        resource: '%kernel.root_dir%/routing.yml'
 
 services:
     Fazland\ApiPlatformBundle\Tests\Fixtures\Cors\Controller\TestController:

@@ -3,7 +3,7 @@
 namespace Fazland\ApiPlatformBundle\HttpKernel\Exception;
 
 use Kcs\Serializer\Annotation as Serializer;
-use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\ErrorHandler\Exception\FlattenException;
 
 /**
  * Used as helper to serialize exceptions when debug is enabled
@@ -15,11 +15,9 @@ use Symfony\Component\Debug\Exception\FlattenException;
 class DebugSerializableException extends SerializableException
 {
     /**
-     * @var array
-     *
      * @Serializer\Type("array")
      */
-    private $exception;
+    private array $exception;
 
     public function __construct(FlattenException $exception)
     {

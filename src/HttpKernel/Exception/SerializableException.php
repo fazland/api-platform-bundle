@@ -3,7 +3,7 @@
 namespace Fazland\ApiPlatformBundle\HttpKernel\Exception;
 
 use Kcs\Serializer\Annotation as Serializer;
-use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -15,18 +15,14 @@ use Symfony\Component\HttpFoundation\Response;
 class SerializableException
 {
     /**
-     * @var string
-     *
      * @Serializer\Type("string")
      */
-    protected $errorMessage;
+    protected string $errorMessage;
 
     /**
-     * @var int
-     *
      * @Serializer\Type("int")
      */
-    protected $errorCode;
+    protected int $errorCode;
 
     public function __construct(FlattenException $exception)
     {

@@ -10,10 +10,7 @@ final class Orderings implements \Countable, \IteratorAggregate, \ArrayAccess
     public const SORT_ASC = 'asc';
     public const SORT_DESC = 'desc';
 
-    /**
-     * @var array
-     */
-    private $orderings;
+    private array $orderings;
 
     /**
      * Constructor.

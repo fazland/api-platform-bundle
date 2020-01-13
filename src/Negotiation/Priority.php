@@ -8,20 +8,11 @@ use Negotiation\Exception\InvalidMediaType;
 
 class Priority extends BaseAccept implements AcceptHeader
 {
-    /**
-     * @var string
-     */
-    private $basePart;
+    private string $basePart;
 
-    /**
-     * @var string
-     */
-    private $subPart;
+    private string $subPart;
 
-    /**
-     * @var string|null
-     */
-    private $version;
+    private ?string $version;
 
     public function __construct(string $value)
     {

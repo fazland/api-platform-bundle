@@ -7,7 +7,7 @@ use Fazland\ApiPlatformBundle\HttpKernel\Exception\DebugSerializableException;
 use Fazland\ApiPlatformBundle\HttpKernel\Exception\SerializableException;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
 use Kcs\Serializer\SerializationContext;
-use Kcs\Serializer\Serializer;
+use Kcs\Serializer\SerializerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -21,24 +21,15 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ExceptionControllerTest extends TestCase
 {
     /**
-     * @var Serializer|ObjectProphecy
+     * @var SerializerInterface|ObjectProphecy
      */
-    private $serializer;
+    private object $serializer;
 
-    /**
-     * @var SerializationContext
-     */
-    private $serializationContext;
+    private SerializationContext $serializationContext;
 
-    /**
-     * @var ExceptionController
-     */
-    private $controller;
+    private ExceptionController $controller;
 
-    /**
-     * @var Request
-     */
-    private $request;
+    private Request $request;
 
     /**
      * {@inheritdoc}
@@ -51,7 +42,7 @@ class ExceptionControllerTest extends TestCase
         $this->request->setRequestFormat('json');
         $this->request->headers->set('X-Php-Ob-Level', \count($status));
 
-        $this->serializer = $this->prophesize(Serializer::class);
+        $this->serializer = $this->prophesize(SerializerInterface::class);
         $this->serializationContext = SerializationContext::create();
 
         $this->controller = new ExceptionController($this->serializer->reveal(), $this->serializationContext, false);
@@ -66,7 +57,8 @@ class ExceptionControllerTest extends TestCase
 
         $this->serializer
             ->serialize(Argument::type(DebugSerializableException::class), 'json', $this->serializationContext)
-            ->shouldHaveBeenCalled();
+            ->shouldHaveBeenCalled()
+        ;
 
         self::assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
@@ -78,7 +70,8 @@ class ExceptionControllerTest extends TestCase
 
         $this->serializer
             ->serialize(Argument::type(SerializableException::class), 'json', $this->serializationContext)
-            ->shouldHaveBeenCalled();
+            ->shouldHaveBeenCalled()
+        ;
 
         self::assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
@@ -92,7 +85,8 @@ class ExceptionControllerTest extends TestCase
 
         $this->serializer
             ->serialize(Argument::type(SerializableException::class), 'md', $this->serializationContext)
-            ->shouldHaveBeenCalled();
+            ->shouldHaveBeenCalled()
+        ;
 
         self::assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         self::assertEquals('An error has occurred: Bad Request', $response->getContent());

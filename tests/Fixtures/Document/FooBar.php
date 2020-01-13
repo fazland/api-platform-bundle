@@ -14,7 +14,7 @@ class FooBar
      *
      * @ODM\Id()
      */
-    public $id;
+    public string $id;
 
     /**
      * @var mixed

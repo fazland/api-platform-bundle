@@ -2,22 +2,19 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\Fixtures\Doctrine;
 
-use Doctrine\Common\Persistence\Mapping\MappingException;
-use Doctrine\Common\Persistence\Mapping\RuntimeReflectionService;
+use Doctrine\Persistence\Mapping\MappingException;
 use Fazland\ODM\Elastica\Metadata\MetadataFactory;
 use Kcs\Metadata\ClassMetadataInterface;
 
 class FakeElasticaMetadataFactory extends MetadataFactory
 {
-    private $_metadata = [];
-    private $reflService;
+    private array $metadata;
 
     /**
      * {@inheritdoc}
      */
     public function __construct()
     {
-        $this->reflService = new RuntimeReflectionService();
     }
 
     /**
@@ -25,7 +22,7 @@ class FakeElasticaMetadataFactory extends MetadataFactory
      */
     public function getAllMetadata(): array
     {
-        return \array_values($this->_metadata);
+        return \array_values($this->metadata);
     }
 
     /**
@@ -33,11 +30,11 @@ class FakeElasticaMetadataFactory extends MetadataFactory
      */
     public function getMetadataFor($className): ClassMetadataInterface
     {
-        if (! isset($this->_metadata[$className])) {
+        if (! isset($this->metadata[$className])) {
             throw new MappingException('Cannot find metadata for "'.$className.'"');
         }
 
-        return $this->_metadata[$className];
+        return $this->metadata[$className];
     }
 
     /**
@@ -45,7 +42,7 @@ class FakeElasticaMetadataFactory extends MetadataFactory
      */
     public function hasMetadataFor($className): bool
     {
-        return isset($this->_metadata[$className]);
+        return isset($this->metadata[$className]);
     }
 
     /**
@@ -53,7 +50,7 @@ class FakeElasticaMetadataFactory extends MetadataFactory
      */
     public function setMetadataFor($className, $class): void
     {
-        $this->_metadata[$className] = $class;
+        $this->metadata[$className] = $class;
     }
 
     /**

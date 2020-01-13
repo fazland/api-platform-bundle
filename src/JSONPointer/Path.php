@@ -12,12 +12,12 @@ class Path implements \IteratorAggregate, PropertyPathInterface
     /**
      * @var string[]
      */
-    private $parts;
+    private array $parts;
 
     /**
      * @var int
      */
-    private $length;
+    private int $length;
 
     public function __construct(string $path)
     {

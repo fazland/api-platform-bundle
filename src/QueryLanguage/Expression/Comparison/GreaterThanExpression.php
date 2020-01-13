@@ -14,6 +14,6 @@ final class GreaterThanExpression extends ComparisonExpression
      */
     public function __toString(): string
     {
-        return '$gt('.$this->getValue().')';
+        return "\$gt($this->value)";
     }
 }

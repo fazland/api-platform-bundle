@@ -14,39 +14,36 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 trait MongoDocumentManagerMockTrait
 {
-    /**
-     * @var DocumentManager
-     */
-    private $_documentManager;
+    private DocumentManager $documentManager;
 
     /**
      * @var Client|ObjectProphecy
      */
-    private $_client;
+    private object $client;
 
     /**
      * @var Database|ObjectProphecy
      */
-    private $_db;
+    private $database;
 
     /**
      * @var Collection|ObjectProphecy
      */
-    private $_collection;
+    private $collection;
 
     /**
      * @var Connection
      */
-    private $_connection;
+    private $connection;
 
     /**
      * @var Configuration
      */
-    private $_configuration;
+    private $configuration;
 
     public function getDocumentManager(): DocumentManager
     {
-        if (null === $this->_documentManager) {
+        if (null === $this->documentManager) {
             $mongoDb = null;
 
             $server = $this->prophesize(\MongoClient::class);
@@ -63,38 +60,40 @@ trait MongoDocumentManagerMockTrait
 
                 return $mongoDb = new \MongoDB($this->reveal(), $dbName);
             });
-            $server->getClient()->willReturn($this->_client = $this->prophesize(Client::class));
+            $server->getClient()->willReturn($this->client = $this->prophesize(Client::class));
 
-            $this->_client->selectDatabase('doctrine', Argument::any())
-                ->willReturn($this->_db = $this->prophesize(Database::class));
-            $this->_client->selectCollection('doctrine', 'FooBar', Argument::any())
-                ->willReturn($this->_collection = $this->prophesize(Collection::class));
-            $this->_db->selectCollection('FooBar', Argument::any())->willReturn($this->_collection);
+            $this->client->selectDatabase('doctrine', Argument::any())
+                ->willReturn($this->database = $this->prophesize(Database::class))
+            ;
+            $this->client->selectCollection('doctrine', 'FooBar', Argument::any())
+                ->willReturn($this->collection = $this->prophesize(Collection::class))
+            ;
+            $this->database->selectCollection('FooBar', Argument::any())->willReturn($this->collection);
 
             $server->selectCollection(Argument::cetera())->willReturn($oldCollection = $this->prophesize(\MongoCollection::class));
-            $oldCollection->getCollection()->willReturn($this->_collection);
+            $oldCollection->getCollection()->willReturn($this->collection);
 
             $schemaManager = $this->prophesize(SchemaManager::class);
             $metadataFactory = new FakeMetadataFactory();
-            $this->_connection = new Connection($server->reveal());
+            $this->connection = new Connection($server->reveal());
 
-            $this->_configuration = new Configuration();
-            $this->_configuration->setHydratorDir(\sys_get_temp_dir());
-            $this->_configuration->setHydratorNamespace('__TMP__\\HydratorNamespace');
-            $this->_configuration->setProxyDir(\sys_get_temp_dir());
-            $this->_configuration->setProxyNamespace('__TMP__\\ProxyNamespace');
+            $this->configuration = new Configuration();
+            $this->configuration->setHydratorDir(\sys_get_temp_dir());
+            $this->configuration->setHydratorNamespace('__TMP__\\HydratorNamespace');
+            $this->configuration->setProxyDir(\sys_get_temp_dir());
+            $this->configuration->setProxyNamespace('__TMP__\\ProxyNamespace');
 
-            $this->_documentManager = DocumentManager::create($this->_connection, $this->_configuration);
+            $this->documentManager = DocumentManager::create($this->connection, $this->configuration);
 
             (function () use ($schemaManager) {
                 $this->schemaManager = $schemaManager->reveal();
-            })->call($this->_documentManager);
+            })->call($this->documentManager);
 
             (function () use ($metadataFactory) {
                 $this->metadataFactory = $metadataFactory;
-            })->call($this->_documentManager);
+            })->call($this->documentManager);
         }
 
-        return $this->_documentManager;
+        return $this->documentManager;
     }
 }

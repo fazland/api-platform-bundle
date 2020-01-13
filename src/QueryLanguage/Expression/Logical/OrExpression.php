@@ -7,10 +7,7 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Walker\TreeWalkerInterface;
 
 final class OrExpression implements LogicalExpressionInterface
 {
-    /**
-     * @var array
-     */
-    private $arguments;
+    private array $arguments;
 
     private function __construct(array $arguments)
     {

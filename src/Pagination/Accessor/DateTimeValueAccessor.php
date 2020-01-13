@@ -4,10 +4,7 @@ namespace Fazland\ApiPlatformBundle\Pagination\Accessor;
 
 final class DateTimeValueAccessor implements ValueAccessorInterface
 {
-    /**
-     * @var ValueAccessorInterface
-     */
-    private $decorated;
+    private ValueAccessorInterface $decorated;
 
     public function __construct(ValueAccessorInterface $decorated)
     {

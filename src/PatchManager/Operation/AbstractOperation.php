@@ -6,10 +6,7 @@ use Fazland\ApiPlatformBundle\JSONPointer\Accessor;
 
 abstract class AbstractOperation implements OperationInterface
 {
-    /**
-     * @var Accessor
-     */
-    protected $accessor;
+    protected Accessor $accessor;
 
     public function __construct(?Accessor $accessor = null)
     {

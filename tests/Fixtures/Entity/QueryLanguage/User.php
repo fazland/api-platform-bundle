@@ -10,34 +10,26 @@ use Doctrine\ORM\Mapping as ORM;
 class User
 {
     /**
-     * @var int
-     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    public $id;
+    public ?int $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column()
+     * @ORM\Column(type="string")
      */
-    public $name;
+    public string $name;
 
     /**
-     * @var FooBar
-     *
      * @ORM\ManyToOne(targetEntity=FooBar::class, cascade={"persist", "remove"})
      */
-    public $foobar;
+    public FooBar $foobar;
 
     /**
-     * @var int
-     *
-     * @ORM\Column()
+     * @ORM\Column(type="integer")
      */
-    public $nameLength;
+    public int $nameLength;
 
     public function __construct(string $name)
     {

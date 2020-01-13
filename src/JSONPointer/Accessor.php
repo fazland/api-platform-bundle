@@ -94,29 +94,19 @@ class Accessor implements PropertyAccessorInterface
      */
     public const CACHE_PREFIX_PROPERTY_PATH = 'p';
 
-    /**
-     * @var CacheItemPoolInterface
-     */
-    private $cacheItemPool;
+    private CacheItemPoolInterface $cacheItemPool;
 
-    /**
-     * @var array
-     */
-    private $readPropertyCache = [];
+    private array $readPropertyCache;
 
-    /**
-     * @var array
-     */
-    private $writePropertyCache = [];
+    private array $writePropertyCache;
 
-    /**
-     * @var array
-     */
-    private static $resultProto = [self::VALUE => null];
+    private static array $resultProto = [self::VALUE => null];
 
     public function __construct(?CacheItemPoolInterface $cacheItemPool = null)
     {
         $this->cacheItemPool = $cacheItemPool ?? new ArrayAdapter();
+        $this->readPropertyCache = [];
+        $this->writePropertyCache = [];
     }
 
     /**
@@ -176,7 +166,9 @@ class Accessor implements PropertyAccessorInterface
                 } else {
                     if ($appendToArray && $propertiesCount - 1 === $i) {
                         continue;
-                    } elseif ($appendToArray && $propertiesCount - 2 === $i) {
+                    }
+
+                    if ($appendToArray && $propertiesCount - 2 === $i) {
                         $object = $zval[self::VALUE];
                         $access = $this->getWriteAccessInfo(\get_class($object), $property, [$value]);
 

@@ -14,6 +14,6 @@ final class GreaterThanOrEqualExpression extends ComparisonExpression
      */
     public function __toString(): string
     {
-        return '$gte('.$this->getValue().')';
+        return "\$gte($this->value)";
     }
 }

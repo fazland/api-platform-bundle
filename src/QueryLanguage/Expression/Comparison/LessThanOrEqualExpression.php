@@ -14,6 +14,6 @@ final class LessThanOrEqualExpression extends ComparisonExpression
      */
     public function __toString(): string
     {
-        return '$lte('.$this->getValue().')';
+        return "\$lte($this->value)";
     }
 }

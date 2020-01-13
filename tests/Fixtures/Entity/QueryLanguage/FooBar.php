@@ -11,18 +11,14 @@ use Doctrine\ORM\Mapping as ORM;
 class FooBar
 {
     /**
-     * @var int
-     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    public $id;
+    public ?int $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column()
      */
-    public $foobar = 'foobar';
+    public string $foobar = 'foobar';
 }

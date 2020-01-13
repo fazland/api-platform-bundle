@@ -10,25 +10,24 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class View implements ConfigurationInterface
 {
-    /**
-     * @var int
-     */
-    public $statusCode = Response::HTTP_OK;
+    public int $statusCode;
 
     /**
      * @var string[]
      */
     public $groups;
 
-    /**
-     * @var string
-     */
-    public $groupsProvider;
+    public ?string $groupsProvider;
 
-    /**
-     * @var string
-     */
-    public $serializationType;
+    public ?string $serializationType;
+
+    public function __construct()
+    {
+        $this->statusCode = Response::HTTP_OK;
+        $this->groups = [];
+        $this->groupsProvider = null;
+        $this->serializationType = null;
+    }
 
     /**
      * {@inheritdoc}

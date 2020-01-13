@@ -10,11 +10,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
 class Sunset implements ConfigurationInterface
 {
     /**
-     * @var string
-     *
      * @Required()
      */
-    public $date;
+    public ?string $date;
+
+    public function __construct()
+    {
+        $this->date = null;
+    }
 
     /**
      * {@inheritdoc}

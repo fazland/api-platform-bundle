@@ -7,7 +7,7 @@ use Doctrine\ODM\PHPCR\Mapping\ClassMetadata;
 final class MappingHelper
 {
     /**
-     * Processes phpcr odm mapping finding the root field by $fieldName.
+     * Processes PHPCR ODM mapping finding the root field by $fieldName.
      * Returns the root field (if found) and the rest part as an array of strings.
      *
      * @param ClassMetadata $classMetadata

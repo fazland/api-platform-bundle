@@ -7,9 +7,9 @@ use Fazland\ApiPlatformBundle\Decoder\Exception\UnsupportedFormatException;
 class DecoderProvider implements DecoderProviderInterface
 {
     /**
-     * @var array
+     * @var DecoderInterface[]
      */
-    private $decoders;
+    private array $decoders;
 
     public function __construct(array $decoders)
     {

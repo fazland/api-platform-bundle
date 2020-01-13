@@ -18,25 +18,16 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Walker\PhpCr\NodeWalker;
  */
 class Column implements ColumnInterface
 {
-    /**
-     * @var string
-     */
-    private $rootAlias;
+    private string $rootAlias;
 
     /**
-     * @var string[]
+     * @var string[]|null
      */
-    private $mapping;
+    private ?array $mapping;
 
-    /**
-     * @var string
-     */
-    public $fieldName;
+    public string $fieldName;
 
-    /**
-     * @var string
-     */
-    private $fieldType;
+    private string $fieldType;
 
     /**
      * @var string|callable|null
@@ -51,12 +42,9 @@ class Column implements ColumnInterface
     /**
      * @var array
      */
-    private $associations;
+    private array $associations;
 
-    /**
-     * @var DocumentManagerInterface
-     */
-    private $documentManager;
+    private DocumentManagerInterface $documentManager;
 
     public function __construct(
         string $fieldName,
@@ -66,6 +54,9 @@ class Column implements ColumnInterface
     ) {
         $this->fieldName = $fieldName;
         $this->rootAlias = $rootAlias;
+        $this->documentManager = $documentManager;
+        $this->validationWalker = null;
+        $this->customWalker = null;
 
         [$rootField, $rest] = MappingHelper::processFieldName($rootEntity, $fieldName);
         $this->mapping = $rootField;
@@ -79,8 +70,6 @@ class Column implements ColumnInterface
         if (null !== $rest) {
             $this->processAssociations($documentManager, $rest);
         }
-
-        $this->documentManager = $documentManager;
     }
 
     /**

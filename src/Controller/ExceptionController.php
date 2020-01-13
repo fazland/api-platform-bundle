@@ -13,20 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ExceptionController
 {
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
+    private SerializerInterface $serializer;
 
-    /**
-     * @var SerializationContext
-     */
-    private $serializationContext;
+    private SerializationContext $serializationContext;
 
-    /**
-     * @var bool
-     */
-    private $exceptionClass;
+    private string $exceptionClass;
 
     public function __construct(SerializerInterface $serializer, SerializationContext $serializationContext, bool $debug = false)
     {

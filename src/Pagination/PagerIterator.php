@@ -13,52 +13,39 @@ class PagerIterator implements \Iterator
 
     /**
      * Ordering information holder.
-     *
-     * @var Orderings
      */
-    protected $orderBy;
+    protected Orderings $orderBy;
 
     /**
      * The page size.
-     *
-     * @var int
      */
-    protected $pageSize = self::DEFAULT_PAGE_SIZE;
+    protected int $pageSize;
 
     /**
      * The current continuation token.
-     *
-     * @var PageToken|null
      */
-    protected $token;
+    protected ?PageToken $token;
 
     /**
      * The object array to be paginated.
-     *
-     * @var array
      */
-    private $objects;
+    private array $objects;
 
-    /**
-     * @var array
-     */
-    private $page;
+    private ?array $page;
 
-    /**
-     * @var bool
-     */
-    private $valid;
+    private bool $valid;
 
     public function __construct(iterable $objects, $orderBy)
     {
-        if ($orderBy instanceof Orderings) {
-            $this->orderBy = $orderBy;
-        } else {
-            $this->orderBy = new Orderings($orderBy);
-        }
+        $this->pageSize = self::DEFAULT_PAGE_SIZE;
+        $this->token = null;
+        $this->page = null;
+        $this->valid = false;
+
+        $this->orderBy = $orderBy instanceof Orderings ? $orderBy : new Orderings($orderBy);
 
         if (\count($this->orderBy) < 2) {
-            throw new \RuntimeException('orderBy must have at least 2 "field"=>"direction(ASC|DESC)". The first is the reference timestamp, the second is the checksum field.');
+            throw new \RuntimeException('orderBy must have at least 2 "field" => "direction(ASC|DESC)". The first is the reference timestamp, the second is the checksum field.');
         }
 
         $objects = \is_array($objects) ? $objects : \iterator_to_array($objects);

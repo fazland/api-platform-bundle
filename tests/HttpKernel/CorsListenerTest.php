@@ -20,10 +20,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class CorsListenerTest extends WebTestCase
 {
-    /**
-     * @var CorsListener
-     */
-    private $listener;
+    private CorsListener $listener;
 
     /**
      * {@inheritdoc}
@@ -108,7 +105,7 @@ class CorsListenerTest extends WebTestCase
         }
 
         $response = $event->getResponse();
-        self::assertEquals(200, $response->getStatusCode());
+        self::assertEquals(Response::HTTP_OK, $response->getStatusCode());
 
         $headers = $response->headers->all();
         self::assertArrayHasKey('access-control-allow-credentials', $headers);
@@ -216,10 +213,10 @@ class CorsListenerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('OPTIONS', '/', [], [], ['HTTP_ORIGIN' => 'https://localhost']);
+        $client->request(Request::METHOD_OPTIONS, '/', [], [], ['HTTP_ORIGIN' => 'https://localhost']);
         $response = $client->getResponse();
 
         self::assertEquals('*', $response->headers->get('Access-Control-Allow-Origin'));
-        self::assertEquals(Kernel::VERSION_ID < 30000 ? 'GET, HEAD' : 'GET', $response->headers->get('Access-Control-Allow-Methods'));
+        self::assertEquals(Request::METHOD_GET, $response->headers->get('Access-Control-Allow-Methods'));
     }
 }

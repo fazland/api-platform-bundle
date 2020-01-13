@@ -12,10 +12,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class BodyConverter implements EventSubscriberInterface
 {
-    /**
-     * @var DecoderProviderInterface
-     */
-    private $decoderProvider;
+    private DecoderProviderInterface $decoderProvider;
 
     public function __construct(DecoderProviderInterface $decoderProvider)
     {
@@ -60,11 +57,8 @@ class BodyConverter implements EventSubscriberInterface
     {
         $format = $request->getFormat($contentType);
 
-        if (null === $format) {
-            switch ($contentType) {
-                case 'application/merge-patch+json':
-                    return 'json';
-            }
+        if (null === $format && 'application/merge-patch+json' === $contentType) {
+            return 'json';
         }
 
         return $format;

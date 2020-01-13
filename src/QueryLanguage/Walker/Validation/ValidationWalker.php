@@ -9,10 +9,12 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class ValidationWalker implements ValidationWalkerInterface
 {
-    /**
-     * @var ExecutionContextInterface
-     */
-    protected $validationContext;
+    protected ?ExecutionContextInterface $validationContext;
+
+    public function __construct()
+    {
+        $this->validationContext = null;
+    }
 
     /**
      * {@inheritdoc}
@@ -91,6 +93,10 @@ class ValidationWalker implements ValidationWalkerInterface
 
     protected function addViolation(string $message, array $parameters = []): void
     {
+        if (null === $this->validationContext) {
+            return;
+        }
+
         $this->validationContext
             ->buildViolation($message, $parameters)
             ->addViolation()

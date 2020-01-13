@@ -10,11 +10,9 @@ use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
 class User
 {
     /**
-     * @var string
-     *
      * @PHPCR\Id(strategy="PARENT")
      */
-    public $id;
+    public ?string $id;
 
     /**
      * @var mixed
@@ -24,28 +22,24 @@ class User
     private $parent;
 
     /**
-     * @var string
-     *
      * @PHPCR\Nodename()
      */
-    public $name;
+    public string $name;
 
     /**
-     * @var FooBar
-     *
      * @PHPCR\ReferenceOne(targetDocument=FooBar::class, strategy="hard", cascade={"persist", "remove"})
      */
-    public $foobar;
+    public FooBar $foobar;
 
     /**
-     * @var int
-     *
      * @PHPCR\Field(type="int")
      */
-    public $nameLength;
+    public int $nameLength;
 
     public function __construct(string $name, $parent = null)
     {
+        $this->id = null;
+        $this->parent = null;
         $this->name = $name;
         $this->nameLength = \strlen($name);
         if (null === $parent) {
