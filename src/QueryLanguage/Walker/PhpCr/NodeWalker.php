@@ -64,7 +64,7 @@ class NodeWalker extends AbstractWalker
     public function walkComparison(string $operator, ValueExpression $expression)
     {
         if ('parent' === $this->fieldType) {
-            if ($operator !== '=') {
+            if ('=' !== $operator) {
                 throw new \InvalidArgumentException('Cannot evaluate child nodes with non equals comparison.');
             }
 

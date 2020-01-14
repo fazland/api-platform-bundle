@@ -2,9 +2,9 @@
 
 namespace Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\ORM;
 
-use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Fazland\ApiPlatformBundle\Pagination\Doctrine\ORM\PagerIterator;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\OrderExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Form\DTO\Query;
