@@ -18,6 +18,8 @@ final class PagerIterator extends BaseIterator implements ObjectIteratorInterfac
     public function __construct(QueryBuilder $searchable, $orderBy)
     {
         $this->queryBuilder = clone $searchable;
+        $this->totalCount = null;
+
         $this->apply(null);
 
         parent::__construct([], $orderBy);
