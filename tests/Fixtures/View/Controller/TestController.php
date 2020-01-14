@@ -46,11 +46,11 @@ class TestController extends AbstractController
      */
     public function formNotSubmittedExceptionAction(): void
     {
-        /** @var FormInterface $form */
         $form = $this->createFormBuilder()
             ->add('first')
             ->add('second')
-            ->getForm();
+            ->getForm()
+        ;
 
         throw new FormNotSubmittedException($form);
     }

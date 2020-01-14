@@ -13,10 +13,7 @@ class Base64ToUploadedFileTransformerTest extends TestCase
     private const TEST_TXT_DATA = 'data:text/plain,K%C3%A9vin%20Dunglas%0A';
     private const TEST_TXT_CONTENT = "Kévin Dunglas\n";
 
-    /**
-     * @var Base64ToUploadedFileTransformer
-     */
-    private $transformer;
+    private Base64ToUploadedFileTransformer $transformer;
 
     /**
      * {@inheritdoc}

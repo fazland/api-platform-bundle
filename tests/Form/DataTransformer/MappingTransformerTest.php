@@ -13,12 +13,9 @@ class MappingTransformerTest extends TestCase
     /**
      * @var DataTransformerInterface|ObjectProphecy
      */
-    private $innerTransformer;
+    private object $innerTransformer;
 
-    /**
-     * @var MappingTransformer
-     */
-    private $transformer;
+    private MappingTransformer $transformer;
 
     /**
      * {@inheritdoc}

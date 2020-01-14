@@ -8,10 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class TestOperationTest extends TestCase
 {
-    /**
-     * @var TestOperation
-     */
-    private $operation;
+    private TestOperation $operation;
 
     /**
      * {@inheritdoc}

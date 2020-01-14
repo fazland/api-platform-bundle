@@ -8,10 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class ReplaceOperationTest extends TestCase
 {
-    /**
-     * @var ReplaceOperation
-     */
-    private $operation;
+    private ReplaceOperation $operation;
 
     /**
      * {@inheritdoc}

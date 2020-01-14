@@ -12,10 +12,7 @@ class GrammarTest extends TestCase
 {
     use VarDumperTestTrait;
 
-    /**
-     * @var Grammar
-     */
-    private $grammar;
+    private Grammar $grammar;
 
     protected function setUp(): void
     {

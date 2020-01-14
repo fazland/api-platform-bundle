@@ -13,12 +13,9 @@ class NullableMappingTransformerTest extends TestCase
     /**
      * @var DataTransformerInterface|ObjectProphecy
      */
-    private $innerTransformer;
+    private object $innerTransformer;
 
-    /**
-     * @var NullableMappingTransformer
-     */
-    private $transformer;
+    private NullableMappingTransformer $transformer;
 
     /**
      * {@inheritdoc}

@@ -7,10 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class MoveOperationTest extends TestCase
 {
-    /**
-     * @var MoveOperation
-     */
-    private $operation;
+    private MoveOperation $operation;
 
     /**
      * {@inheritdoc}

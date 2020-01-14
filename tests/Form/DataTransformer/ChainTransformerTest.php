@@ -12,17 +12,14 @@ class ChainTransformerTest extends TestCase
     /**
      * @var DataTransformerInterface|ObjectProphecy
      */
-    private $innerTransformer1;
+    private object $innerTransformer1;
 
     /**
      * @var DataTransformerInterface|ObjectProphecy
      */
-    private $innerTransformer2;
+    private object $innerTransformer2;
 
-    /**
-     * @var ChainTransformer
-     */
-    private $transformer;
+    private ChainTransformer $transformer;
 
     /**
      * {@inheritdoc}

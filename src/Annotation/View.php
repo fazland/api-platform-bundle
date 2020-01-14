@@ -11,15 +11,13 @@ use Symfony\Component\HttpFoundation\Response;
 class View implements ConfigurationInterface
 {
     public int $statusCode;
+    public ?string $groupsProvider;
+    public ?string $serializationType;
 
     /**
      * @var string[]
      */
     public $groups;
-
-    public ?string $groupsProvider;
-
-    public ?string $serializationType;
 
     public function __construct()
     {

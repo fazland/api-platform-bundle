@@ -14,10 +14,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class InvalidJSONExceptionSubscriberTest extends WebTestCase
 {
-    /**
-     * @var InvalidJSONExceptionSubscriber
-     */
-    private $subscriber;
+    private InvalidJSONExceptionSubscriber $subscriber;
 
     /**
      * {@inheritdoc}

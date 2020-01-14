@@ -25,7 +25,6 @@ class DqlWalker extends AbstractWalker
     ];
 
     protected QueryBuilder $queryBuilder;
-
     private ?string $columnType;
 
     public function __construct(QueryBuilder $queryBuilder, string $field, ?string $columnType = null)

@@ -9,10 +9,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class DateTransformerTest extends TestCase
 {
-    /**
-     * @var DateTransformer
-     */
-    private $transformer;
+    private DateTransformer $transformer;
 
     /**
      * {@inheritdoc}

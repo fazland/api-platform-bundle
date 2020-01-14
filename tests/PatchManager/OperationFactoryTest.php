@@ -9,10 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class OperationFactoryTest extends TestCase
 {
-    /**
-     * @var OperationFactory
-     */
-    private $factory;
+    private OperationFactory $factory;
 
     /**
      * {@inheritdoc}
@@ -24,20 +21,17 @@ class OperationFactoryTest extends TestCase
 
     public function getOperations(): iterable
     {
-        yield ['test'];
-        yield ['remove'];
-        yield ['add'];
-        yield ['replace'];
-        yield ['move'];
-        yield ['copy'];
+        foreach (OperationFactory::OPERATION_MAP as $operationType => $operationClass) {
+            yield [$operationType, $operationClass];
+        }
     }
 
     /**
      * @dataProvider getOperations
      */
-    public function testFactoryShouldReturnAnOperationObject(string $op): void
+    public function testFactoryShouldReturnAnOperationObject(string $operationType, string $operationClass): void
     {
-        self::assertInstanceOf(OperationInterface::class, $this->factory->factory($op));
+        self::assertInstanceOf($operationClass, $this->factory->factory($operationType));
     }
 
     public function testFactoryShouldThrowIfOperationIsUnknown(): void

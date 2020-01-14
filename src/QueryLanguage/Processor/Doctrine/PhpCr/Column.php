@@ -19,15 +19,14 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Walker\PhpCr\NodeWalker;
 class Column implements ColumnInterface
 {
     private string $rootAlias;
+    private string $fieldType;
+    private array $associations;
+    public string $fieldName;
 
     /**
      * @var string[]|null
      */
     private ?array $mapping;
-
-    public string $fieldName;
-
-    private string $fieldType;
 
     /**
      * @var string|callable|null
@@ -38,11 +37,6 @@ class Column implements ColumnInterface
      * @var string|callable|null
      */
     public $customWalker;
-
-    /**
-     * @var array
-     */
-    private array $associations;
 
     private DocumentManagerInterface $documentManager;
 

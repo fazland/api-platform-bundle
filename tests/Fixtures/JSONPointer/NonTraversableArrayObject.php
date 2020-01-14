@@ -8,10 +8,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer;
  */
 class NonTraversableArrayObject implements \ArrayAccess, \Countable, \Serializable
 {
-    /**
-     * @var array
-     */
-    private $array;
+    private array $array;
 
     public function __construct(?array $array = null)
     {

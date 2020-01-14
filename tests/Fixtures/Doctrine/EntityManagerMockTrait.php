@@ -18,7 +18,6 @@ use Prophecy\Prophecy\ObjectProphecy;
 trait EntityManagerMockTrait
 {
     private ?EntityManagerInterface $entityManager;
-
     private Connection $connection;
 
     /**

@@ -9,10 +9,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class CodeToCurrencyTransformerTest extends TestCase
 {
-    /**
-     * @var CodeToCurrencyTransformer
-     */
-    private $transformer;
+    private CodeToCurrencyTransformer $transformer;
 
     /**
      * {@inheritdoc}

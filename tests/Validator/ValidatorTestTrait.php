@@ -14,12 +14,9 @@ trait ValidatorTestTrait
     /**
      * @var ExecutionContextInterface|ObjectProphecy
      */
-    private $context;
+    private object $context;
 
-    /**
-     * @var ConstraintValidatorInterface
-     */
-    private $validator;
+    private ConstraintValidatorInterface $validator;
 
     /**
      * {@inheritdoc}

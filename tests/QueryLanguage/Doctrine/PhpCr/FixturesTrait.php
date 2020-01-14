@@ -20,10 +20,7 @@ use PHPCR\SimpleCredentials;
 
 trait FixturesTrait
 {
-    /**
-     * @var DocumentManagerInterface
-     */
-    private static $documentManager;
+    private static DocumentManagerInterface $documentManager;
 
     /**
      * {@inheritdoc}

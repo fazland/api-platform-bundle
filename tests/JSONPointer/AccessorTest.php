@@ -19,10 +19,7 @@ use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 
 class AccessorTest extends TestCase
 {
-    /**
-     * @var Accessor
-     */
-    private $propertyAccessor;
+    private Accessor $propertyAccessor;
 
     /**
      * {@inheritdoc}

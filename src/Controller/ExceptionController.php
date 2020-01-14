@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ExceptionController
 {
     private SerializerInterface $serializer;
-
     private SerializationContext $serializationContext;
-
     private string $exceptionClass;
 
     public function __construct(SerializerInterface $serializer, SerializationContext $serializationContext, bool $debug = false)

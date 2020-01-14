@@ -10,7 +10,6 @@ final class EntryExpression implements ExpressionInterface
     use ExpressionTrait;
 
     private LiteralExpression $key;
-
     private ExpressionInterface $value;
 
     public function __construct(LiteralExpression $key, ExpressionInterface $value)

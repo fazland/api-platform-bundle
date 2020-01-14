@@ -10,10 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CollectionTypeTest extends TestCase
 {
-    /**
-     * @var CollectionType
-     */
-    private $type;
+    private CollectionType $type;
 
     /**
      * {@inheritdoc}

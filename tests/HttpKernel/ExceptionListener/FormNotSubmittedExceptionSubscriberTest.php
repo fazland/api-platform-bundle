@@ -15,10 +15,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class FormNotSubmittedExceptionSubscriberTest extends WebTestCase
 {
-    /**
-     * @var FormNotSubmittedExceptionSubscriber
-     */
-    private $subscriber;
+    private FormNotSubmittedExceptionSubscriber $subscriber;
 
     /**
      * {@inheritdoc}

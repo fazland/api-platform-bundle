@@ -11,11 +11,8 @@ use Symfony\Component\Inflector\Inflector;
 final class AccessHelper
 {
     private \ReflectionClass $reflectionClass;
-
     private ?\ReflectionProperty $reflectionProperty;
-
     private string $property;
-
     private string $camelized;
 
     public function __construct(string $class, string $property)

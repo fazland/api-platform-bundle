@@ -9,15 +9,12 @@ use Symfony\Component\PropertyAccess\PropertyPathIterator;
 
 class Path implements \IteratorAggregate, PropertyPathInterface
 {
+    private int $length;
+
     /**
      * @var string[]
      */
     private array $parts;
-
-    /**
-     * @var int
-     */
-    private int $length;
 
     public function __construct(string $path)
     {

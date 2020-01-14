@@ -14,10 +14,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class UnmergeablePatchExceptionSubscriberTest extends WebTestCase
 {
-    /**
-     * @var UnmergeablePatchExceptionSubscriber
-     */
-    private $subscriber;
+    private UnmergeablePatchExceptionSubscriber $subscriber;
 
     /**
      * {@inheritdoc}

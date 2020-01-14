@@ -11,10 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class VersionAwareNegotiatorTest extends TestCase
 {
-    /**
-     * @var VersionAwareNegotiator
-     */
-    private $negotiator;
+    private VersionAwareNegotiator $negotiator;
 
     /**
      * {@inheritdoc}

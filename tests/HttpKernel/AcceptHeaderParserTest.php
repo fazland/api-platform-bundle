@@ -13,11 +13,10 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-/**
- * @property AcceptHeaderParser parser
- */
 class AcceptHeaderParserTest extends TestCase
 {
+    private AcceptHeaderParser $parser;
+
     /**
      * {@inheritdoc}
      */

@@ -48,9 +48,7 @@ class ViewHandlerTest extends WebTestCase
     private object $tokenStorage;
 
     private SerializationContext $serializationContext;
-
     private ViewHandler $viewHandler;
-
     private string $defaultResponseCharset;
 
     /**

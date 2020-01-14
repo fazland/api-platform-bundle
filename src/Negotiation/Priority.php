@@ -9,9 +9,7 @@ use Negotiation\Exception\InvalidMediaType;
 class Priority extends BaseAccept implements AcceptHeader
 {
     private string $basePart;
-
     private string $subPart;
-
     private ?string $version;
 
     public function __construct(string $value)

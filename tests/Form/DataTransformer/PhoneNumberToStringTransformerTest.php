@@ -11,10 +11,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class PhoneNumberToStringTransformerTest extends TestCase
 {
-    /**
-     * @var PhoneNumberToStringTransformer
-     */
-    private $transformer;
+    private PhoneNumberToStringTransformer $transformer;
 
     /**
      * {@inheritdoc}
