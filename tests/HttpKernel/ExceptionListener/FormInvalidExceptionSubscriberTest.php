@@ -17,10 +17,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class FormInvalidExceptionSubscriberTest extends WebTestCase
 {
-    /**
-     * @var FormInvalidExceptionSubscriber
-     */
-    private $subscriber;
+    private FormInvalidExceptionSubscriber $subscriber;
 
     /**
      * {@inheritdoc}

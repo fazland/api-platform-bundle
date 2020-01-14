@@ -21,11 +21,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class ViewHandler implements EventSubscriberInterface
 {
     private SerializerInterface $serializer;
-
     private SerializationContext $serializationContext;
-
     private ?TokenStorageInterface $tokenStorage;
-
     private string $responseCharset;
 
     public function __construct(

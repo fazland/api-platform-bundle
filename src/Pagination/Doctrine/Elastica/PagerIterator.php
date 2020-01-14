@@ -15,7 +15,6 @@ final class PagerIterator extends BaseIterator implements ObjectIteratorInterfac
     use IteratorTrait;
 
     private Search $search;
-
     private ?int $totalCount;
 
     public function __construct(Search $search, $orderBy)

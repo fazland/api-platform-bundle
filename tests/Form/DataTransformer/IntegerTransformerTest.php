@@ -8,10 +8,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class IntegerTransformerTest extends TestCase
 {
-    /**
-     * @var IntegerTransformer
-     */
-    private $transformer;
+    private IntegerTransformer $transformer;
 
     /**
      * {@inheritdoc}

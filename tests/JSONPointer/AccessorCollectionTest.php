@@ -119,22 +119,30 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
         $axesBefore = $this->getContainer([1 => 'second', 3 => 'fourth']);
         $axesAfter = $this->getContainer([0 => 'first', 1 => 'second', 2 => 'third']);
 
-        $car->expects(self::any())
+        $car
             ->method('getStructure')
-            ->will(self::returnValue($structure));
+            ->willReturn($structure)
+        ;
 
         $structure->expects(self::at(0))
             ->method('getAxes')
-            ->will(self::returnValue($axesBefore));
+            ->willReturn($axesBefore)
+        ;
+
         $structure->expects(self::at(1))
             ->method('removeAxis')
-            ->with('fourth');
+            ->with('fourth')
+        ;
+
         $structure->expects(self::at(2))
             ->method('addAxis')
-            ->with('first');
+            ->with('first')
+        ;
+
         $structure->expects(self::at(3))
             ->method('addAxis')
-            ->with('third');
+            ->with('third')
+        ;
 
         $this->propertyAccessor->setValue($car, '/structure/axes', $axesAfter);
     }
@@ -147,9 +155,10 @@ abstract class AccessorCollectionTest extends AccessorArrayAccessTest
         $axesBefore = $this->getContainer([1 => 'second', 3 => 'fourth']);
         $axesAfter = $this->getContainer([0 => 'first', 1 => 'second', 2 => 'third']);
 
-        $car->expects(self::any())
+        $car
             ->method('getAxes')
-            ->will(self::returnValue($axesBefore));
+            ->willReturn($axesBefore)
+        ;
 
         $this->propertyAccessor->setValue($car, '/axes', $axesAfter);
     }

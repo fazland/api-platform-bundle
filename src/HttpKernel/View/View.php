@@ -13,24 +13,19 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class View
 {
+    public array $headers;
+    public int $statusCode;
+    public ?Type $serializationType;
+
     /**
      * @var mixed
      */
     public $result;
 
-    public array $headers;
-
-    public int $statusCode;
-
     /**
      * @var string[]|null
      */
     public ?array $serializationGroups;
-
-    /**
-     * @var Type|null
-     */
-    public ?Type $serializationType;
 
     public function __construct($result, int $statusCode = Response::HTTP_OK)
     {

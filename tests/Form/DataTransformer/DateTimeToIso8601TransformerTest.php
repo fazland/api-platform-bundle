@@ -8,15 +8,8 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class DateTimeToIso8601TransformerTest extends TestCase
 {
-    /**
-     * @var \DateTimeInterface
-     */
-    private $dateTime;
-
-    /**
-     * @var \DateTimeInterface
-     */
-    private $dateTimeWithoutSeconds;
+    private ?\DateTimeInterface $dateTime;
+    private ?\DateTimeInterface $dateTimeWithoutSeconds;
 
     /**
      * {@inheritdoc}

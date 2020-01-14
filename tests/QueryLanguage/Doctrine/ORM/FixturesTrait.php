@@ -13,10 +13,7 @@ use Fazland\ApiPlatformBundle\Tests\Fixtures\Entity\QueryLanguage as QueryLangua
 
 trait FixturesTrait
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private static $entityManager;
+    private static EntityManagerInterface $entityManager;
 
     /**
      * {@inheritdoc}
@@ -28,9 +25,7 @@ trait FixturesTrait
         $configuration->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_EVAL);
         $configuration->setProxyNamespace('__CG__\\'.QueryLanguageFixtures::class);
         $configuration->setProxyDir(\sys_get_temp_dir().'/'.\uniqid('api-platform-proxy', true));
-        $configuration->setEntityNamespaces([
-            QueryLanguageFixtures::class,
-        ]);
+        $configuration->setEntityNamespaces([QueryLanguageFixtures::class]);
 
         self::$entityManager = EntityManager::create(['url' => 'sqlite:///:memory:'], $configuration);
         $schemaTool = new SchemaTool(self::$entityManager);

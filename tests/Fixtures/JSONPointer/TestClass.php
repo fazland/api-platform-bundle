@@ -7,7 +7,6 @@ class TestClass
     public $publicProperty;
     protected $protectedProperty;
     private $privateProperty;
-
     private $publicAccessor;
     private $publicMethodAccessor;
     private $publicGetSetter;

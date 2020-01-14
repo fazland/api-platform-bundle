@@ -8,10 +8,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class BooleanTransformerTest extends TestCase
 {
-    /**
-     * @var BooleanTransformer
-     */
-    private $transformer;
+    private BooleanTransformer $transformer;
 
     /**
      * {@inheritdoc}

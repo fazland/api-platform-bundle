@@ -22,30 +22,11 @@ class PagerIteratorTest extends TestCase
 {
     use ElasticaDocumentManagerMockTrait;
 
-    /**
-     * @var PagerIterator
-     */
-    private $iterator;
-
-    /**
-     * @var CollectionInterface
-     */
-    private $collection;
-
-    /**
-     * @var Search
-     */
-    private $search;
-
-    /**
-     * @var Type
-     */
-    private $type;
-
-    /**
-     * @var Query
-     */
-    private $query;
+    private PagerIterator $iterator;
+    private CollectionInterface $collection;
+    private Search $search;
+    private Type $type;
+    private Query $query;
 
     /**
      * {@inheritdoc}

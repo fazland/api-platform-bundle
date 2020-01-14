@@ -21,25 +21,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Processor
 {
+    private string $rootAlias;
     private QueryBuilder $queryBuilder;
-
     private EntityManagerInterface $entityManager;
+    private ClassMetadata $rootEntity;
+    private FormFactoryInterface $formFactory;
+    private array $options;
 
     /**
      * @var ColumnInterface[]
      */
     private array $columns;
-
-    private string $rootAlias;
-
-    private ClassMetadata $rootEntity;
-
-    private FormFactoryInterface $formFactory;
-
-    /**
-     * @var array
-     */
-    private $options;
 
     public function __construct(QueryBuilder $queryBuilder, FormFactoryInterface $formFactory, array $options = [])
     {

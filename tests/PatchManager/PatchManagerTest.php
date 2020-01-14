@@ -30,22 +30,15 @@ class PatchManagerTest extends TestCase
     /**
      * @var FormFactoryInterface|ObjectProphecy
      */
-    private $formFactory;
-
-    /**
-     * @var PatchManager
-     */
-    private $patchManager;
-
-    /**
-     * @var CacheItemPoolInterface
-     */
-    private static $cache;
+    private object $formFactory;
 
     /**
      * @var ValidatorInterface|ObjectProphecy
      */
-    private $validator;
+    private object $validator;
+
+    private PatchManager $patchManager;
+    private static CacheItemPoolInterface $cache;
 
     /**
      * {@inheritdoc}

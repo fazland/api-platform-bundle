@@ -25,10 +25,7 @@ class ProcessorTest extends TestCase
 {
     use FixturesTrait;
 
-    /**
-     * @var Processor
-     */
-    private $processor;
+    private Processor $processor;
 
     /**
      * {@inheritdoc}

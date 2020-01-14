@@ -9,10 +9,7 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Walker\TreeWalkerInterface;
 
 final class NotExpression implements LogicalExpressionInterface
 {
-    /**
-     * @var ExpressionInterface
-     */
-    private $argument;
+    private ExpressionInterface $argument;
 
     private function __construct(ExpressionInterface $expression)
     {

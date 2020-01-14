@@ -19,16 +19,11 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\EnumWalker;
 class Column implements ColumnInterface
 {
     private string $rootAlias;
-
-    public string $fieldName;
-
-    public ?array $mapping;
-
     private string $columnType;
-
-    public array $associations;
-
     private EntityManagerInterface $entityManager;
+    public string $fieldName;
+    public ?array $mapping;
+    public array $associations;
 
     /**
      * @var string|callable|null

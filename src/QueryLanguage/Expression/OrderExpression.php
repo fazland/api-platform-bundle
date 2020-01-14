@@ -7,7 +7,6 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Walker\TreeWalkerInterface;
 final class OrderExpression implements ExpressionInterface
 {
     private string $field;
-
     private string $direction;
 
     public function __construct(string $field, string $direction)

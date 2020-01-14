@@ -10,10 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CheckboxTypeTest extends TestCase
 {
-    /**
-     * @var CheckboxType
-     */
-    private $type;
+    private CheckboxType $type;
 
     /**
      * {@inheritdoc}

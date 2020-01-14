@@ -19,15 +19,8 @@ class PagerIteratorTest extends TestCase
 {
     use EntityManagerMockTrait;
 
-    /**
-     * @var QueryBuilder
-     */
-    private $queryBuilder;
-
-    /**
-     * @var PagerIterator
-     */
-    private $iterator;
+    private QueryBuilder $queryBuilder;
+    private PagerIterator $iterator;
 
     /**
      * {@inheritdoc}

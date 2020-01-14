@@ -14,10 +14,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class SunsetHandlerTest extends WebTestCase
 {
-    /**
-     * @var SunsetHandler
-     */
-    private $sunsetHandler;
+    private SunsetHandler $sunsetHandler;
 
     /**
      * {@inheritdoc}

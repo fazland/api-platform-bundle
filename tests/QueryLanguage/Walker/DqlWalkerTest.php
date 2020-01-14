@@ -15,15 +15,9 @@ class DqlWalkerTest extends TestCase
 {
     use FixturesTrait;
 
-    /**
-     * @var DqlWalker
-     */
-    private $walker;
+    private DqlWalker $walker;
 
-    /**
-     * @var QueryBuilder
-     */
-    private $queryBuilder;
+    private QueryBuilder $queryBuilder;
 
     protected function setUp(): void
     {

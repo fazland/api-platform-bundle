@@ -32,10 +32,7 @@ class NodeWalker extends AbstractWalker
         'like' => QOMConstants::JCR_OPERATOR_LIKE,
     ];
 
-    /**
-     * @var string|null
-     */
-    private $fieldType;
+    private ?string $fieldType;
 
     public function __construct(string $field, ?string $fieldType = null)
     {

@@ -22,11 +22,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class PatchManager implements PatchManagerInterface
 {
     private FormFactoryInterface $formFactory;
-
     private ValidatorInterface $validator;
-
     private OperationFactory $operationsFactory;
-
     protected ?CacheItemPoolInterface $cache;
 
     public function __construct(FormFactoryInterface $formFactory, ValidatorInterface $validator)

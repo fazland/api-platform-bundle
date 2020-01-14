@@ -8,11 +8,7 @@ namespace Fazland\ApiPlatformBundle\Tests\Fixtures\JSONPointer;
 class TypeHinted
 {
     private $date;
-
-    /**
-     * @var \Countable
-     */
-    private $countable;
+    private ?\Countable $countable;
 
     public function setDate(\DateTimeInterface $date): void
     {
@@ -24,17 +20,11 @@ class TypeHinted
         return $this->date;
     }
 
-    /**
-     * @return \Countable
-     */
-    public function getCountable(): \Countable
+    public function getCountable(): ?\Countable
     {
         return $this->countable;
     }
 
-    /**
-     * @param \Countable $countable
-     */
     public function setCountable(\Countable $countable): void
     {
         $this->countable = $countable;

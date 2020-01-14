@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping\ClassMetadata as ORMClassMetadata;
 class FakeMetadataFactory implements ClassMetadataFactory
 {
     private array $metadata;
-
     private RuntimeReflectionService $reflectionService;
 
     /**

@@ -20,16 +20,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ExceptionControllerTest extends TestCase
 {
+    private SerializationContext $serializationContext;
+    private ExceptionController $controller;
+    private Request $request;
+
     /**
      * @var SerializerInterface|ObjectProphecy
      */
     private object $serializer;
-
-    private SerializationContext $serializationContext;
-
-    private ExceptionController $controller;
-
-    private Request $request;
 
     /**
      * {@inheritdoc}

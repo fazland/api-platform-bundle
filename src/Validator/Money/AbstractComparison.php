@@ -8,9 +8,6 @@ use Symfony\Component\Validator\Constraints\AbstractComparison as BaseAbstractCo
 
 abstract class AbstractComparison extends BaseAbstractComparison
 {
-    /**
-     * @var string
-     */
     public string $currency;
 
     public function __construct($options = null)

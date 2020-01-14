@@ -9,6 +9,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class Query
 {
+    public ?PageToken $pageToken;
+    public ?int $skip;
+    public ?int $limit;
+
     /**
      * @var ExpressionInterface[]
      */
@@ -18,12 +22,6 @@ class Query
      * @Assert\Type(OrderExpression::class)
      */
     public ?OrderExpression $ordering;
-
-    public ?PageToken $pageToken;
-
-    public ?int $skip;
-
-    public ?int $limit;
 
     public function __construct()
     {

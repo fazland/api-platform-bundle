@@ -19,25 +19,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractRequestHandlerTest extends TestCase
 {
-    /**
-     * @var RequestHandlerInterface
-     */
-    protected $requestHandler;
-
-    /**
-     * @var FormFactory
-     */
-    protected $factory;
-
-    /**
-     * @var null|Request
-     */
-    protected $request;
+    protected RequestHandlerInterface $requestHandler;
+    protected FormFactory $factory;
+    protected ?Request $request;
 
     /**
      * @var MockObject|ServerParams
      */
-    protected $serverParams;
+    protected object $serverParams;
 
     protected function setUp(): void
     {

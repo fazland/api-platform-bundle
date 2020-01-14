@@ -66,10 +66,10 @@ class MockPlatform extends AbstractPlatform
      */
     protected function getVarcharTypeDeclarationSQLSnippet($length, $fixed): string
     {
-        return $fixed
-            ? ($length ? 'CHAR('.$length.')' : 'CHAR(255)')
-            : ($length ? 'VARCHAR('.$length.')' : 'VARCHAR(255)')
-        ;
+        $type = $fixed ? 'CHAR' : 'VARCHAR';
+        $length = $length ?? 255;
+
+        return "$type($length)";
     }
 
     /**

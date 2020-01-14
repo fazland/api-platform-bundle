@@ -9,10 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class RemoveOperationTest extends TestCase
 {
-    /**
-     * @var RemoveOperation
-     */
-    private $operation;
+    private RemoveOperation $operation;
 
     /**
      * {@inheritdoc}

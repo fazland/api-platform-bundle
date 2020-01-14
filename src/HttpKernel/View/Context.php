@@ -9,7 +9,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class Context
 {
     private Request $request;
-
     private ?UserInterface $user;
 
     public function __construct(Request $request, TokenStorageInterface $tokenStorage = null)

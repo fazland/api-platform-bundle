@@ -7,10 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 abstract class AccessorArrayAccessTest extends TestCase
 {
-    /**
-     * @var Accessor
-     */
-    protected $propertyAccessor;
+    protected Accessor $propertyAccessor;
 
     /**
      * {@inheritdoc}
