@@ -3,7 +3,6 @@
 namespace Fazland\ApiPlatformBundle\QueryLanguage\Expression\Comparison;
 
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionTrait;
-use Fazland\ApiPlatformBundle\QueryLanguage\Expression\Literal\LiteralExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\TreeWalkerInterface;
 
 abstract class ComparisonExpression implements ComparisonExpressionInterface

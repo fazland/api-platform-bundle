@@ -86,7 +86,7 @@ class PagerIteratorTest extends TestCase
     public function testPagerShouldGenerateFirstPageWithStringToken(): void
     {
         $pager = new PagerIterator(
-            $this->generatePageableInterfaceListFromArray(self::CASE_1, SELF::VALID_UUIDS), ['id' => 'ASC', 'timestamp' => 'ASC']
+            $this->generatePageableInterfaceListFromArray(self::CASE_1, self::VALID_UUIDS), ['id' => 'ASC', 'timestamp' => 'ASC']
         );
         $pager->setPageSize(self::PAGE_SIZE);
 
@@ -112,7 +112,7 @@ class PagerIteratorTest extends TestCase
     public function testPagerShouldGenerateSecondPageWithTokenAndLastPage(): void
     {
         $pager = new PagerIterator(
-            $this->generatePageableInterfaceListFromArray(self::CASE_1, SELF::VALID_UUIDS), ['timestamp' => 'ASC', 'id' => 'ASC']
+            $this->generatePageableInterfaceListFromArray(self::CASE_1, self::VALID_UUIDS), ['timestamp' => 'ASC', 'id' => 'ASC']
         );
         $pager->setPageSize(self::PAGE_SIZE);
 
@@ -138,7 +138,7 @@ class PagerIteratorTest extends TestCase
     public function testPagerShouldGenerateSecondPageWithStringTokenAndLastPage(): void
     {
         $pager = new PagerIterator(
-            $this->generatePageableInterfaceListFromArray(self::CASE_1, SELF::VALID_UUIDS), ['id' => 'ASC', 'timestamp' => 'ASC']
+            $this->generatePageableInterfaceListFromArray(self::CASE_1, self::VALID_UUIDS), ['id' => 'ASC', 'timestamp' => 'ASC']
         );
         $pager->setPageSize(self::PAGE_SIZE);
 
@@ -164,7 +164,7 @@ class PagerIteratorTest extends TestCase
     public function testOffsetShouldWork(): void
     {
         $pager = new PagerIterator(
-            $this->generatePageableInterfaceListFromArray(self::CASE_2, SELF::VALID_UUIDS), ['timestamp' => 'ASC', 'id' => 'ASC']
+            $this->generatePageableInterfaceListFromArray(self::CASE_2, self::VALID_UUIDS), ['timestamp' => 'ASC', 'id' => 'ASC']
         );
         $pager->setPageSize(self::PAGE_SIZE);
 
@@ -202,7 +202,7 @@ class PagerIteratorTest extends TestCase
     public function testPagerShouldReturnFirstPageWithTimestampDifference(): void
     {
         $pager = new PagerIterator(
-            $this->generatePageableInterfaceListFromArray(self::CASE_1, SELF::VALID_UUIDS, '+2 hours'), ['timestamp' => 'ASC', 'id' => 'ASC']
+            $this->generatePageableInterfaceListFromArray(self::CASE_1, self::VALID_UUIDS, '+2 hours'), ['timestamp' => 'ASC', 'id' => 'ASC']
         );
         $pager->setPageSize(self::PAGE_SIZE);
 

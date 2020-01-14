@@ -3,7 +3,6 @@
 namespace Fazland\ApiPlatformBundle\Tests\PatchManager;
 
 use Fazland\ApiPlatformBundle\PatchManager\Exception\UnknownOperationException;
-use Fazland\ApiPlatformBundle\PatchManager\Operation\OperationInterface;
 use Fazland\ApiPlatformBundle\PatchManager\OperationFactory;
 use PHPUnit\Framework\TestCase;
 

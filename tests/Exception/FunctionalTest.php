@@ -10,7 +10,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class FunctionalTest extends WebTestCase
 {
-
     /**
      * {@inheritdoc}
      */
