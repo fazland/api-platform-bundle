@@ -33,7 +33,7 @@ abstract class TestKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return \dirname((new \ReflectionClass($this))->getFileName()).'/var/cache/'.$this->environment;
     }

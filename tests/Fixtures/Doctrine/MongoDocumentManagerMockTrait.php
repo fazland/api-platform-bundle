@@ -46,6 +46,7 @@ trait MongoDocumentManagerMockTrait
         if (null === $this->documentManager) {
             $mongoDb = null;
 
+            /** @var \MongoClient|ObjectProphecy $server */
             $server = $this->prophesize(\MongoClient::class);
             $server->getReadPreference()->willReturn(['type' => \MongoClient::RP_PRIMARY]);
             $server->getWriteConcern()->willReturn([
@@ -60,7 +61,9 @@ trait MongoDocumentManagerMockTrait
 
                 return $mongoDb = new \MongoDB($this->reveal(), $dbName);
             });
-            $server->getClient()->willReturn($this->client = $this->prophesize(Client::class));
+
+            $this->client = $this->prophesize(Client::class);
+            $server->getClient()->willReturn($this->client);
 
             $this->client->selectDatabase('doctrine', Argument::any())
                 ->willReturn($this->database = $this->prophesize(Database::class))
