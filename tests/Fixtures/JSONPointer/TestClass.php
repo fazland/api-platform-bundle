@@ -33,29 +33,14 @@ class TestClass
         $this->publicGetter = $value;
     }
 
-    public function setPublicAccessor($value)
-    {
-        $this->publicAccessor = $value;
-    }
-
-    public function setPublicAccessorWithDefaultValue($value = null)
-    {
-        $this->publicAccessorWithDefaultValue = $value;
-    }
-
-    public function setPublicAccessorWithRequiredAndDefaultValue($value, $optional = null)
-    {
-        $this->publicAccessorWithRequiredAndDefaultValue = $value;
-    }
-
-    public function setPublicAccessorWithMoreRequiredParameters($value, $needed)
-    {
-        $this->publicAccessorWithMoreRequiredParameters = $value;
-    }
-
     public function getPublicAccessor()
     {
         return $this->publicAccessor;
+    }
+
+    public function setPublicAccessor($value): void
+    {
+        $this->publicAccessor = $value;
     }
 
     public function getPublicAccessorWithDefaultValue()
@@ -63,9 +48,19 @@ class TestClass
         return $this->publicAccessorWithDefaultValue;
     }
 
+    public function setPublicAccessorWithDefaultValue($value = null): void
+    {
+        $this->publicAccessorWithDefaultValue = $value;
+    }
+
     public function getPublicAccessorWithRequiredAndDefaultValue()
     {
         return $this->publicAccessorWithRequiredAndDefaultValue;
+    }
+
+    public function setPublicAccessorWithRequiredAndDefaultValue($value, $optional = null): void
+    {
+        $this->publicAccessorWithRequiredAndDefaultValue = $value;
     }
 
     public function getPublicAccessorWithMoreRequiredParameters()
@@ -73,9 +68,9 @@ class TestClass
         return $this->publicAccessorWithMoreRequiredParameters;
     }
 
-    public function setPublicIsAccessor($value)
+    public function setPublicAccessorWithMoreRequiredParameters($value, $needed): void
     {
-        $this->publicIsAccessor = $value;
+        $this->publicAccessorWithMoreRequiredParameters = $value;
     }
 
     public function isPublicIsAccessor()
@@ -83,14 +78,19 @@ class TestClass
         return $this->publicIsAccessor;
     }
 
-    public function setPublicHasAccessor($value)
+    public function setPublicIsAccessor($value): void
     {
-        $this->publicHasAccessor = $value;
+        $this->publicIsAccessor = $value;
     }
 
     public function hasPublicHasAccessor()
     {
         return $this->publicHasAccessor;
+    }
+
+    public function setPublicHasAccessor($value): void
+    {
+        $this->publicHasAccessor = $value;
     }
 
     public function publicGetSetter($value = null)
@@ -107,58 +107,58 @@ class TestClass
         return $this->publicGetSetter;
     }
 
-    protected function setProtectedAccessor($value)
-    {
-    }
-
-    protected function getProtectedAccessor()
+    protected function getProtectedAccessor(): string
     {
         return 'foobar';
     }
 
-    protected function setProtectedIsAccessor($value)
+    protected function setProtectedAccessor($value): void
     {
     }
 
-    protected function isProtectedIsAccessor()
+    protected function isProtectedIsAccessor(): string
     {
         return 'foobar';
     }
 
-    protected function setProtectedHasAccessor($value)
+    protected function setProtectedIsAccessor($value): void
     {
     }
 
-    protected function hasProtectedHasAccessor()
+    protected function hasProtectedHasAccessor(): string
     {
         return 'foobar';
     }
 
-    private function setPrivateAccessor($value)
+    protected function setProtectedHasAccessor($value): void
     {
     }
 
-    private function getPrivateAccessor()
+    private function getPrivateAccessor(): string
     {
         return 'foobar';
     }
 
-    private function setPrivateIsAccessor($value)
+    private function setPrivateAccessor($value): void
     {
     }
 
-    private function isPrivateIsAccessor()
+    private function isPrivateIsAccessor(): string
     {
         return 'foobar';
     }
 
-    private function setPrivateHasAccessor($value)
+    private function setPrivateIsAccessor($value): void
     {
     }
 
-    private function hasPrivateHasAccessor()
+    private function hasPrivateHasAccessor(): string
     {
         return 'foobar';
+    }
+
+    private function setPrivateHasAccessor($value): void
+    {
     }
 
     public function getPublicGetter()
@@ -166,13 +166,13 @@ class TestClass
         return $this->publicGetter;
     }
 
-    public function setDate(\DateTimeInterface $date)
-    {
-        $this->date = $date;
-    }
-
-    public function getDate()
+    public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): void
+    {
+        $this->date = $date;
     }
 }

@@ -38,7 +38,8 @@ class ProcessorTest extends TestCase
         $formFactory = (new FormFactoryBuilder(true))
             ->addExtension(new ValidatorExtension((new ValidatorBuilder())->getValidator()))
             ->addTypeExtension(new FormTypeHttpFoundationExtension(new AutoSubmitRequestHandler()))
-            ->getFormFactory();
+            ->getFormFactory()
+        ;
 
         $this->processor = new Processor(
             self::$documentManager->getRepository(User::class)->createQueryBuilder('u'),
