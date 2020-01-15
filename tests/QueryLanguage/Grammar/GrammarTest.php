@@ -74,6 +74,14 @@ class GrammarTest extends TestCase
         yield ['$gte(2019-10-14T02:00:00.000Z)', new Expression\Comparison\GreaterThanOrEqualExpression(
             Expression\Literal\LiteralExpression::create('2019-10-14T02:00:00.000Z')
         )];
+
+        // Not as first parameter of $and expression
+        yield ['$and($not(5), 8)', Expression\Logical\AndExpression::create([
+            Expression\Logical\NotExpression::create(
+                new Expression\Comparison\EqualExpression(Expression\Literal\LiteralExpression::create('5'))
+            ),
+            new Expression\Comparison\EqualExpression(Expression\Literal\LiteralExpression::create('8')),
+        ])];
     }
 
     /**
