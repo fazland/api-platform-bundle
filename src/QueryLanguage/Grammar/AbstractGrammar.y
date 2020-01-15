@@ -40,11 +40,7 @@ argument_list    : /* empty */                              { $$ = []; }
                  | unary_expression                         { $$ = [ $1 ]; }
                  | binary_expression                        { $$ = [ $1 ]; }
                  | variadic_expression                      { $$ = [ $1 ]; }
-                 | argument_list ',' equality_expression    { $$[] = $3; }
-                 | argument_list ',' not_expression         { $$[] = $3; }
-                 | argument_list ',' unary_expression       { $$[] = $3; }
-                 | argument_list ',' binary_expression      { $$[] = $3; }
-                 | argument_list ',' variadic_expression    { $$[] = $3; }
+                 | argument_list ',' expression             { $$[] = $3; }
                  ;
 
 variadic_expression : variadic '(' argument_list ')' { $$ = $this->variadicExpression($1, $3); }
