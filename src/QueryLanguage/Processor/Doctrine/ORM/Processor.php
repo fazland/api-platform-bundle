@@ -6,87 +6,46 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Fazland\ApiPlatformBundle\Pagination\Doctrine\ORM\PagerIterator;
-use Fazland\ApiPlatformBundle\QueryLanguage\Expression\OrderExpression;
-use Fazland\ApiPlatformBundle\QueryLanguage\Form\DTO\Query;
-use Fazland\ApiPlatformBundle\QueryLanguage\Form\QueryType;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\ColumnInterface;
+use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\AbstractProcessor;
 use Fazland\DoctrineExtra\ObjectIteratorInterface;
 use Fazland\DoctrineExtra\ORM\EntityIterator;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class Processor
+class Processor extends AbstractProcessor
 {
     private string $rootAlias;
     private QueryBuilder $queryBuilder;
     private EntityManagerInterface $entityManager;
     private ClassMetadata $rootEntity;
-    private FormFactoryInterface $formFactory;
-    private array $options;
-
-    /**
-     * @var ColumnInterface[]
-     */
-    private array $columns;
 
     public function __construct(QueryBuilder $queryBuilder, FormFactoryInterface $formFactory, array $options = [])
     {
+        parent::__construct($formFactory, $options);
+
         $this->queryBuilder = $queryBuilder;
         $this->entityManager = $this->queryBuilder->getEntityManager();
-        $this->formFactory = $formFactory;
-        $this->columns = [];
 
-        $this->options = $this->resolveOptions($options);
         $this->rootAlias = $this->queryBuilder->getRootAliases()[0];
         $this->rootEntity = $this->entityManager->getClassMetadata($this->queryBuilder->getRootEntities()[0]);
     }
 
     /**
-     * Adds a column to this list processor.
-     *
-     * @param string                $name
-     * @param array|ColumnInterface $options
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function addColumn(string $name, $options = []): self
+    protected function createColumn(string $fieldName): ColumnInterface
     {
-        if ($options instanceof ColumnInterface) {
-            $this->columns[$name] = $options;
+        return new Column($fieldName, $this->rootAlias, $this->rootEntity, $this->entityManager);
+    }
 
-            return $this;
-        }
-
-        $resolver = new OptionsResolver();
-        $options = $resolver
-            ->setDefaults([
-                'field_name' => $name,
-                'walker' => null,
-                'validation_walker' => null,
-            ])
-            ->setAllowedTypes('field_name', 'string')
-            ->setAllowedTypes('walker', ['null', 'string', 'callable'])
-            ->setAllowedTypes('validation_walker', ['null', 'string', 'callable'])
-            ->resolve($options)
-        ;
-
-        $column = new Column($options['field_name'], $this->rootAlias, $this->rootEntity, $this->entityManager);
-
-        if (null !== $options['walker']) {
-            $column->customWalker = $options['walker'];
-        }
-
-        if (null !== $options['validation_walker']) {
-            $column->validationWalker = $options['validation_walker'];
-        }
-
-        $this->columns[$name] = $column;
-
-        return $this;
+    /**
+     * {@inheritdoc}
+     */
+    protected function getIdentifierFieldNames(): array
+    {
+        return $this->rootEntity->getIdentifierColumnNames();
     }
 
     /**
@@ -122,33 +81,6 @@ class Processor
     }
 
     /**
-     * @param Request $request
-     *
-     * @return Query|FormInterface
-     */
-    private function handleRequest(Request $request)
-    {
-        $dto = new Query();
-        $form = $this->formFactory->createNamed('', QueryType::class, $dto, [
-            'limit_field' => $this->options['limit_field'],
-            'skip_field' => $this->options['skip_field'],
-            'order_field' => $this->options['order_field'],
-            'continuation_token_field' => $this->options['continuation_token']['field'] ?? null,
-            'columns' => $this->columns,
-            'orderable_columns' => \array_keys(\array_filter($this->columns, static function (ColumnInterface $column): bool {
-                return $column instanceof Column;
-            })),
-        ]);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && ! $form->isValid()) {
-            return $form;
-        }
-
-        return $dto;
-    }
-
-    /**
      * Add conditions to query builder.
      *
      * @param array $filters
@@ -161,76 +93,5 @@ class Processor
             $column = $this->columns[$key];
             $column->addCondition($this->queryBuilder, $expr);
         }
-    }
-
-    /**
-     * Parses the ordering expression for continuation token.
-     *
-     * @param OrderExpression $ordering
-     *
-     * @return array
-     */
-    private function parseOrderings(OrderExpression $ordering): array
-    {
-        $checksumColumn = $this->rootEntity->getIdentifierColumnNames()[0];
-        if (isset($this->options['continuation_token']['checksum_field'])) {
-            $checksumColumn = $this->options['continuation_token']['checksum_field'];
-            if (! $this->columns[$checksumColumn] instanceof Column) {
-                throw new \InvalidArgumentException(\sprintf('%s is not a valid field for checksum', $this->options['continuation_token']['checksum_field']));
-            }
-
-            $checksumColumn = $this->columns[$checksumColumn]->fieldName;
-        }
-
-        $fieldName = $this->columns[$ordering->getField()]->fieldName;
-        $direction = $ordering->getDirection();
-
-        return [
-            $fieldName => $direction,
-            $checksumColumn => 'ASC',
-        ];
-    }
-
-    /**
-     * Resolves options for this processor.
-     *
-     * @param array $options
-     *
-     * @return array
-     */
-    private function resolveOptions(array $options): array
-    {
-        $resolver = new OptionsResolver();
-
-        foreach (['order_field', 'skip_field', 'limit_field'] as $field) {
-            $resolver
-                ->setDefault($field, null)
-                ->setAllowedTypes($field, ['null', 'string'])
-            ;
-        }
-
-        $resolver
-            ->setDefault('continuation_token', [
-                'field' => 'continue',
-                'checksum_field' => null,
-            ])
-            ->setAllowedTypes('continuation_token', ['bool', 'array'])
-            ->setNormalizer('continuation_token', function (Options $options, $value): array {
-                if (true === $value) {
-                    return [
-                        'field' => 'continue',
-                        'checksum_field' => null,
-                    ];
-                }
-
-                if (! isset($value['field'])) {
-                    throw new InvalidOptionsException('Continuation token field must be set');
-                }
-
-                return $value;
-            })
-        ;
-
-        return $resolver->resolve($options);
     }
 }
