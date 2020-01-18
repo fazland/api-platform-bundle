@@ -198,6 +198,43 @@ class ProcessorTest extends TestCase
         self::assertEquals('donald duck', $result[0]->name);
     }
 
+    public function provideParamsForPageSize(): iterable
+    {
+        yield [ [] ];
+        yield [ ['order' => '$order(name)'] ];
+        yield [ ['order' => '$order(name)', 'continue' => '=YmF6_1_10tf9ny'] ];
+    }
+
+    /**
+     * @dataProvider provideParamsForPageSize
+     */
+    public function testPageSizeOptionShouldWork(array $params): void
+    {
+        $formFactory = (new FormFactoryBuilder(true))
+            ->addExtension(new ValidatorExtension((new ValidatorBuilder())->getValidator()))
+            ->addTypeExtension(new FormTypeHttpFoundationExtension(new AutoSubmitRequestHandler()))
+            ->getFormFactory();
+
+        $this->processor = new Processor(
+            self::$documentManager->getRepository(User::class)->createQueryBuilder('u'),
+            self::$documentManager,
+            $formFactory,
+            [
+                'order_field' => 'order',
+                'continuation_token' => true,
+                'default_page_size' => 3,
+            ]
+        );
+
+        $this->processor->addColumn('name');
+        $itr = $this->processor->processRequest(new Request($params));
+
+        self::assertInstanceOf(ObjectIteratorInterface::class, $itr);
+        $result = \iterator_to_array($itr);
+
+        self::assertCount(3, $result);
+    }
+
     public function testCustomColumnWorks(): void
     {
         $this->processor->addColumn('foobar', new class(self::$documentManager) implements ColumnInterface {

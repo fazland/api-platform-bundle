@@ -4,6 +4,7 @@ namespace Fazland\ApiPlatformBundle\Tests\QueryLanguage\Processor\Doctrine\ORM;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Fazland\ApiPlatformBundle\Form\Extension\AutoSubmitRequestHandler;
+use Fazland\ApiPlatformBundle\Pagination\PagerIterator;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\ExpressionInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\ColumnInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\ORM\Processor;
@@ -34,7 +35,11 @@ class ProcessorTest extends TestCase
 
         $this->processor = new Processor(
             self::$entityManager->getRepository(User::class)->createQueryBuilder('u'),
-            $formFactory
+            $formFactory,
+            [
+                'order_field' => 'order',
+                'continuation_token' => true,
+            ],
         );
     }
 
@@ -77,6 +82,28 @@ class ProcessorTest extends TestCase
         self::assertCount(1, $result);
         self::assertInstanceOf(User::class, $result[0]);
         self::assertEquals('donald duck', $result[0]->name);
+    }
+
+    public function provideParamsForPageSize(): iterable
+    {
+        yield [ [] ];
+        yield [ ['order' => '$order(name)'] ];
+        yield [ ['order' => '$order(name)', 'continue' => '=YmF6_1_10tf9ny'] ];
+    }
+
+    /**
+     * @dataProvider provideParamsForPageSize
+     */
+    public function testPageSizeOptionShouldWork(array $params): void
+    {
+        $this->processor->addColumn('name');
+        $this->processor->setDefaultPageSize(3);
+        $itr = $this->processor->processRequest(new Request($params));
+
+        self::assertInstanceOf(ObjectIteratorInterface::class, $itr);
+        $result = \iterator_to_array($itr);
+
+        self::assertCount(3, $result);
     }
 
     public function testCustomColumnWorks(): void
