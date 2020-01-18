@@ -31,6 +31,16 @@ abstract class AbstractProcessor
     }
 
     /**
+     * Sets the default page size (will be used if limit is disabled or not passed by the user).
+     *
+     * @param int|null $size
+     */
+    public function setDefaultPageSize(?int $size): void
+    {
+        $this->options['default_page_size'] = $size;
+    }
+
+    /**
      * Adds a column to this list processor.
      *
      * @param string                $name
@@ -166,6 +176,8 @@ abstract class AbstractProcessor
         }
 
         $resolver
+            ->setDefault('default_page_size', null)
+            ->setAllowedTypes('default_page_size', ['null', 'int'])
             ->setDefault('continuation_token', [
                 'field' => 'continue',
                 'checksum_field' => null,

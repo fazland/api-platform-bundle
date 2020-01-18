@@ -61,20 +61,24 @@ class Processor extends AbstractProcessor
         }
 
         $this->attachToQueryBuilder($result->filters);
+        $pageSize = $this->options['default_page_size'] ?? $result->limit;
 
         if (null !== $result->skip) {
             $this->queryBuilder->setFirstResult($result->skip);
         }
 
-        if (null !== $result->limit) {
-            $this->queryBuilder->setMaxResults($result->limit);
-        }
-
         if (null !== $result->ordering) {
             $iterator = new PagerIterator($this->queryBuilder, $this->parseOrderings($result->ordering));
             $iterator->setToken($result->pageToken);
+            if (null !== $pageSize) {
+                $iterator->setPageSize($pageSize);
+            }
 
             return $iterator;
+        }
+
+        if (null !== $pageSize) {
+            $this->queryBuilder->setMaxResults($pageSize);
         }
 
         return new EntityIterator($this->queryBuilder);
