@@ -14,7 +14,7 @@ class StringToExpresionTransformer implements DataTransformerInterface
 
     public function __construct(?Grammar $grammar = null)
     {
-        $this->grammar = $grammar ?? new Grammar();
+        $this->grammar = $grammar ?? Grammar::getInstance();
     }
 
     /**

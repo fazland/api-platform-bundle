@@ -3,6 +3,7 @@
 namespace Fazland\ApiPlatformBundle\QueryLanguage\Form;
 
 use Fazland\ApiPlatformBundle\Form\PageTokenType;
+use Fazland\ApiPlatformBundle\QueryLanguage\Expression\OrderExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Form\DTO\Query;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\ColumnInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Validator\Expression;
@@ -10,6 +11,8 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\OrderWalker;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,11 +26,29 @@ class QueryType extends AbstractType
     {
         if (null !== $options['order_field']) {
             $builder->add($options['order_field'], FieldType::class, [
+                'data_class' => null,
                 'property_path' => 'ordering',
                 'constraints' => [
                     new Expression(new OrderWalker($options['orderable_columns'])),
                 ],
             ]);
+
+            if (isset($options['default_order'])) {
+                $default = $options['default_order'];
+                $field = $options['order_field'];
+                $builder->addEventListener(
+                    FormEvents::PRE_SUBMIT,
+                    static function (FormEvent $event) use ($default, $field): void {
+                        $data = $event->getData();
+                        if (isset($data[$field])) {
+                            return;
+                        }
+
+                        $data[$field] = $default;
+                        $event->setData($data);
+                    }
+                );
+            }
         }
 
         if (null !== $options['continuation_token_field']) {
@@ -65,9 +86,10 @@ class QueryType extends AbstractType
                 'limit_field' => null,
                 'continuation_token_field' => null,
                 'order_field' => null,
+                'default_order' => null,
                 'allow_extra_fields' => true,
                 'method' => Request::METHOD_GET,
-                'orderable_columns' => function (Options $options) {
+                'orderable_columns' => static function (Options $options) {
                     return \array_keys($options['columns']);
                 },
             ])
@@ -75,6 +97,7 @@ class QueryType extends AbstractType
             ->setAllowedTypes('limit_field', ['null', 'string'])
             ->setAllowedTypes('continuation_token_field', ['null', 'string'])
             ->setAllowedTypes('order_field', ['null', 'string'])
+            ->setAllowedTypes('default_order', ['null', OrderExpression::class])
             ->setRequired('columns')
         ;
     }

@@ -5,6 +5,7 @@ namespace Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine;
 use Fazland\ApiPlatformBundle\QueryLanguage\Expression\OrderExpression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Form\DTO\Query;
 use Fazland\ApiPlatformBundle\QueryLanguage\Form\QueryType;
+use Fazland\ApiPlatformBundle\QueryLanguage\Grammar\Grammar;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\ColumnInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\ORM\Column as ORMColumn;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\PhpCr\Column as PhpCrColumn;
@@ -98,6 +99,7 @@ abstract class AbstractProcessor
             'limit_field' => $this->options['limit_field'],
             'skip_field' => $this->options['skip_field'],
             'order_field' => $this->options['order_field'],
+            'default_order' => $this->options['default_order'],
             'continuation_token_field' => $this->options['continuation_token']['field'] ?? null,
             'columns' => $this->columns,
             'orderable_columns' => \array_keys(\array_filter($this->columns, static function (ColumnInterface $column): bool {
@@ -168,7 +170,7 @@ abstract class AbstractProcessor
     {
         $resolver = new OptionsResolver();
 
-        foreach (['order_field', 'skip_field', 'limit_field'] as $field) {
+        foreach (['order_field', 'skip_field', 'limit_field', 'default_order'] as $field) {
             $resolver
                 ->setDefault($field, null)
                 ->setAllowedTypes($field, ['null', 'string'])
@@ -196,6 +198,24 @@ abstract class AbstractProcessor
                 }
 
                 return $value;
+            })
+            ->setNormalizer('default_order', static function (Options $options, $value): ?OrderExpression {
+                if (empty($value)) {
+                    return null;
+                }
+
+                if (false === \strpos($value, '$')) {
+                    $value = '$order('.$value.')';
+                }
+
+                $grammar = Grammar::getInstance();
+                $expression = $grammar->parse($value);
+
+                if (! $expression instanceof OrderExpression) {
+                    throw new InvalidOptionsException('Invalid default order specified');
+                }
+
+                return $expression;
             })
         ;
 
