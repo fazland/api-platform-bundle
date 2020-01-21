@@ -18,7 +18,9 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\HttpFoundation\Type\FormTypeHttpFoundationExtension;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\FormFactoryBuilder;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\Validator\ValidatorBuilder;
 
 class ProcessorTest extends TestCase
@@ -200,9 +202,9 @@ class ProcessorTest extends TestCase
 
     public function provideParamsForPageSize(): iterable
     {
-        yield [ [] ];
-        yield [ ['order' => '$order(name)'] ];
-        yield [ ['order' => '$order(name)', 'continue' => '=YmF6_1_10tf9ny'] ];
+        yield [[]];
+        yield [['order' => '$order(name)']];
+        yield [['order' => '$order(name)', 'continue' => '=YmF6_1_10tf9ny']];
     }
 
     /**
@@ -233,6 +235,70 @@ class ProcessorTest extends TestCase
         $result = \iterator_to_array($itr);
 
         self::assertCount(3, $result);
+    }
+
+    public function testOrderByDefaultFieldShouldThrowOnInvalidOptions(): void
+    {
+        $this->expectException(InvalidOptionsException::class);
+        $formFactory = (new FormFactoryBuilder(true))
+            ->addExtension(new ValidatorExtension((new ValidatorBuilder())->getValidator()))
+            ->addTypeExtension(new FormTypeHttpFoundationExtension(new AutoSubmitRequestHandler()))
+            ->getFormFactory();
+
+        $this->processor = new Processor(
+            self::$documentManager->getRepository(User::class)->createQueryBuilder('u'),
+            self::$documentManager,
+            $formFactory,
+            [
+                'default_order' => '$eq(name)',
+                'order_field' => 'order',
+                'continuation_token' => true,
+            ],
+        );
+
+        $this->processor->addColumn('name');
+        $this->processor->setDefaultPageSize(3);
+        $this->processor->processRequest(new Request([]));
+    }
+
+    public function provideParamsForDefaultOrder(): iterable
+    {
+        yield [true, '$order(name)'];
+        yield [true, 'name'];
+        yield [true, 'name, desc'];
+        yield [false, '$order(nonexistent, asc)'];
+    }
+
+    /**
+     * @dataProvider provideParamsForDefaultOrder
+     */
+    public function testOrderByDefaultFieldShouldWork(bool $valid, string $defaultOrder): void
+    {
+        $formFactory = (new FormFactoryBuilder(true))
+            ->addExtension(new ValidatorExtension((new ValidatorBuilder())->getValidator()))
+            ->addTypeExtension(new FormTypeHttpFoundationExtension(new AutoSubmitRequestHandler()))
+            ->getFormFactory();
+
+        $this->processor = new Processor(
+            self::$documentManager->getRepository(User::class)->createQueryBuilder('u'),
+            self::$documentManager,
+            $formFactory,
+            [
+                'default_order' => $defaultOrder,
+                'order_field' => 'order',
+                'continuation_token' => true,
+            ],
+        );
+
+        $this->processor->addColumn('name');
+        $this->processor->setDefaultPageSize(3);
+        $itr = $this->processor->processRequest(new Request([]));
+
+        if (! $valid) {
+            self::assertInstanceOf(FormInterface::class, $itr);
+        } else {
+            self::assertInstanceOf(PagerIterator::class, $itr);
+        }
     }
 
     public function testCustomColumnWorks(): void

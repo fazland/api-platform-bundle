@@ -12,6 +12,22 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Expression\OrderExpression;
 
 final class Grammar extends AbstractGrammar
 {
+    private static ?self $instance = null;
+
+    /**
+     * Gets the Grammar class singleton.
+     *
+     * @return self
+     */
+    public static function getInstance(): self
+    {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
     /**
      * Parses an expression into an AST.
      *
