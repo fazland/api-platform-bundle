@@ -28,10 +28,10 @@ class ApiPlatformExtension extends Extension
         }
 
         if ($config['versioning']['accept_header']['enabled']) {
+            $loader->load('accept_header_parser.xml');
+
             $container->setParameter('fazland_api.versioning.accept_header.default_type', $config['versioning']['accept_header']['default_type']);
             $container->setParameter('fazland_api.versioning.accept_header.uris', $config['versioning']['accept_header']['uris']);
-
-            $loader->load('accept_header_parser.xml');
         }
 
         $loader->load('patch_manager.xml');
@@ -45,8 +45,8 @@ class ApiPlatformExtension extends Extension
         }
 
         if ($config['catch_exceptions']) {
-            $container->setParameter('kernel.error_controller', ExceptionController::class);
             $loader->load('exception.xml');
+            $container->setParameter('kernel.error_controller', ExceptionController::class);
         }
 
         if ($config['cors']['enabled']) {
