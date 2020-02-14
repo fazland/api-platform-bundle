@@ -4,11 +4,12 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="Fazland\ApiPlatformBundle\Controller\ExceptionController" public="true">
+        <service id="Fazland\ApiPlatformBundle\ErrorRenderer\SerializerErrorRenderer" decorates="error_renderer">
+            <argument type="service" id="Fazland\ApiPlatformBundle\ErrorRenderer\SerializerErrorRenderer.inner" />
+            <argument type="service" id="request_stack" />
             <argument type="service" id="kcs_serializer.serializer" />
             <argument type="service" id="fazland_api.view_serialization_context.prototype" />
             <argument>%kernel.debug%</argument>
         </service>
-        <service alias="Fazland\ApiPlatformBundle\Controller\ExceptionController" id="fazland_api.exception_controller" public="true" />
     </services>
 </container>

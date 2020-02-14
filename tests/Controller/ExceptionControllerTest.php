@@ -2,7 +2,7 @@
 
 namespace Fazland\ApiPlatformBundle\Tests\Controller;
 
-use Fazland\ApiPlatformBundle\Controller\ExceptionController;
+use Fazland\ApiPlatformBundle\ErrorRenderer\SerializerErrorRenderer;
 use Fazland\ApiPlatformBundle\HttpKernel\Exception\DebugSerializableException;
 use Fazland\ApiPlatformBundle\HttpKernel\Exception\SerializableException;
 use Kcs\Serializer\Exception\UnsupportedFormatException;
@@ -11,8 +11,10 @@ use Kcs\Serializer\SerializerInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\ErrorHandler\Exception\FlattenException;
+use Symfony\Component\ErrorHandler\ErrorRenderer\ErrorRendererInterface;
+use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -21,13 +23,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class ExceptionControllerTest extends TestCase
 {
     private SerializationContext $serializationContext;
-    private ExceptionController $controller;
+    private SerializerErrorRenderer $renderer;
     private Request $request;
+    private ErrorRendererInterface $fallbackErrorRenderer;
 
     /**
      * @var SerializerInterface|ObjectProphecy
      */
-    private object $serializer;
+    private ObjectProphecy $serializer;
 
     /**
      * {@inheritdoc}
@@ -40,53 +43,61 @@ class ExceptionControllerTest extends TestCase
         $this->request->setRequestFormat('json');
         $this->request->headers->set('X-Php-Ob-Level', \count($status));
 
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+
+        $this->fallbackErrorRenderer = new HtmlErrorRenderer(false);
+
         $this->serializer = $this->prophesize(SerializerInterface::class);
         $this->serializationContext = SerializationContext::create();
 
-        $this->controller = new ExceptionController($this->serializer->reveal(), $this->serializationContext, false);
+        $this->renderer = new SerializerErrorRenderer($this->fallbackErrorRenderer, $requestStack, $this->serializer->reveal(), $this->serializationContext, false);
     }
 
     public function testShouldSerializeDebugExceptionIfDebugIsEnabled(): void
     {
-        $this->serializer->serialize(Argument::cetera())->willReturn();
-        $controller = new ExceptionController($this->serializer->reveal(), $this->serializationContext, true);
-
-        $response = $controller($this->request, FlattenException::create(new NotFoundHttpException()));
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
 
         $this->serializer
             ->serialize(Argument::type(DebugSerializableException::class), 'json', $this->serializationContext)
-            ->shouldHaveBeenCalled()
+            ->shouldBeCalled()
+            ->willReturn('{}')
         ;
 
-        self::assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        $renderer = new SerializerErrorRenderer($this->fallbackErrorRenderer, $requestStack, $this->serializer->reveal(), $this->serializationContext, true);
+        $flatten = $renderer->render(new NotFoundHttpException());
+
+        self::assertEquals(Response::HTTP_NOT_FOUND, $flatten->getStatusCode());
+        self::assertEquals('{}', $flatten->getAsString());
     }
 
     public function testShouldSerializeException(): void
     {
         $this->serializer->serialize(Argument::cetera())->willReturn();
-        $response = ($this->controller)($this->request, FlattenException::create(new AccessDeniedHttpException()));
+        $flatten = $this->renderer->render(new AccessDeniedHttpException());
 
         $this->serializer
             ->serialize(Argument::type(SerializableException::class), 'json', $this->serializationContext)
             ->shouldHaveBeenCalled()
         ;
 
-        self::assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        self::assertEquals(Response::HTTP_FORBIDDEN, $flatten->getStatusCode());
     }
 
-    public function testShouldReturnATextResponseIfFormatIsNotSerializable(): void
+    public function testShouldCallTheFallbackRendererIfFormatIsNotSerializable(): void
     {
         $this->serializer->serialize(Argument::cetera())->willThrow(new UnsupportedFormatException());
         $this->request->setRequestFormat('md');
 
-        $response = ($this->controller)($this->request, FlattenException::create(new BadRequestHttpException('A message.')));
+        $flatten = $this->renderer->render(new BadRequestHttpException('A message.'));
 
         $this->serializer
             ->serialize(Argument::type(SerializableException::class), 'md', $this->serializationContext)
             ->shouldHaveBeenCalled()
         ;
 
-        self::assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        self::assertEquals('An error has occurred: Bad Request', $response->getContent());
+        self::assertEquals(Response::HTTP_BAD_REQUEST, $flatten->getStatusCode());
+        self::assertStringContainsString('The server returned a "400 Bad Request".', $flatten->getAsString());
     }
 }

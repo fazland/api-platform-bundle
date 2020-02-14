@@ -82,6 +82,6 @@ class ApiPlatformBundleTest extends WebTestCase
         $response = $client->getResponse();
 
         self::assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
-        self::assertEquals('An error has occurred: Internal Server Error', $response->getContent());
+        self::assertStringContainsString('The server returned a "500 Internal Server Error".', $response->getContent());
     }
 }
