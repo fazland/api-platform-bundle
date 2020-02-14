@@ -7,29 +7,31 @@ use Fazland\ApiPlatformBundle\Negotiation\VersionAwareNegotiator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Routing\Exception\NoConfigurationException;
 
 class AcceptHeaderParser implements EventSubscriberInterface
 {
     private string $defaultType;
+    private bool $debug;
 
     /**
      * @var string[]
      */
     private array $uris;
 
-    public function __construct(string $defaultType = 'application/json', array $uris = ['.*'])
+    public function __construct(string $defaultType = 'application/json', array $uris = ['.*'], bool $debug = false)
     {
         if (empty($uris)) {
             throw new \InvalidArgumentException('URIs argument cannot be empty');
         }
 
         $this->defaultType = $defaultType;
-
-        $this->uris = \array_map(function (string $uri): string {
-            return '#'.\str_replace('#', '\\#', $uri).'#i';
-        }, $uris);
+        $this->debug = $debug;
+        $this->uris = \array_map(static fn (string $uri): string => '#'.\str_replace('#', '\\#', $uri).'#i', $uris);
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -62,6 +64,19 @@ class AcceptHeaderParser implements EventSubscriberInterface
         $request->attributes->set('_version', $version);
     }
 
+    public function onKernelException(ExceptionEvent $event): void
+    {
+        if (! $this->debug || !($e = $event->getThrowable()) instanceof NotFoundHttpException) {
+            return;
+        }
+
+        if ($e->getPrevious() instanceof NoConfigurationException) {
+            $request = $event->getRequest();
+            $request->attributes->set('_format', 'html');
+            $request->setRequestFormat('html');
+        }
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -69,6 +84,7 @@ class AcceptHeaderParser implements EventSubscriberInterface
     {
         return [
             KernelEvents::REQUEST => ['onKernelRequest', 40],
+            KernelEvents::EXCEPTION => ['onKernelException', 250],
         ];
     }
 

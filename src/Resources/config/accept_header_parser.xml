@@ -16,6 +16,7 @@
             <tag name="kernel.event_subscriber" />
             <argument>%fazland_api.versioning.accept_header.default_type%</argument>
             <argument>%fazland_api.versioning.accept_header.uris%</argument>
+            <argument>%kernel.debug%</argument>
         </service>
     </services>
 </container>
