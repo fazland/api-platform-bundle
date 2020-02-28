@@ -15,6 +15,11 @@ use Symfony\Component\Routing\Exception\NoConfigurationException;
 
 class AcceptHeaderParser implements EventSubscriberInterface
 {
+    protected const FORMAT_PRIORITIES = [
+        'application/json', 'application/x-json',
+        'text/xml', 'application/xml', 'application/x-xml',
+    ];
+
     private string $defaultType;
     private bool $debug;
 
@@ -42,10 +47,7 @@ class AcceptHeaderParser implements EventSubscriberInterface
         }
 
         $negotiator = new VersionAwareNegotiator();
-        $header = $negotiator->getBest($request->headers->get('Accept', $this->defaultType), [
-            'application/json', 'application/x-json',
-            'text/xml', 'application/xml', 'application/x-xml',
-        ]);
+        $header = $negotiator->getBest($request->headers->get('Accept', $this->defaultType), static::FORMAT_PRIORITIES);
 
         if (null === $header) {
             $event->setResponse(new Response('', Response::HTTP_NOT_ACCEPTABLE));
