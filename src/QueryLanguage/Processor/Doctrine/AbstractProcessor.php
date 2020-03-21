@@ -9,6 +9,7 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Grammar\Grammar;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\ColumnInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\ORM\Column as ORMColumn;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\PhpCr\Column as PhpCrColumn;
+use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\ValidationWalkerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +29,7 @@ abstract class AbstractProcessor
     public function __construct(FormFactoryInterface $formFactory, array $options = [])
     {
         $this->options = $this->resolveOptions($options);
+        $this->columns = [];
         $this->formFactory = $formFactory;
     }
 
@@ -94,8 +96,7 @@ abstract class AbstractProcessor
      */
     protected function handleRequest(Request $request)
     {
-        $dto = new Query();
-        $form = $this->formFactory->createNamed('', QueryType::class, $dto, [
+        $options = [
             'limit_field' => $this->options['limit_field'],
             'skip_field' => $this->options['skip_field'],
             'order_field' => $this->options['order_field'],
@@ -105,8 +106,13 @@ abstract class AbstractProcessor
             'orderable_columns' => \array_keys(\array_filter($this->columns, static function (ColumnInterface $column): bool {
                 return $column instanceof PhpCrColumn || $column instanceof ORMColumn;
             })),
-        ]);
+        ];
 
+        if (null !== $this->options['order_validation_walker']) {
+            $options['order_validation_walker'] = $this->options['order_validation_walker'];
+        }
+
+        $form = $this->formFactory->createNamed('', QueryType::class, $dto = new Query(), $options);
         $form->handleRequest($request);
         if ($form->isSubmitted() && ! $form->isValid()) {
             return $form;
@@ -160,6 +166,16 @@ abstract class AbstractProcessor
     }
 
     /**
+     * Allow to deeply configure the options resolver.
+     *
+     * @param OptionsResolver $resolver
+     */
+    protected function configureOptions(OptionsResolver $resolver): void
+    {
+        // Do nothing.
+    }
+
+    /**
      * Resolves options for this processor.
      *
      * @param array $options
@@ -180,6 +196,8 @@ abstract class AbstractProcessor
         $resolver
             ->setDefault('default_page_size', null)
             ->setAllowedTypes('default_page_size', ['null', 'int'])
+            ->setDefault('order_validation_walker', null)
+            ->setAllowedTypes('order_validation_walker', ['null', ValidationWalkerInterface::class])
             ->setDefault('continuation_token', [
                 'field' => 'continue',
                 'checksum_field' => null,
@@ -218,6 +236,8 @@ abstract class AbstractProcessor
                 return $expression;
             })
         ;
+
+        $this->configureOptions($resolver);
 
         return $resolver->resolve($options);
     }

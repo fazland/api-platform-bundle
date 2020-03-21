@@ -8,6 +8,7 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Form\DTO\Query;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\ColumnInterface;
 use Fazland\ApiPlatformBundle\QueryLanguage\Validator\Expression;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\OrderWalker;
+use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\ValidationWalkerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,7 +30,7 @@ class QueryType extends AbstractType
                 'data_class' => null,
                 'property_path' => 'ordering',
                 'constraints' => [
-                    new Expression(new OrderWalker($options['orderable_columns'])),
+                    new Expression($options['order_validation_walker']),
                 ],
             ]);
 
@@ -89,15 +90,15 @@ class QueryType extends AbstractType
                 'default_order' => null,
                 'allow_extra_fields' => true,
                 'method' => Request::METHOD_GET,
-                'orderable_columns' => static function (Options $options) {
-                    return \array_keys($options['columns']);
-                },
+                'orderable_columns' => static fn (Options $options) => \array_keys($options['columns']),
+                'order_validation_walker' => static fn (Options $options) => new OrderWalker($options['orderable_columns']),
             ])
             ->setAllowedTypes('skip_field', ['null', 'string'])
             ->setAllowedTypes('limit_field', ['null', 'string'])
             ->setAllowedTypes('continuation_token_field', ['null', 'string'])
             ->setAllowedTypes('order_field', ['null', 'string'])
             ->setAllowedTypes('default_order', ['null', OrderExpression::class])
+            ->setAllowedTypes('order_validation_walker', ['null', ValidationWalkerInterface::class])
             ->setRequired('columns')
         ;
     }
