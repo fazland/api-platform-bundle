@@ -68,13 +68,18 @@ class Processor extends AbstractProcessor
         }
 
         if (null !== $result->ordering) {
-            $iterator = new PagerIterator($this->queryBuilder, $this->parseOrderings($result->ordering));
-            $iterator->setToken($result->pageToken);
-            if (null !== $pageSize) {
-                $iterator->setPageSize($pageSize);
+            if ($this->options['continuation_token']) {
+                $iterator = new PagerIterator($this->queryBuilder, $this->parseOrderings($result->ordering));
+                $iterator->setToken($result->pageToken);
+                if (null !== $pageSize) {
+                    $iterator->setPageSize($pageSize);
+                }
+
+                return $iterator;
             }
 
-            return $iterator;
+            $fieldName = $this->columns[$result->ordering->getField()]->fieldName;
+            $this->queryBuilder->orderBy($this->rootAlias.'.'.$fieldName, $result->ordering->getDirection());
         }
 
         if (null !== $pageSize) {

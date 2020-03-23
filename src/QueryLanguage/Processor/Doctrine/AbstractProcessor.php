@@ -203,7 +203,7 @@ abstract class AbstractProcessor
                 'checksum_field' => null,
             ])
             ->setAllowedTypes('continuation_token', ['bool', 'array'])
-            ->setNormalizer('continuation_token', static function (Options $options, $value): array {
+            ->setNormalizer('continuation_token', static function (Options $options, $value) {
                 if (true === $value) {
                     return [
                         'field' => 'continue',
@@ -211,7 +211,7 @@ abstract class AbstractProcessor
                     ];
                 }
 
-                if (! isset($value['field'])) {
+                if (false !== $value && ! isset($value['field'])) {
                     throw new InvalidOptionsException('Continuation token field must be set');
                 }
 

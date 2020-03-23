@@ -29,7 +29,7 @@ class SerializerErrorRenderer implements ErrorRendererInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function render(\Throwable $exception): FlattenException
     {

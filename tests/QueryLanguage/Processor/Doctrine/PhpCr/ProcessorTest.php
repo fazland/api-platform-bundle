@@ -14,6 +14,7 @@ use Fazland\ApiPlatformBundle\Tests\Fixtures\Document\PhpCrQueryLanguage\FooBar;
 use Fazland\ApiPlatformBundle\Tests\Fixtures\Document\PhpCrQueryLanguage\User;
 use Fazland\ApiPlatformBundle\Tests\QueryLanguage\Doctrine\PhpCr\FixturesTrait;
 use Fazland\DoctrineExtra\ObjectIteratorInterface;
+use Fazland\DoctrineExtra\ODM\PhpCr\DocumentIterator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Extension\HttpFoundation\Type\FormTypeHttpFoundationExtension;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
@@ -299,6 +300,31 @@ class ProcessorTest extends TestCase
         } else {
             self::assertInstanceOf(PagerIterator::class, $itr);
         }
+    }
+
+    public function testContinuationTokenCouldBeDisabled(): void
+    {
+        $formFactory = (new FormFactoryBuilder(true))
+            ->addExtension(new ValidatorExtension((new ValidatorBuilder())->getValidator()))
+            ->addTypeExtension(new FormTypeHttpFoundationExtension(new AutoSubmitRequestHandler()))
+            ->getFormFactory();
+
+        $this->processor = new Processor(
+            self::$documentManager->getRepository(User::class)->createQueryBuilder('u'),
+            self::$documentManager,
+            $formFactory,
+            [
+                'default_order' => 'name, desc',
+                'order_field' => 'order',
+                'continuation_token' => false,
+            ],
+        );
+
+        $this->processor->addColumn('name');
+        $this->processor->setDefaultPageSize(3);
+        $itr = $this->processor->processRequest(new Request([]));
+
+        self::assertInstanceOf(DocumentIterator::class, $itr);
     }
 
     public function testCustomColumnWorks(): void

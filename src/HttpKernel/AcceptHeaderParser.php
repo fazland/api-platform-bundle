@@ -68,7 +68,7 @@ class AcceptHeaderParser implements EventSubscriberInterface
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        if (! $this->debug || !($e = $event->getThrowable()) instanceof NotFoundHttpException) {
+        if (! $this->debug || ! ($e = $event->getThrowable()) instanceof NotFoundHttpException) {
             return;
         }
 

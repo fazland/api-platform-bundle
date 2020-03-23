@@ -84,13 +84,30 @@ class Processor extends AbstractProcessor
         }
 
         if (null !== $result->ordering) {
-            $iterator = new PagerIterator($this->queryBuilder, $this->parseOrderings($result->ordering));
-            $iterator->setToken($result->pageToken);
-            if (null !== $pageSize) {
-                $iterator->setPageSize($pageSize);
+            if ($this->options['continuation_token']) {
+                $iterator = new PagerIterator($this->queryBuilder, $this->parseOrderings($result->ordering));
+                $iterator->setToken($result->pageToken);
+                if (null !== $pageSize) {
+                    $iterator->setPageSize($pageSize);
+                }
+
+                return $iterator;
             }
 
-            return $iterator;
+            $direction = $result->ordering->getDirection();
+            $fieldName = $this->columns[$result->ordering->getField()]->fieldName;
+
+            /** @var From $fromNode */
+            $fromNode = $this->queryBuilder->getChildOfType(AbstractNode::NT_FROM);
+            /** @var SourceDocument $source */
+            $source = $fromNode->getChildOfType(AbstractNode::NT_SOURCE);
+            $alias = $source->getAlias();
+
+            if ('nodename' === $this->rootDocument->getTypeOfField($fieldName)) {
+                $this->queryBuilder->orderBy()->{$direction}()->localName($alias);
+            } else {
+                $this->queryBuilder->orderBy()->{$direction}()->field($alias.'.'.$fieldName);
+            }
         }
 
         if (null !== $pageSize) {
