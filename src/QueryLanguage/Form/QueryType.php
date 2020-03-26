@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Range;
 
 class QueryType extends AbstractType
 {
@@ -57,11 +58,17 @@ class QueryType extends AbstractType
         }
 
         if (null !== $options['skip_field']) {
-            $builder->add($options['skip_field'], IntegerType::class, ['property_path' => 'skip']);
+            $builder->add($options['skip_field'], IntegerType::class, [
+                'property_path' => 'skip',
+                'constraints' => [new Range(['min' => 0])],
+            ]);
         }
 
         if (null !== $options['limit_field']) {
-            $builder->add($options['limit_field'], IntegerType::class, ['property_path' => 'limit']);
+            $builder->add($options['limit_field'], IntegerType::class, [
+                'property_path' => 'limit',
+                'constraints' => [new Range(['min' => 0])],
+            ]);
         }
 
         /** @var ColumnInterface $column */
