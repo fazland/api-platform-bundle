@@ -7,8 +7,6 @@ use Fazland\ApiPlatformBundle\QueryLanguage\Form\DTO\Query;
 use Fazland\ApiPlatformBundle\QueryLanguage\Form\QueryType;
 use Fazland\ApiPlatformBundle\QueryLanguage\Grammar\Grammar;
 use Fazland\ApiPlatformBundle\QueryLanguage\Processor\ColumnInterface;
-use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\ORM\Column as ORMColumn;
-use Fazland\ApiPlatformBundle\QueryLanguage\Processor\Doctrine\PhpCr\Column as PhpCrColumn;
 use Fazland\ApiPlatformBundle\QueryLanguage\Walker\Validation\ValidationWalkerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -104,7 +102,7 @@ abstract class AbstractProcessor
             'continuation_token_field' => $this->options['continuation_token']['field'] ?? null,
             'columns' => $this->columns,
             'orderable_columns' => \array_keys(\array_filter($this->columns, static function (ColumnInterface $column): bool {
-                return $column instanceof PhpCrColumn || $column instanceof ORMColumn;
+                return $column instanceof PhpCr\Column || $column instanceof ORM\Column || $column instanceof DBAL\Column;
             })),
         ];
 
@@ -149,7 +147,7 @@ abstract class AbstractProcessor
         $checksumColumn = $this->getIdentifierFieldNames()[0];
         if (isset($this->options['continuation_token']['checksum_field'])) {
             $checksumColumn = $this->options['continuation_token']['checksum_field'];
-            if (! $this->columns[$checksumColumn] instanceof PhpCrColumn && ! $this->columns[$checksumColumn] instanceof ORMColumn) {
+            if (! $this->columns[$checksumColumn] instanceof PhpCr\Column && ! $this->columns[$checksumColumn] instanceof ORM\Column) {
                 throw new \InvalidArgumentException(\sprintf('%s is not a valid field for checksum', $this->options['continuation_token']['checksum_field']));
             }
 
