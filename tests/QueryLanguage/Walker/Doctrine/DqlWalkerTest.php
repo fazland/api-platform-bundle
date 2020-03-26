@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Fazland\ApiPlatformBundle\Tests\QueryLanguage\Walker;
+namespace Fazland\ApiPlatformBundle\Tests\QueryLanguage\Walker\Doctrine;
 
 use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\QueryBuilder;
@@ -16,7 +16,6 @@ class DqlWalkerTest extends TestCase
     use FixturesTrait;
 
     private DqlWalker $walker;
-
     private QueryBuilder $queryBuilder;
 
     protected function setUp(): void
