@@ -50,7 +50,10 @@ class SerializerErrorRenderer implements ErrorRendererInterface
         }
 
         $flatten->setAsString($data);
-        $flatten->setHeaders(['Content-Type' => $request->getMimeType($format) ?: 'text/html'] + $flatten->getHeaders());
+        $flatten->setHeaders([
+            'Content-Type' => $request->getMimeType($format) ?: 'text/html',
+            'Vary' => 'Accept',
+        ] + $flatten->getHeaders());
 
         return $flatten;
     }

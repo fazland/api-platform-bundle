@@ -80,6 +80,7 @@ class ViewHandler implements EventSubscriberInterface
         try {
             $content = $this->handle($result, $request);
             $response = new Response($content, $result->statusCode, $headers);
+            $response->headers->set('Vary', 'Accept', false);
         } catch (UnsupportedFormatException $e) {
             $response = new Response(null, Response::HTTP_NOT_ACCEPTABLE);
         }
